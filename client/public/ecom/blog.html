@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog - LUXE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navigation.css">
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+  <div class="reading-progress"></div>
+
+  <div class="container" style="padding-top: calc(80px + var(--space-2xl)); padding-bottom: var(--space-2xl);">
+    <div style="text-align: center; margin-bottom: var(--space-2xl);">
+      <h1 style="margin-bottom: var(--space-md);">Blog & Stories</h1>
+      <p style="font-size: 1.25rem; color: var(--text-secondary);">Insights, trends, and stories from the world of premium lifestyle</p>
+    </div>
+
+    <!-- Featured Post -->
+    <div class="card hover-lift" style="padding: 0; margin-bottom: var(--space-2xl); overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0;">
+        <img src="https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=800&h=600&fit=crop" alt="Featured" style="width: 100%; height: 100%; object-fit: cover;">
+        <div style="padding: var(--space-2xl);">
+          <div class="badge badge-primary" style="margin-bottom: var(--space-md);">Featured</div>
+          <h2 style="margin-bottom: var(--space-md);">The Future of Minimalist Design</h2>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-lg); font-size: 1.125rem;">Exploring how less is becoming more in modern product design and lifestyle choices.</p>
+          <div style="display: flex; align-items: center; gap: var(--space-md); margin-bottom: var(--space-lg); color: var(--text-tertiary); font-size: 0.875rem;">
+            <span>By Sarah Chen</span>
+            <span>•</span>
+            <span>5 min read</span>
+            <span>•</span>
+            <span>March 15, 2026</span>
+          </div>
+          <a href="blog-details.html?id=1" class="btn btn-primary">Read More</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blog Grid -->
+    <div class="grid grid-3" style="gap: var(--space-xl);">
+      <div class="card card-product hover-lift" style="padding: 0; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1483058712412-4245e9b90334?w=600&h=400&fit=crop" alt="Post" style="width: 100%; aspect-ratio: 3/2; object-fit: cover;">
+        <div style="padding: var(--space-lg);">
+          <div class="badge badge-outline" style="margin-bottom: var(--space-sm);">Lifestyle</div>
+          <h3 style="margin-bottom: var(--space-sm);">Essential Productivity Tools</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--space-md);">Discover the tools that help top performers stay focused and efficient.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; color: var(--text-tertiary); font-size: 0.75rem;">
+            <span>4 min read</span>
+            <a href="blog-details.html?id=2" style="color: var(--primary); font-weight: 600;">Read →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-product hover-lift" style="padding: 0; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=400&fit=crop" alt="Post" style="width: 100%; aspect-ratio: 3/2; object-fit: cover;">
+        <div style="padding: var(--space-lg);">
+          <div class="badge badge-outline" style="margin-bottom: var(--space-sm);">Style</div>
+          <h3 style="margin-bottom: var(--space-sm);">Timeless Watch Collection</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--space-md);">Why investing in quality timepieces never goes out of style.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; color: var(--text-tertiary); font-size: 0.75rem;">
+            <span>6 min read</span>
+            <a href="blog-details.html?id=3" style="color: var(--primary); font-weight: 600;">Read →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-product hover-lift" style="padding: 0; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&h=400&fit=crop" alt="Post" style="width: 100%; aspect-ratio: 3/2; object-fit: cover;">
+        <div style="padding: var(--space-lg);">
+          <div class="badge badge-outline" style="margin-bottom: var(--space-sm);">Tech</div>
+          <h3 style="margin-bottom: var(--space-sm);">Audio Evolution 2026</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--space-md);">How wireless audio technology is reshaping our listening experience.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; color: var(--text-tertiary); font-size: 0.75rem;">
+            <span>7 min read</span>
+            <a href="blog-details.html?id=4" style="color: var(--primary); font-weight: 600;">Read →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-product hover-lift" style="padding: 0; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?w=600&h=400&fit=crop" alt="Post" style="width: 100%; aspect-ratio: 3/2; object-fit: cover;">
+        <div style="padding: var(--space-lg);">
+          <div class="badge badge-outline" style="margin-bottom: var(--space-sm);">Home</div>
+          <h3 style="margin-bottom: var(--space-sm);">Creating Calm Spaces</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--space-md);">Design principles for mindful, peaceful living environments.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; color: var(--text-tertiary); font-size: 0.75rem;">
+            <span>5 min read</span>
+            <a href="blog-details.html?id=5" style="color: var(--primary); font-weight: 600;">Read →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-product hover-lift" style="padding: 0; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&h=400&fit=crop" alt="Post" style="width: 100%; aspect-ratio: 3/2; object-fit: cover;">
+        <div style="padding: var(--space-lg);">
+          <div class="badge badge-outline" style="margin-bottom: var(--space-sm);">Fashion</div>
+          <h3 style="margin-bottom: var(--space-sm);">Sustainable Sneaker Movement</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--space-md);">The rise of eco-conscious footwear and what it means for style.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; color: var(--text-tertiary); font-size: 0.75rem;">
+            <span>4 min read</span>
+            <a href="blog-details.html?id=6" style="color: var(--primary); font-weight: 600;">Read →</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card card-product hover-lift" style="padding: 0; overflow: hidden;">
+        <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=600&h=400&fit=crop" alt="Post" style="width: 100%; aspect-ratio: 3/2; object-fit: cover;">
+        <div style="padding: var(--space-lg);">
+          <div class="badge badge-outline" style="margin-bottom: var(--space-sm);">Travel</div>
+          <h3 style="margin-bottom: var(--space-sm);">Travel Essentials Guide</h3>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; margin-bottom: var(--space-md);">Pack smarter with our curated list of must-have travel items.</p>
+          <div style="display: flex; justify-content: space-between; align-items: center; color: var(--text-tertiary); font-size: 0.75rem;">
+            <span>8 min read</span>
+            <a href="blog-details.html?id=7" style="color: var(--primary); font-weight: 600;">Read →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: var(--space-2xl);">
+      <button class="btn btn-secondary btn-lg">Load More Articles</button>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/theme-toggle.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/nav.js"></script>
+
+  <script>
+      const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      document.querySelector('.reading-progress').style.width = scrolled + '%';
+    });
+  </script>
+</body>
+</html>

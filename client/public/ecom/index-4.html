@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LUXE - Bold & Dynamic | Home V4</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navigation.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+  <div class="reading-progress"></div>
+
+  <!-- Bold Split Hero -->
+  <section class="section-hero" style="background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); color: white; position: relative; overflow: hidden;">
+    <div class="mesh-gradient" style="position: absolute; inset: 0; opacity: 0.3;"></div>
+    
+    <div class="container" style="position: relative; z-index: 2;">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl); align-items: center; min-height: 90vh;">
+        <div>
+          <div class="badge" style="background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); margin-bottom: var(--space-md);">
+            🔥 Flash Sale - 50% Off
+          </div>
+          <h1 style="color: white; margin-bottom: var(--space-lg); font-size: clamp(2.5rem, 5vw, 4.5rem);">
+            Make a Statement
+          </h1>
+          <p style="font-size: 1.5rem; color: rgba(255,255,255,0.9); margin-bottom: var(--space-2xl);">
+            Bold designs for bold personalities
+          </p>
+          <div style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
+            <a href="shop.html" class="btn btn-lg" style="background: white; color: var(--primary); border: none;">
+              Shop Collection
+            </a>
+            <a href="#new" class="btn btn-outline btn-lg" style="border-color: white; color: white;">
+              New Arrivals
+            </a>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-md);">
+          <div class="card hover-lift" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);">
+            <img src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=300&h=300&fit=crop" alt="Watch" class="product-image">
+            <h4 style="color: white;">Smart Watch</h4>
+            <div style="color: white; font-size: 1.25rem; font-weight: 700;">$349</div>
+          </div>
+          
+          <div class="card hover-lift" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); margin-top: var(--space-xl);">
+            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop" alt="Headphones" class="product-image">
+            <h4 style="color: white;">Headphones</h4>
+            <div style="color: white; font-size: 1.25rem; font-weight: 700;">$299</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hot Deals -->
+  <section id="new" style="padding: var(--space-2xl) 0; background: var(--bg-primary);">
+    <div class="container">
+      <div style="text-align: center; margin-bottom: var(--space-2xl);">
+        <h2 style="margin-bottom: var(--space-sm);">🔥 Hot Deals</h2>
+        <p style="font-size: 1.25rem; color: var(--text-secondary);">Limited time offers you can't miss</p>
+      </div>
+
+      <div class="grid grid-4" style="gap: var(--space-lg);">
+        <div class="card card-product hover-lift">
+          <div class="badge badge-warning" style="position: absolute; top: 1rem; left: 1rem;">-50%</div>
+          <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&h=400&fit=crop" alt="Sneakers" class="product-image">
+          <h3>Limited Sneakers</h3>
+          <div class="stars">★★★★★</div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem;">
+            <span class="price">$65</span>
+            <span class="price-old">$130</span>
+          </div>
+          <button class="btn btn-gradient btn-sm btn-magnetic" style="width: 100%;" onclick="addToCart('prod-18', 'Limited Sneakers', 65, 'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&h=400&fit=crop')">Grab Now</button>
+        </div>
+
+        <div class="card card-product hover-lift">
+          <div class="badge badge-warning" style="position: absolute; top: 1rem; left: 1rem;">-40%</div>
+          <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop" alt="Backpack" class="product-image">
+          <h3>Travel Backpack</h3>
+          <div class="stars">★★★★☆</div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem;">
+            <span class="price">$54</span>
+            <span class="price-old">$90</span>
+          </div>
+          <button class="btn btn-gradient btn-sm btn-magnetic" style="width: 100%;" onclick="addToCart('prod-19', 'Travel Backpack', 54, 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&h=400&fit=crop')">Grab Now</button>
+        </div>
+
+        <div class="card card-product hover-lift">
+          <div class="badge badge-warning" style="position: absolute; top: 1rem; left: 1rem;">-35%</div>
+          <img src="https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop" alt="Sunglasses" class="product-image">
+          <h3>Designer Sunglasses</h3>
+          <div class="stars">★★★★★</div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem;">
+            <span class="price">$97</span>
+            <span class="price-old">$150</span>
+          </div>
+          <button class="btn btn-gradient btn-sm btn-magnetic" style="width: 100%;" onclick="addToCart('prod-20', 'Designer Sunglasses', 97, 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop')">Grab Now</button>
+        </div>
+
+        <div class="card card-product hover-lift">
+          <div class="badge badge-warning" style="position: absolute; top: 1rem; left: 1rem;">-45%</div>
+          <img src="https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=400&h=400&fit=crop" alt="Laptop Sleeve" class="product-image">
+          <h3>Laptop Sleeve</h3>
+          <div class="stars">★★★★★</div>
+          <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 1rem;">
+            <span class="price">$38</span>
+            <span class="price-old">$69</span>
+          </div>
+          <button class="btn btn-gradient btn-sm btn-magnetic" style="width: 100%;" onclick="addToCart('prod-21', 'Laptop Sleeve', 38, 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=400&h=400&fit=crop')">Grab Now</button>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: var(--space-2xl);">
+        <div style="display: inline-flex; gap: var(--space-sm); align-items: center; background: var(--bg-tertiary); padding: var(--space-md) var(--space-lg); border-radius: var(--radius-full);">
+          <span style="font-weight: 600;">Sale ends in:</span>
+          <div class="count-up" data-count-target="23" style="font-weight: 700; color: var(--primary); min-width: 2rem;">23</div>
+          <span>hours</span>
+          <div class="count-up" data-count-target="59" style="font-weight: 700; color: var(--primary); min-width: 2rem;">59</div>
+          <span>minutes</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/theme-toggle.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/smooth-scroll.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/nav.js"></script>
+  <script>
+      const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      document.querySelector('.reading-progress').style.width = scrolled + '%';
+    });
+  </script>
+</body>
+</html>

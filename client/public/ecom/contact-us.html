@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us - LUXE</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/navigation.css">
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+  <div class="reading-progress"></div>
+
+  <div class="container" style="padding-top: calc(80px + var(--space-2xl)); padding-bottom: var(--space-2xl);">
+    <div style="text-align: center; margin-bottom: var(--space-2xl);">
+      <h1 style="margin-bottom: var(--space-md);">Get in Touch</h1>
+      <p style="font-size: 1.25rem; color: var(--text-secondary);">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2xl);">
+      <!-- Contact Form -->
+      <div class="card" style="padding: var(--space-2xl);">
+        <h2 style="margin-bottom: var(--space-lg);">Send us a Message</h2>
+        <form id="contact-form">
+          <div class="input-group">
+            <label>Name</label>
+            <input type="text" required placeholder="Your name" data-testid="input-contact-name">
+          </div>
+
+          <div class="input-group">
+            <label>Email</label>
+            <input type="email" required placeholder="your@email.com" data-testid="input-contact-email">
+          </div>
+
+          <div class="input-group">
+            <label>Subject</label>
+            <input type="text" required placeholder="How can we help?" data-testid="input-contact-subject">
+          </div>
+
+          <div class="input-group">
+            <label>Message</label>
+            <textarea rows="5" required placeholder="Your message..." data-testid="textarea-contact-message"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-gradient btn-lg btn-magnetic" style="width: 100%;" data-testid="button-send-message">
+            Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <div class="card" style="padding: var(--space-xl); margin-bottom: var(--space-lg);">
+          <div style="font-size: 2rem; margin-bottom: var(--space-md);">📧</div>
+          <h3 style="margin-bottom: var(--space-sm);">Email</h3>
+          <p style="color: var(--text-secondary); margin-bottom: var(--space-sm);">Our team is here to help</p>
+          <a href="mailto:hello@luxestore.com" style="color: var(--primary); font-weight: 600;">hello@luxestore.com</a>
+        </div>
+
+        <div class="card" style="padding: var(--space-xl); margin-bottom: var(--space-lg);">
+          <div style="font-size: 2rem; margin-bottom: var(--space-md);">📍</div>
+          <h3 style="margin-bottom: var(--space-sm);">Office</h3>
+          <p style="color: var(--text-secondary);">
+            123 Design Street<br>
+            San Francisco, CA 94102<br>
+            United States
+          </p>
+        </div>
+
+        <div class="card" style="padding: var(--space-xl);">
+          <div style="font-size: 2rem; margin-bottom: var(--space-md);">⏰</div>
+          <h3 style="margin-bottom: var(--space-sm);">Hours</h3>
+          <p style="color: var(--text-secondary);">
+            Monday - Friday: 9AM - 6PM PST<br>
+            Saturday - Sunday: Closed
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/wishlist.js"></script>
+  <script src="js/theme-toggle.js"></script>
+  <script src="js/cursor.js"></script>
+  <script src="js/nav.js"></script>
+
+  <script>
+      e.preventDefault();
+      alert('Thank you for your message! This is a demo - no email was sent.');
+      e.target.reset();
+    };
+
+    window.addEventListener('scroll', () => {
+      const scrolled = (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+      document.querySelector('.reading-progress').style.width = scrolled + '%';
+    });
+  </script>
+
+  <style>
+    @media (max-width: 1024px) {
+      .container > div:last-of-type {
+        grid-template-columns: 1fr !important;
+      }
+    }
+  </style>
+</body>
+</html>
