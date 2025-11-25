@@ -1,5 +1,1 @@
-import { createRoot } from "react-dom/client";
-import App from "./App";
-import "./index.css";
-
-createRoot(document.getElementById("root")!).render(<App />);
+// React app - not used, site redirects to /ecom/ in index.html
