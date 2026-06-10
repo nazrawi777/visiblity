@@ -168,7 +168,8 @@ endfor
             {%- if child_link.handle == 'all-products' or child_title_downcase contains 'all products' -%}
             {%- assign nav_collection_handle = 'premium-anime-merchandise-clothing-collectibles-shop-all' -%}
             {%- assign nav_collection_image = collections[nav_collection_handle].image | default: collections[nav_collection_handle].products.first.featured_image -%}
-            <li class="{% if child_link.active %}active{% endif %}"><a class="heading shop-now-dropdown-link" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}><span>{{ child_link.title }}</span>{%- if nav_collection_image != blank -%}<img class="shop-now-dropdown-thumb" src="{{ nav_collection_image | image_url: width: 96, height: 96, crop: 'center' }}" alt="{{ collections[nav_collection_handle].title | default: child_link.title | escape }}" loading="lazy" width="48" height="48">{%- endif -%}</a></li>
+            {%- assign nav_placeholder_image = 'https://placehold.co/48x48/1a1a2e/ffffff?text=ALL' -%}
+            <li class="{% if child_link.active %}active{% endif %}"><a class="heading shop-now-dropdown-link" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}><span>{{ child_link.title }}</span><img class="shop-now-dropdown-thumb" src="{%- if nav_collection_image != blank -%}{{ nav_collection_image | image_url: width: 96, height: 96, crop: 'center' }}{%- else -%}{{ nav_placeholder_image }}{%- endif -%}" alt="{{ collections[nav_collection_handle].title | default: child_link.title | escape }}" loading="lazy" width="48" height="48"></a></li>
             {%- endif -%}
           {%- endfor -%}
         {%- endif -%}
@@ -272,7 +273,8 @@ endfor
             {%- if child_link.handle == 'all-products' or child_title_downcase contains 'all products' -%}
             {%- assign nav_collection_handle = 'premium-anime-merchandise-clothing-collectibles-shop-all' -%}
             {%- assign nav_collection_image = collections[nav_collection_handle].image | default: collections[nav_collection_handle].products.first.featured_image -%}
-            <li class="{% if child_link.active %} active{% endif %}"><a class="shop-now-dropdown-link" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}><span>{{ child_link.title }}</span>{%- if nav_collection_image != blank -%}<img class="shop-now-dropdown-thumb" src="{{ nav_collection_image | image_url: width: 96, height: 96, crop: 'center' }}" alt="{{ collections[nav_collection_handle].title | default: child_link.title | escape }}" loading="lazy" width="48" height="48">{%- endif -%}</a></li>
+            {%- assign nav_placeholder_image = 'https://placehold.co/48x48/1a1a2e/ffffff?text=ALL' -%}
+            <li class="{% if child_link.active %} active{% endif %}"><a class="shop-now-dropdown-link" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}><span>{{ child_link.title }}</span><img class="shop-now-dropdown-thumb" src="{%- if nav_collection_image != blank -%}{{ nav_collection_image | image_url: width: 96, height: 96, crop: 'center' }}{%- else -%}{{ nav_placeholder_image }}{%- endif -%}" alt="{{ collections[nav_collection_handle].title | default: child_link.title | escape }}" loading="lazy" width="48" height="48"></a></li>
             {%- endif -%}
           {%- endfor -%}
         {%- endif -%}
