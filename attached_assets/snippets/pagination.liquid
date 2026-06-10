@@ -1,0 +1,85 @@
+{%- comment -%}
+  ── PAGINATION URL FIX ──
+  Shopify's paginate object does not preserve custom search parameters
+  like type=product and options[prefix]=last when generating page URLs.
+  We append them manually to every pagination link on search pages.
+{%- endcomment -%}
+
+{%- assign is_search = false -%}
+{%- if paginate_from == 'search' -%}
+  {%- assign is_search = true -%}
+{%- endif -%}
+
+{%- comment -%} Build the extra params string to append to search pagination URLs {%- endcomment -%}
+{%- assign extra_params = '&type=product&options%5Bprefix%5D=last' -%}
+
+{% if paginate_from != blank and paginate_from != 'collection' %}
+<ul class="pagination-default text-center">
+  {% if paginate.previous %}
+    {%- assign prev_url = paginate.previous.url -%}
+    {%- if is_search -%}{%- assign prev_url = prev_url | append: extra_params -%}{%- endif -%}
+    <li><a class="enable-arrow" href="{{ prev_url }}" title="{{ paginate.previous.title }}"><span class="fa fa-angle-left"></span></a></li>
+  {% else %}
+    <li class="disabled"><span class="fa fa-angle-left"></span></li>
+  {% endif %}
+
+  {% for part in paginate.parts %}
+    {% if part.is_link %}
+      {%- assign part_url = part.url -%}
+      {%- if is_search -%}{%- assign part_url = part_url | append: extra_params -%}{%- endif -%}
+      <li>
+        <a href="{{ part_url }}" title="" class="">{{ part.title }}</a>
+      </li>
+    {% else %}
+      {% if part.title == paginate.current_page %}
+        <li class="active"><span>{{ part.title }}</span></li>
+      {% else %}
+        <li><span>{{ part.title }}</span></li>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+  {% if paginate.next %}
+    {%- assign next_url = paginate.next.url -%}
+    {%- if is_search -%}{%- assign next_url = next_url | append: extra_params -%}{%- endif -%}
+    <li><a class="enable-arrow" href="{{ next_url }}" title="{{ paginate.next.title }}"><span class="fa fa-angle-right"></span></a></li>
+  {% else %}
+    <li class="disabled"><span class="fa fa-angle-right"></span></li>
+  {% endif %}
+</ul>
+
+{% else %}
+<ul class="pagination-default text-center">
+  {% if paginate.previous %}
+    {%- assign prev_url = paginate.previous.url -%}
+    {%- if is_search -%}{%- assign prev_url = prev_url | append: extra_params -%}{%- endif -%}
+    <li><a class="enable-arrow dT_Pagination" href="{{ prev_url }}" title="{{ paginate.previous.title }}"><span class="fa fa-angle-left"></span></a></li>
+  {% else %}
+    <li class="disabled"><span class="fa fa-angle-left"></span></li>
+  {% endif %}
+
+  {% for part in paginate.parts %}
+    {% if part.is_link %}
+      {%- assign part_url = part.url -%}
+      {%- if is_search -%}{%- assign part_url = part_url | append: extra_params -%}{%- endif -%}
+      <li>
+        <a href="{{ part_url }}" title="" class="dT_Pagination">{{ part.title }}</a>
+      </li>
+    {% else %}
+      {% if part.title == paginate.current_page %}
+        <li class="active"><span>{{ part.title }}</span></li>
+      {% else %}
+        <li><span>{{ part.title }}</span></li>
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+
+  {% if paginate.next %}
+    {%- assign next_url = paginate.next.url -%}
+    {%- if is_search -%}{%- assign next_url = next_url | append: extra_params -%}{%- endif -%}
+    <li><a class="enable-arrow dT_Pagination" href="{{ next_url }}" title="{{ paginate.next.title }}"><span class="fa fa-angle-right"></span></a></li>
+  {% else %}
+    <li class="disabled"><span class="fa fa-angle-right"></span></li>
+  {% endif %}
+</ul>
+{% endif %}

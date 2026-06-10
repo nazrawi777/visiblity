@@ -1,0 +1,16 @@
+{{ 'dt-framework.css' | asset_url | stylesheet_tag }}
+{{ 'dt-custom.css' | asset_url | stylesheet_tag }}
+{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+{% unless template contains 'customers' or template contains 'cart' %}
+  {{ 'select2.min.css' | asset_url | stylesheet_tag }}{% endunless %}
+{% unless template contains 'customers' or template contains 'cart' %}
+  {{ 'select2.min.css' | asset_url | stylesheet_tag }}{% endunless %}
+{{ 'slick.css' | asset_url | stylesheet_tag }}
+{{ 'font-all.min.css' | asset_url | stylesheet_tag }}
+{% if settings.animae_enable %}
+  {{ 'animation.css' | asset_url | stylesheet_tag: preload: true }}
+{% endif %}
+{{ 'magnific-popup.css' | asset_url | stylesheet_tag: preload: true }}
+{% if settings.enable_rtl %}
+  {{ 'dT_rtl.css' | asset_url | stylesheet_tag }}
+{% endif %}

@@ -1,0 +1,53 @@
+<script src="{{ 'lazysizes.js' | asset_url }}" async="async"></script>
+{% if template contains 'article' or template contains 'product' %}
+  {% if settings.social_sharing_blog or settings.social_sharing_products %}
+    <script src="{{ 'social-buttons.js' | asset_url }}" defer="defer"></script>
+  {% endif %}
+{% endif %}
+{% comment %}theme-check-disable ParserBlockingJavaScript{% endcomment %}
+<script src="{{ 'dt-theme.js' | asset_url }}"></script>
+{% comment %}theme-check-enable ParserBlockingJavaScript{% endcomment %}
+<script src="{{ 'dT_main.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'dT_main_app.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'dT_bundle_base.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'dT_bundle.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'wish_list.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'compare_list.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'isotope.pkgd.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'instafeed.js' | asset_url }}" defer="defer"></script>
+{% unless template contains 'customers' or template contains 'cart' %}
+  <script src="{{ 'select2.min.js' | asset_url }}" defer="defer"></script>
+{% endunless %}
+{% if settings.enable_rtl %}
+  <script src="{{ 'dT_rtl.js' | asset_url }}" defer="defer"></script>
+{% endif %}
+{% render 'ajax-cart-template' %}
+
+<script>
+  Handlebars.registerHelper('formatPrice', function(aString) {
+    return new Handlebars.SafeString(aString);
+  });
+
+  $(document).ready(function() {
+    if ($('#shipping-calculator select').data('select2')) {
+      $("#shipping-calculator select").select2('destroy');
+    }
+
+    if ($('.dT_bundleSelector select').data('select2')) {
+      $(".dT_bundleSelector select").select2('destroy');
+    }
+
+    {% unless template contains 'customers' or template contains 'cart' %}
+      $('select').select2({minimumResultsForSearch: Infinity, theme: "classic"});{% endunless %}if ($('.fbt-wrapper select').data('select2')) {
+      $(".fbt-wrapper select").select2('destroy');
+    }
+
+    if ($('.fbt-wrapper select').data('select2')) {
+      $(".fbt-wrapper select").select2('destroy');
+    }
+    if ($('#SortBy').data('select2')) {
+      $('#SortBy').select2({dropdownCssClass: "increasedzindexclass", theme: "classic"});
+    }
+
+  });
+</script>

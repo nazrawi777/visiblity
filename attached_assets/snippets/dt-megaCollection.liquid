@@ -1,0 +1,23 @@
+<li class="dT_VProdWrapper  menu-type-{{ block.type }}">
+    <div class="mega-menu-carousel">
+      <div class="dt-sc-swiper-slider swiper-container navigation-bottom-center">
+        <div id="mega-swiper-{{ block.id }}-slider"
+          class="dT_VProdWrapperOther dt-sc-swiper-slider-init"
+          mega-item-swiper="{{ block.id }}" mega-item-swiper-count="{{ block.settings.slides_per_view }}">  
+          <ul class="swiper-wrapper">                 
+            {% for product in collections[block.settings.collection].products limit: block.settings.limit %}
+            {% render 'product-grid-item', product: product, swiperSlideClass: 'swiper-slide' %} 
+            {% else %}
+            {% for i in (1..5) %}
+            {% render 'empty-row' , product: product, swiperSlideClass: 'swiper-slide' %}
+            {% endfor %}
+            {% endfor %}
+          </ul>               
+          <div class="mega-swiper-{{ block.id }}-arrows swiper-arrows">
+            <div id="mega-swiper-{{ block.id }}-next" class="swiper-button-next dt-sc-btn"></div>
+            <div id="mega-swiper-{{ block.id }}-prev" class="swiper-button-prev dt-sc-btn"></div>
+          </div>  
+        </div>            
+      </div>
+    </div>  
+  </li>

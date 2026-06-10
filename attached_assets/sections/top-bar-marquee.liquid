@@ -1,0 +1,194 @@
+{%- liquid
+  assign margin = section.settings.margin | split: ','
+  assign margin_top = margin[0]
+  assign margin_bottom = margin[1]
+  assign padding = section.settings.padding | split: ','
+  assign padding_top = padding[0]
+  assign padding_bottom = padding[1]
+  case section.settings.speed
+    when '1'
+      assign animation_speed = '60s'
+    when '2'
+      assign animation_speed = '40s'
+    when '3'
+      assign animation_speed = '20s'
+  endcase
+  if section.settings.enable_overlay
+    assign section_overlay = 'dt-sc-overlay'
+  endif
+  if section.settings.show_background_image
+    assign lazyScript = "lazyload"
+  endif
+  if section.settings.enable_reverse_animation
+    assign animation_direction = 'reverse'
+  else
+    assign animation_direction = 'normal'
+  endif
+%}
+
+{% if section.blocks.size > 0 %}
+<div class="dt-sc-section-wrapper iv-marquee-bar {{ lazyScript }} {{ section_overlay }} {% if section.settings.background_style == 'parallax' %} parallax-initiated{% endif %}" {% if section.settings.background_style == 'parallax' %} data-speed="2" data-style="parallax"{% endif %} style="{% render 'bg-color-image-padding' %} background-size: {{- section.settings.background_size -}}; {% if section.settings.background_style == 'fixed' %}background-attachment: fixed;{% endif %} background-repeat:{% if section.settings.background_size == 'repeat' %}repeat{% else %}no-repeat;{% endif %}" {% render 'bg_image' %}>
+  <div class="iv-marquee-outer-{{ section.id }}">
+    <div class="iv-marquee-track-{{ section.id }}">
+      {%- comment -%}
+        Render blocks 8 times so the strip is always full
+        with no visible gap during the seamless loop.
+        The animation moves exactly -50% which aligns with
+        rendering each block set twice (8 repeats = 4 pairs).
+      {%- endcomment -%}
+      {% for repeat in (1..8) %}
+        {% for block in section.blocks %}
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="iv-marquee-item-{{ section.id }} iv-marquee-item-link-{{ section.id }}">{{ block.settings.block_heading }}</a>
+          {%- else -%}
+            <span class="iv-marquee-item-{{ section.id }}">{{ block.settings.block_heading }}</span>
+          {%- endif -%}
+          <span class="iv-marquee-sep-{{ section.id }}" aria-hidden="true">✦</span>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{%- style -%}
+  @media only screen and (min-width: 1200px) {
+    #shopify-section-{{ section.id }}.top-bar-marquee-section .dt-sc-section-wrapper {
+      margin-top: {{ margin_top }}px;
+      margin-bottom: {{ margin_bottom }}px;
+      padding-top: {{ padding_top }}px;
+      padding-bottom: {{ padding_bottom }}px;
+    }
+  }
+  @media only screen and (max-width: 1199px) {
+    #shopify-section-{{ section.id }}.top-bar-marquee-section .dt-sc-section-wrapper {
+      margin-top: {{ margin_top | divided_by: 2 }}px;
+      margin-bottom: {{ margin_bottom | divided_by: 2 }}px;
+      padding-top: {{ padding_top | divided_by: 2 }}px;
+      padding-bottom: {{ padding_bottom | divided_by: 2 }}px;
+    }
+  }
+
+  /* ── MARQUEE BAR SECTION WRAPPER ── */
+  #shopify-section-{{ section.id }}.top-bar-marquee-section {
+    background: #FFC72F;
+    overflow: hidden;
+  }
+  #shopify-section-{{ section.id }}.top-bar-marquee-section .dt-sc-section-wrapper,
+  #shopify-section-{{ section.id }}.top-bar-marquee-section .iv-marquee-bar {
+    background: #FFC72F;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* ── MARQUEE OUTER CONTAINER ── */
+  #shopify-section-{{ section.id }} .iv-marquee-outer-{{ section.id }} {
+    background: #FFC72F;
+    overflow: hidden;
+    width: 100%;
+    padding: 11px 0;
+  }
+
+  /* ── MARQUEE TRACK — animation scoped to this section ID ── */
+  #shopify-section-{{ section.id }} .iv-marquee-track-{{ section.id }} {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    width: max-content;
+    animation: iv-scroll-{{ section.id }} {{ animation_speed }} linear infinite {{ animation_direction }};
+  }
+  #shopify-section-{{ section.id }} .iv-marquee-track-{{ section.id }}:hover {
+    animation-play-state: paused;
+  }
+
+  /* Keyframe name includes section ID so multiple marquees never conflict */
+  @keyframes iv-scroll-{{ section.id }} {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── MARQUEE ITEMS ── */
+  #shopify-section-{{ section.id }} .iv-marquee-item-{{ section.id }} {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #1a1a2e;
+    padding: 0 24px;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+  #shopify-section-{{ section.id }} .iv-marquee-item-link-{{ section.id }}:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+  }
+
+  /* ── SEPARATOR ── */
+  #shopify-section-{{ section.id }} .iv-marquee-sep-{{ section.id }} {
+    color: #1a1a2e;
+    opacity: 0.4;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+{%- endstyle -%}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Topbar Marquee section",
+  "class": "index-section top-bar-marquee-section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "checkbox", "id": "full", "label": "Show Full width" },
+    { "type": "checkbox", "id": "spacing_both_ends", "label": "Enable Right & Left Spacing (Works only on Fullwidth)", "default": false },
+    { "type": "text", "id": "padding", "label": "Style value (Padding)", "default": "0,0", "info": "Top(px),Bottom(px)" },
+    { "type": "text", "id": "margin", "label": "Style value (Margin)", "default": "0,0", "info": "Top(px),Bottom(px)" },
+    { "type": "checkbox", "id": "show_background_image", "label": "Enable Background image" },
+    { "type": "image_picker", "id": "background_image", "label": "Background image", "info": "Size: 1920x1280" },
+    { "type": "select", "id": "background_style", "label": "Background Style", "default": "none", "options": [
+      { "value": "fixed", "label": "Fixed" },
+      { "value": "parallax", "label": "Parallax" },
+      { "value": "none", "label": "None" }
+    ]},
+    { "type": "select", "id": "background_size", "label": "Background Size", "default": "auto", "options": [
+      { "value": "auto", "label": "Auto" },
+      { "value": "cover", "label": "Cover" },
+      { "value": "contain", "label": "Contain" },
+      { "value": "repeat", "label": "Repeat" }
+    ]},
+    { "type": "checkbox", "id": "enable_overlay", "label": "Enable Background Color" },
+    { "type": "color", "id": "background_color", "label": "Background color" },
+    { "type": "text", "id": "overlay_transparency", "label": "Overlay Transparency (0.01 to 1)", "default": "0.5" },
+    { "type": "header", "content": "Marquee Settings" },
+    { "type": "select", "id": "speed", "label": "Scroll Speed", "default": "2", "options": [
+      { "value": "1", "label": "Slow" },
+      { "value": "2", "label": "Medium" },
+      { "value": "3", "label": "Fast" }
+    ]},
+    { "type": "checkbox", "id": "enable_reverse_animation", "label": "Enable Reverse Direction" },
+    { "type": "header", "content": "Custom class" },
+    { "type": "text", "id": "custom_class_name", "label": "Add your custom class name here" }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Marquee Item",
+      "settings": [
+        { "type": "text", "id": "block_heading", "label": "Text", "default": "Free Shipping on All Orders — No Minimum" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Topbar Marquee Section",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

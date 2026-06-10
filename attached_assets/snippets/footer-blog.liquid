@@ -1,0 +1,64 @@
+<div class="{{ footer_column_alignment }}">
+  {% if block.settings.title != blank  and section.settings.show_footer_title %}
+  <h5 class="footer__title ">{{ block.settings.title }}</h5>
+  {% endif %}
+  <ul class="footer-article-list">
+    {% for article in blogs[block.settings.blog].articles limit: block.settings.post_limit %}
+    <li>
+
+      <a href="{{ article.url }}">
+        {%- if article.image -%}
+         <img
+                srcset="{%- if article.image.src.width >= 165 -%}{{ article.image.src | image_url: width: 165 }} 165w,{%- endif -%}
+                  {%- if article.image.src.width >= 360 -%}{{ article.image.src | image_url: width: 360 }} 360w,{%- endif -%}
+                  {%- if article.image.src.width >= 533 -%}{{ article.image.src | image_url: width: 533 }} 533w,{%- endif -%}
+                  {%- if article.image.src.width >= 720 -%}{{ article.image.src | image_url: width: 720 }} 720w,{%- endif -%}
+                  {%- if article.image.src.width >= 1000 -%}{{ article.image.src | image_url: width: 1000 }} 1000w,{%- endif -%}
+                  {%- if article.image.src.width >= 1500 -%}{{ article.image.src | image_url: width: 1500 }} 1500w,{%- endif -%}
+                  {{ article.image.src | image_url: width: 1500 }} {{ article.image.src.width }}w"
+                src="{{ article.image.src | image_url: width: 1500 }}"
+                sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 6 }}px, (min-width: 750px) calc((100vw - 130px) / 2), calc((100vw - 50px) / 2)"
+                alt="{{ article.image.src.alt | escape }}"
+                class="motion-reduce article-image"
+                loading="lazy"
+                width="{{ article.image.width }}"
+                height="{{ article.image.height }}"
+              >
+        {%- endif -%}
+      </a>
+      <div class="footer_blog_content">
+        <h6 class="article-title"><a href="{{ article.url }}">{{ article.title }}</a></h6>
+
+        {%- if block.settings.blog_show_date -%}
+        <p>
+          {{ article.published_at | time_tag: format: 'month_day_year' }}
+        </p>
+        {%- endif -%}
+        {%- if block.settings.blog_show_excerpt -%}
+        <p>
+          {%- if article.excerpt.size > 0 -%}
+          {{ article.excerpt | strip_html | truncate: 70 }}
+          {%- else -%}
+          {{ article.content | strip_html | truncate: 70 }}
+          {%- endif -%}
+        </p>
+        {%- endif -%}
+
+        {%- if block.settings.blog_show_comment -%}
+
+        {%- if blog.comments_enabled? and article.comments_count > 0 -%}
+        <ul>
+          <li>
+            <a href="{{ article.url }}#comments">
+              {{ article.comments_count }}
+            </a>
+          </li>
+        </ul>
+        {%- endif -%}
+
+        {%- endif -%}
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+</div>

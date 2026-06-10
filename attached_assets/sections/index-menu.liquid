@@ -1,0 +1,345 @@
+
+{%- assign index_menu = section.settings.linklist -%}
+
+<div class="filter-panel-menu">
+  {%- if section.settings.logo -%}
+  <div class="fullheight-menu-logo">
+  <a href="{{ routes.root_url }}" title="{{ shop.name }}" >
+    {%- if section.settings.logo != blank -%}
+      {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
+      {%- assign logo_height = section.settings.logo_max_width | divided_by: section.settings.logo.aspect_ratio -%}
+      {{ section.settings.logo | image_url: width: section.settings.logo_max_width | image_tag:
+        class: 'header__heading-logo',
+        widths: '50, 100, 150, 200, 250, 300, 400, 500',
+        height: logo_height,
+        width: section.settings.logo_max_width,
+        alt: logo_alt
+      }}
+    {%- else -%}
+      <span class="h2">{{ shop.name }}</span>
+    {%- endif -%}
+  </a>
+  </div>
+  {%- endif -%}
+  {%- if section.settings.filter_title != '' -%}
+  <h5 class="sidebar_title">{{ section.settings.filter_title }}</h5>
+  {%- endif -%}
+{%- if linklists[index_menu].links.size > 0 -%}
+  <div class="filter-panel" id="accordian">
+    <ul class="filter-panel-inner">
+      {% for link in linklists[index_menu].links %}
+      {% assign link_handle = link.title | handle %}
+      {% if linklists[link_handle] and linklists[link_handle].links.size > 0 %}
+      <li class="{% unless forloop.first %}{% if link.active %}active{% endif %}{% endunless %}">
+        <a href="{{ link.url }}">{{ link.title }}</a>
+        <ul>
+          {% for child in linklists[link_handle].links %}
+          <li {% if child.active %}class="active"{% endif %}><a href="{{ child.url }}">{{ child.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% else %}
+      <li class="{% if link.active %}active{% endif %}"><a href="{{ link.url }}">{{ link.title }}</a></li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    <div class="close-icon"><a><i class="fa fa-angle-left"></i> Back</a></div>
+  </div>
+{%- endif -%}
+</div>
+
+
+<script>
+// Sticky Header
+  $(window).scroll(function() {
+
+    if ($(window).scrollTop() > 100) {
+      $('.index-scroll-menu').addClass('sticky');
+    } else {
+      $('.index-scroll-menu').removeClass('sticky');
+    }
+  });
+
+//   Fullheight Menu
+
+      $(document).ready(function(){
+        {% if template contains 'index' %}
+        $('.filter-panel .filter-panel-inner li:first-child').addClass('active');
+      {% endif %}
+    });
+  $(document).click(function(event) {
+    if (!$(event.target).closest(".filter-panel").length) {
+      $("body").find(".filter-panel .filter-panel-inner").removeClass("expanded");
+    }
+  });
+
+  $(document).on('click', '.filter-panel li', function(){
+    $('.filter-panel li').removeClass('active');
+    $('.filter-panel .filter-panel-inner').toggleClass('expanded');
+    $(this).addClass('active');
+
+  });
+
+
+  $(document).ready(function(){
+    $(".dt-sc-btn.mobileToggleIcon").on("click",function(){
+      $(".dt-sc-btn.mobileToggleIcon").toggleClass("open");
+      $(".index-scroll-menu").toggleClass("open")
+    });
+    $(".close-icon").on("click",function(){
+     $(".dt-sc-btn.mobileToggleIcon").removeClass("open");
+      $(".index-scroll-menu").removeClass("open")
+    });
+  });
+
+
+</script>
+<style>
+
+
+/*  Fullheight Menu Styles */
+ #shopify-section-index-menu  #accordian {display:block;}
+  {% if settings.enable_fullheight_menu %}
+
+	body .shopify-section.index-scroll-menu #accordian { font-family: var(--DTFontTypo_Heading); }
+
+/*   @media only screen and (min-width:1201px) { */
+
+    #header .sticky-header-active.dt-header-top.dt-header-scroll > .container,
+    #header .dt-sc-header-logo-sec.sticky-header > *[class*="container"] { width: 100%;  max-width: 100%; padding-left: var(--DTGutter_Width);
+      padding-right: var(--DTGutter_Width); }
+
+    body .shopify-section.index-scroll-menu { width: {{ section.settings.scroll_menu_width }}px; clear: none; position: fixed; left: -300px; z-index: 4;
+      transition: all cubic-bezier(.47,1.21,.47,1.21) .3s; -webkit-transition: all cubic-bezier(.47,1.21,.47,1.21) .3s; top: {{ section.settings.spacing_from_top }}px; height: calc(100vh - calc(2*{{ section.settings.spacing_from_top}}px));  }
+/*     body .shifter-page.with-fullheight-menu, .site-footer, .breadcrumb { width: calc(100% - {{ section.settings.scroll_menu_width }}px); float: right; } */
+    body .shopify-section.index-scroll-menu .sidebar_title { margin-top: 0; padding: 15px; margin: 0; border-bottom: 1px solid var(--DTColor_Border); }
+    body .shopify-section.index-scroll-menu #accordian > ul li a { padding: 0; margin: 0;position: relative; color: var(--DTLinkColor); font-size: {{ section.settings.font_size }}px; }
+    body .shopify-section.index-scroll-menu #accordian > ul li a:hover { color: var(--DTLinkHoverColor); }
+    body .shopify-section.index-scroll-menu #accordian > ul > li { padding: 18px 40px 12px 20px; margin: 0; }
+    body .shopify-section.index-scroll-menu #accordian > ul > li:before { display: none; }
+    body .shopify-section.index-scroll-menu #accordian > ul > li:not(:last-child) { border-bottom: 1px solid var(--DTColor_Border); }
+    body .shopify-section.index-scroll-menu #accordian li > ul {  padding: 0; margin-top: 15px; padding-top: 15px; margin-left: 0;
+      border-top: 1px solid var(--DTColor_Border); padding-bottom: 5px; }
+    body .shopify-section.index-scroll-menu #accordian ul ul li { font-size: inherit; }
+    body .shopify-section.index-scroll-menu #accordian li > ul li a { font-size: {{ section.settings.font_size_sub }}px; }
+    body .shopify-section.index-scroll-menu #accordian ul ul li:not(:last-child) { margin-bottom: .5rem; }
+
+    body .shopify-section.index-scroll-menu #accordian a:not(:only-child) { pointer-events: none; }
+/*     body .shopify-section.index-scroll-menu #accordian a:not(:only-child):before { transform: none; -webkit-transform: none; border-radius: 0; transform: rotate(90deg);
+      -webkit-transform: rotate(90deg); }
+    body .shopify-section.index-scroll-menu #accordian a:not(:only-child):before,
+    body .shopify-section.index-scroll-menu #accordian a:not(:only-child):after { position: absolute; top: 50%; content: " "; right: 0; left: auto; margin-top: -3px;
+      width: 15px; height: 1px; background-color: var(--DTLinkColor); transition: var(--DTBaseTransition); -webkit-transition: var(--DTBaseTransition);  opacity: 1; }
+    body .shopify-section.index-scroll-menu #accordian li.active a:before { height: 0; } */
+
+  body .shopify-section.index-scroll-menu #accordian a:not(:only-child):before,
+  body .shopify-section.index-scroll-menu #accordian a:not(:only-child):after { position: absolute;  content: " ";  top: 50%; transform: translateY(-50%); left: auto; margin-top: -3px; background-color: var(--DTLinkColor); transition: var(--DTBaseTransition); -webkit-transition: var(--DTBaseTransition); opacity: 1; }
+
+  body .shopify-section.index-scroll-menu #accordian a:not(:only-child):after { width: 15px; height: 1px; left: calc(100% + 3px); }
+  body .shopify-section.index-scroll-menu #accordian a:not(:only-child):before { height: 15px; width: 1px; left: calc(100% + 10px); }
+
+  body .shopify-section.index-scroll-menu #accordian li.active a:before { height: 0; }
+
+    body .shopify-section.index-scroll-menu.sticky { width: calc({{ section.settings.scroll_menu_width }}px - 25px); height: calc(100vh - 10px); top: 0px; left: -300px; padding: 5px; }
+     body .shopify-section.index-scroll-menu.sticky.open{left:0;}
+     .dt-sc-btn.mobileToggleIcon.open {display: none;}
+     body .shopify-section.index-scroll-menu.open{ left:0;}
+/*     body .shopify-section.index-scroll-menu.sticky .filter-panel-menu { box-shadow: 0 0 10px rgba(26, 26, 26, 0.15); -webkit-box-shadow: 0 0 10px rgba(26, 26, 26, 0.15); } */
+
+    body .shopify-section.index-scroll-menu .filter-panel-menu .fullheight-menu-logo { height: 0; padding: 0 25px; }
+    body .shopify-section.index-scroll-menu .filter-panel-menu .fullheight-menu-logo img { opacity: 0; height: 0; transition: all cubic-bezier(.47,1.21,.47,1.21) .3s;
+    -webkit-transition: all cubic-bezier(.47,1.21,.47,1.21) .3s; }
+
+    body .shopify-section.index-scroll-menu.sticky .filter-panel-menu .fullheight-menu-logo { height: auto; padding: 25px 25px 0; }
+    body .shopify-section.index-scroll-menu.sticky .filter-panel-menu .fullheight-menu-logo img {  opacity: 1; height: auto; }
+
+
+    body:not(.template-index) .shopify-section.index-scroll-menu { width: calc({{ section.settings.scroll_menu_width }}px - 10px); }
+
+    body:not(.template-index) .shopify-section.index-scroll-menu,
+    body:not(.template-index) .shopify-section.index-scroll-menu .filter-panel-menu {
+      background-color: var(--DTTertiaryColor);
+    }
+
+    body:not(.template-index) .shopify-section.index-scroll-menu.sticky { height: 100%; top: 0;  }
+    body:not(.template-index) .shopify-section.index-scroll-menu #accordian > ul > li:not(:last-child) { border-bottom: 1px solid var(--DTColor_Border); }
+    body:not(.template-index) .shopify-section.index-scroll-menu #accordian li > ul { border-top: 1px solid var(--DTColor_Border); }
+
+  }
+
+  @media only screen and (max-width:1200px) {
+
+    .template-index .index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner,
+    body .shopify-section.index-scroll-menu.sticky .filter-panel-menu .filter-panel-inner { -webkit-transform: translateY(55px); transform: translateY(55px);}
+    body .shopify-section.index-scroll-menu.sticky { position: fixed; top: 0; z-index: 3; }
+
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .fullheight-menu-logo { display: none; }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu { position: relative; z-index: 3; display: none;}
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel { position: relative; max-width: 50%; width: 400px; height: 100%; display: grid; -webkit-transform: translateY(-60px); transform: translateY(-60px);
+      height: 3.5rem; margin: 1rem auto 1rem; }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner { display: grid; width: 100%; grid-template-columns: 1fr; margin: 0;
+      line-height: normal; }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li {
+      order: 1; width: 100%; margin: 0; transition: var(--DTBaseTransition); background-color: var(--DT_Button_BG_Color);
+        border: var(--DT_Button_border_width) solid var(--DT_Button_border_Color); line-height: var(--DT_Body_Line_Height);
+          border-radius: var(--DT_Button_Border_Radius); padding: var(--DTPadding_Btn); padding-right: 50px;
+            }
+
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li { align-self: center; }
+
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li a { color: var(--DT_Button_Text_Color); padding: 6px 0; }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li.active a { pointer-events: none; }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li:not(:last-child),
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li.is-checked.active {
+      border-bottom: 1px solid {{ settings.button_text_color | color_modify: 'alpha', 0.2 }};
+    }
+
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li.active,
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li.is-checked {
+      order: 0;
+      z-index: 1;
+    }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner:after {
+      width: 10px; height: 10px; border: 2px solid var(--DT_Button_Text_Color); border-right: 0; border-bottom: 0; content: ""; position: absolute; right: 25px;
+        transform: rotate(-135deg) translateY(-50%); -webkit-transform: rotate(-135deg) translateY(-50%); top: 20px; z-index: 1; pointer-events: none;
+        transform-origin: left 5px; -webkit-transform-origin: left 5px; }
+
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li:not(.active) { position: absolute; top: 0; bottom: 0; }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner.expanded:after { transform: rotate(45deg) translateY(-50%);
+      -webkit-transform: rotate(45deg) translateY(-50%); transform-origin: -15px -15px; -webkit-transform-origin: -15px -15px; }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner.expanded li:not(.active) { position: relative; top: auto; }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li ul,
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li a:after { display: none !important; }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li:not(.active):hover {
+      background: var(--DT_Button_BG_Hover_Color); }
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li:not(.active):hover a {
+      color: var(--DT_Button_Text_Hover_Color); }
+    body .shopify-section.index-scroll-menu{background-color: var(--DTTertiaryColor);}
+  }
+
+  @media only screen and (max-width: 767px) {
+
+    header .logo-alignment:not(.secondary-menu-enabled) #AccessibleNav { justify-content: center; }
+    header .logo-alignment:not(.secondary-menu-enabled) #AccessibleNav .logo { margin-bottom: 0; }
+
+    header .dt-sc-header-logo-sec { padding: 15px 0; }
+
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner li {
+      padding: 8px 20px;
+    }
+
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner::after {
+      width: 10px; height: 10px; right: 10px; top: 50%; transform-origin: left 0px; -webkit-transform-origin: left 0px;
+    }
+
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel .filter-panel-inner.expanded::after {
+      transform-origin: -15px -15px; -webkit-transform-origin: left -10px;
+    }
+
+    body .shopify-section.index-scroll-menu{background-color: var(--DTTertiaryColor);}
+
+  }
+
+	@media only screen and (max-width:576px) {
+
+    #shopify-section-index-menu.index-scroll-menu .filter-panel-menu .filter-panel {
+      max-width: 80%; margin: 20px auto;
+    }
+
+    body .shopify-section.index-scroll-menu{background-color: var(--DTTertiaryColor);}
+
+  }
+  	@media only screen and (max-width:843px) { .dt-sc-btn.mobileToggleIcon{display:none;}}
+
+
+
+    {% endif %}
+  @media only screen and (min-width:1201px) {
+
+  body .shopify-section.index-scroll-menu { background-color: {{ section.settings.fullwidth_menu_bg }}; box-shadow: var(--DTboxShadow); top: {{ section.settings.spacing_from_top }}px;
+  left: -300px; height: calc(100vh - calc(2*{{ section.settings.spacing_from_top }}px));  }
+
+  }
+
+
+    .dt-sc-btn.mobileToggleIcon{position: fixed; left: 0; top: 0; bottom: 0; display:flex; align-items: center; z-index: 9; top: 50%; height: 50px; padding: var(--DTInputPadding); }
+    #shopify-section-index-menu .close-icon { display: flex; justify-content: center; align-items: center;}
+    #shopify-section-index-menu .close-icon a{ padding: var(--DTPadding_Btn); background: var(--DT_Button_BG_Color); color: var(--DT_Button_Text_Color);}
+    #shopify-section-index-menu .close-icon a:hover{    background: var(--DT_Button_BG_Hover_Color); color: var(--DT_Button_Text_Hover_Color);}
+     @media only screen and (max-width:844px){
+      .dt-sc-btn.mobileToggleIcon{ display: none; }
+   }
+
+</style>
+
+{% schema %}
+  {
+  "name": "Index menu",
+  "class": "index-scroll-menu",
+  "settings": [
+  {
+  "type": "header",
+  "content": "Index menu settings",
+  "info":"Not for Mobile"
+  },
+  {
+  "type": "range",
+  "id": "scroll_menu_width",
+  "label":"Scroll menu width",
+  "min": 0,
+  "max": 500,
+  "step": 5,
+  "unit": "px",
+  "default": 350
+  },
+  {
+  "type": "range",
+  "id": "spacing_from_top",
+  "label":"Index Menu Top Spacing",
+  "min": 0,
+  "max": 250,
+  "step": 5,
+  "unit": "px",
+  "default": 100
+  },
+  {
+  "type": "color",
+  "id": "fullwidth_menu_bg",
+  "label": "Fullwidth Menu Background",
+  "default": "#fff"
+  },
+  {
+  "type": "image_picker",
+  "id": "logo",
+  "label": "Logo image"
+  },
+{
+  "type": "range",
+  "id": "logo_max_width",
+  "label":"Custom logo width",
+  "min": 50,
+  "max": 100,
+  "step": 1,
+  "unit": "%",
+  "default": 75
+  },
+  {
+  "type": "text",
+  "id": "filter_title",
+  "label": "Title",
+  "default": "Custom Menu"
+  },
+  {
+  "type": "link_list",
+  "id": "linklist",
+  "label": "Menu"
+  },
+  {
+  "type": "checkbox",
+  "id": "hide_indexmenu_mobile",
+  "label": "Hide index menu on mobile",
+  "default": true
+  }
+  ]
+  }
+{% endschema %}

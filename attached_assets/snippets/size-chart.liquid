@@ -1,0 +1,26 @@
+<div class="pop-up-modal">
+  <div class="pop-up-content">
+    <span class="close-button dt-sc-btn close-icon"></span>
+    <span class="size-chart-content">{{ pages.size-chart.content }}</span>
+  </div>
+</div>
+
+<script>
+  const sizeModal = document.querySelector(".pop-up-modal");
+  const sizeTrigger = document.querySelector(".trigger-pop-up");
+  const sizeXButton = document.querySelector(".pop-up-modal .close-button");
+
+  function sizeToggle() {
+    sizeModal.classList.toggle("show-pop-up");
+  }
+  function sizeOnClick(event) {
+    if (event.target === sizeModal) {
+      sizeToggle();
+    }
+  }
+
+    sizeTrigger.addEventListener("click", sizeToggle);
+    sizeXButton.addEventListener("click", sizeToggle);
+    window.addEventListener("click", sizeOnClick);
+  
+</script>

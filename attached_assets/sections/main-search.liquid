@@ -1,0 +1,199 @@
+{%- liquid
+  case settings.search_grid
+  when '1'
+  when '2'
+    assign column = 'two-column'
+    assign imageSize = '767x767'
+  when '3'
+    assign column = 'three-column'
+    assign imageSize = '767x767'
+  when '4'
+    assign column = 'four-column'
+    assign imageSize = '767x767'
+  when '5'
+    assign column = 'five-column'
+    assign imageSize = '767x767'
+  when '6'
+    assign column = 'six-column'
+    assign imageSize = '767x767'
+  endcase
+  if settings.search_results_per_page != blank
+    assign search_per_page = settings.search_results_per_page
+  else
+    assign search_per_page = 24
+  endif
+%}
+
+{% paginate search.results by search_per_page %}
+  <div
+    class="container"
+    data-section-id="search-page"
+    data-section-type="search-page">
+    <div class="row">
+      <div class="search-products collection-template" data-search-page>
+
+        {% if search.performed %}
+          {% if search.results_count == 0 %}
+            <h2>{{ 'general.search.no_results_html' | t: terms: search.terms }}</h2>
+            {% render 'search-bar' %}
+            <div style="text-align:center; padding:30px 0;">
+              <p style="color:#888; margin-bottom:16px;">Try one of these popular searches:</p>
+              <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <a href="/search?q=one+piece&type=product&options[prefix]=last" class="dt-sc-btn">One Piece</a>
+                <a href="/search?q=naruto&type=product&options[prefix]=last" class="dt-sc-btn">Naruto</a>
+                <a href="/search?q=demon+slayer&type=product&options[prefix]=last" class="dt-sc-btn">Demon Slayer</a>
+                <a href="/search?q=hoodie&type=product&options[prefix]=last" class="dt-sc-btn">Hoodies</a>
+                <a href="/search?q=figure&type=product&options[prefix]=last" class="dt-sc-btn">Figures</a>
+                <a href="/search?q=phone+case&type=product&options[prefix]=last" class="dt-sc-btn">Phone Cases</a>
+                <a href="/search?q=jujutsu&type=product&options[prefix]=last" class="dt-sc-btn">Jujutsu Kaisen</a>
+                <a href="/search?q=solo+leveling&type=product&options[prefix]=last" class="dt-sc-btn">Solo Leveling</a>
+              </div>
+            </div>
+          {% else %}
+            <h2>
+              {{ 'general.search.results_for_html' | t: terms: search.terms }}
+              <span style="font-size:14px; font-weight:400; color:#888; margin-left:8px;">
+                ({{ search.results_count }} result{% if search.results_count != 1 %}s{% endif %})
+              </span>
+            </h2>
+            {% render 'search-bar' %}
+          {% endif %}
+        {% else %}
+          <h2>{{ 'general.search.title' | t }}</h2>
+          {% render 'search-bar' %}
+        {% endif %}
+
+        <div class="dT_VProdWrapper">
+          <ul class="dt-sc-column {{ column }}" id="iv-search-results-grid">
+            {% for item in search.results %}
+              {% if item.object_type == 'product' %}
+                {% render 'product-grid-item', product: item, imageSize: imageSize %}
+              {% else %}
+                <li class="grid item-row grid__item">
+                  <div class="products">
+                    <div class="product-container">
+                      {% assign featured_image = item.image | default: item.featured_image %}
+                      {% if featured_image != blank %}
+                        <a href="{{ item.url }}" title="{{ item.title | escape }}">
+                          {{ featured_image | image_url: width: 800 | image_tag: featured_image.alt }}
+                        </a>
+                      {% endif %}
+                    </div>
+                    <div class="product-detail">
+                      <a href="{{ item.url }}" class="grid-link__title">{{ item.title }}</a>
+                    </div>
+                  </div>
+                </li>
+              {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <div id="iv-load-more-wrap" style="display:flex; flex-direction:column; align-items:center; justify-content:center; margin: 40px auto; text-align:center; width:100%;">
+            <button
+              id="iv-search-load-more-btn"
+              class="dt-sc-btn"
+              style="min-width:200px; cursor:pointer;"
+              data-current-page="1"
+              data-total-pages="{{ paginate.pages }}"
+              data-query="{{ search.terms | escape }}"
+              data-per-page="{{ search_per_page }}">
+              Load More Results
+            </button>
+            <p id="iv-search-count-label" style="margin-top:10px; font-size:13px; color:#888;">
+              Showing <span id="iv-shown-count">{{ search.results | size }}</span> of {{ search.results_count }} results
+            </p>
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+{% endpaginate %}
+
+<script>
+(function() {
+  var btn = document.getElementById('iv-search-load-more-btn');
+  var grid = document.getElementById('iv-search-results-grid');
+  var shownCount = document.getElementById('iv-shown-count');
+  if (!btn || !grid) return;
+
+  var currentPage = 1;
+  var totalPages = parseInt(btn.dataset.totalPages);
+  var query = btn.dataset.query;
+  var perPage = parseInt(btn.dataset.perPage);
+
+  btn.addEventListener('click', function() {
+    if (currentPage >= totalPages) return;
+
+    var nextPage = currentPage + 1;
+    btn.textContent = 'Loading...';
+    btn.disabled = true;
+
+    var url = '/search?q=' + encodeURIComponent(query)
+      + '&type=product'
+      + '&options%5Bprefix%5D=last'
+      + '&options%5Bunavailable_products%5D=last'
+      + '&page=' + nextPage
+      + '&section_id=search-page';
+
+    fetch(url)
+      .then(function(r) {
+        if (!r.ok) throw new Error('Network error');
+        return r.text();
+      })
+      .then(function(html) {
+        var parser = new DOMParser();
+        var doc = parser.parseFromString(html, 'text/html');
+
+        var newGrid = doc.getElementById('iv-search-results-grid');
+        if (!newGrid) {
+          btn.textContent = 'Load More Results';
+          btn.disabled = false;
+          return;
+        }
+
+        var newItems = newGrid.querySelectorAll('li');
+        if (newItems.length === 0) {
+          btn.textContent = 'All Results Loaded';
+          btn.disabled = true;
+          btn.style.opacity = '0.5';
+          return;
+        }
+
+        newItems.forEach(function(item) {
+          grid.appendChild(item.cloneNode(true));
+        });
+
+        currentPage = nextPage;
+
+        if (shownCount) {
+          shownCount.textContent = grid.querySelectorAll('li').length;
+        }
+
+        if (currentPage >= totalPages) {
+          btn.textContent = 'All Results Loaded';
+          btn.disabled = true;
+          btn.style.opacity = '0.5';
+        } else {
+          btn.textContent = 'Load More Results';
+          btn.disabled = false;
+        }
+      })
+      .catch(function(err) {
+        console.error('Load more error:', err);
+        btn.textContent = 'Load More Results';
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Search",
+  "tag": "section",
+  "class": "main-search-page"
+}
+{% endschema %}

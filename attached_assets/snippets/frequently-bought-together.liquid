@@ -1,0 +1,246 @@
+{% assign main_current_variant = product.selected_or_first_available_variant %}
+{%- assign buy_together_metafields =  product.metafields.my_fields.buy_together | split: ',' -%}
+{% if buy_together_metafields != blank %}
+<div class="product-attributes fbt">
+  <div class="fbt-wrapper">
+<!--       <div  class="fbt-product" id="dT_fbt-product-{{ main_current_variant.id }}" data-fbt-product-id="{{ main_current_variant.id }}" data-fbt-product-handle="{{ product.handle }}">
+            {% assign featured_media = main_current_variant.featured_media %}
+            <div class="product-fbt__media"  data-fb-media-id="{{ featured_media.id }}">
+            {{ featured_media | image_url: width: 250 | image_tag }}
+            </div>
+  <div class="fbt-product__meta">
+            <select name="selectVariant" class="selectVariant selectVariant0">
+            {% for variant in product.variants %}
+            <option value="{{ variant.id }}" data-option-price="{{ variant.price | money }}"
+            {% if variant == main_current_variant %}selected="selected"{% endif %}>
+            {{ variant.title }} - {{ variant.price | money }}
+            </option>
+            {% endfor %}
+            </select>
+
+          <span data-decrease>-</span>
+          <input data-value type="text"  id="quantity0" name="v-quantity" class="v-qty" value="1" />
+          <span data-increase>+</span>
+  </div>
+      </div> -->
+      {% for bt_handle in buy_together_metafields %}
+      {% assign bt_array = bt_handle | strip %}
+      {%- assign pro = all_products[bt_array] -%}
+          <div class="fbt-product" id="dT_fbt-product-{{ pro.id }}" data-fbt-product-id="{{ pro.id }}" data-fbt-product-handle="{{ pro.handle }}">
+          {%- assign current_variant = pro.selected_or_first_available_variant -%}
+          {%- assign featured_media = current_variant.featured_media -%}
+            <div class="product-fbt__media"  data-fb-media-id="{{ featured_media.id }}">
+            {{ featured_media | image_url: width: 250 | image_tag }}
+            </div>
+<div class="fbt-product__meta">
+            <select name="selectVariant" class="selectVariant selectVariant{{ forloop.index }}">
+            {%- for variant in pro.variants -%}
+            <option value="{{ variant.id }}" data-option-price="{{ variant.price | money }}"
+            {% if variant == current_variant %}selected="selected"{% endif %}>
+           {{ variant.title }} - {{ variant.price | money }}
+            </option>
+            {%- endfor -%}
+            </select>
+             <div class="qty-controls">
+             <span data-decrease></span>
+                <input data-value type="text"   id="quantity{{ forloop.index }}" name="v-quantity" class="v-qty" value="1"  />
+              <span data-increase></span>
+             </div>
+        </div>
+          </div>
+{%- endfor -%}
+  </div>
+
+  <input type="hidden" id="fbt-hidden-qty" name="fbt-hidden-qty"  value="1,1" />
+  <input type="hidden" id="fbt-hidden-values" name="fbt-hidden-values"  value="{%- for bt_handle in buy_together_metafields -%}{%- assign bt_array = bt_handle | strip -%}{%- assign pro = all_products[bt_array] -%}{{- pro.selected_or_first_available_variant.id -}}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}" />
+    <input type="button" value="{{ 'products.product.bought_together' | t }}" id="add-frequently-bought" />
+</div>
+
+
+<script type="text/javascript">
+
+  $(function() {
+	$('[data-decrease]').click(decrease);
+	$('[data-increase]').click(increase);
+	$('[data-value]').change(valueChange);
+});
+
+function decrease() {
+	var value = $(this).parent().find('[data-value]').val();
+	if(value > 1) {
+		value--;
+		$(this).parent().find('[data-value]').val(value);
+	}
+}
+
+function increase() {
+	var value = $(this).parent().find('[data-value]').val();
+	if(value < 100) {
+		value++;
+		$(this).parent().find('[data-value]').val(value);
+	}
+}
+
+function valueChange() {
+	var value = $(this).val();
+	if(value == undefined || isNaN(value) == true || value <= 0) {
+		$(this).val(1);
+	} else if(value >= 101) {
+		$(this).val(100);
+	}
+}
+
+  var variantArray = [];
+  var qtyArray = [];
+
+  variantArray =  $('#fbt-hidden-values').val();
+  qtyArray =  $('#fbt-hidden-qty').val();
+
+
+
+  $('.fbt-wrapper .fbt-product').each(function( index ) {
+    var VariantIDs = [];
+      $(this).find("select.selectVariant").change(function(){
+       variantArray = "";
+        $.each($(".selectVariant option:selected"), function(){
+          VariantIDs.push($(this).val());
+        });
+        $('#fbt-hidden-values').val(VariantIDs.join(","));
+        variantArray =  $('#fbt-hidden-values').val();
+    });
+
+ });
+
+
+  $('#add-frequently-bought').on('click', function()  {
+    var VariantQty = $("input[name='v-quantity']").map(function() {
+    return this.value;
+}).get();
+    $('#fbt-hidden-qty').val(VariantQty);
+    qtyArray =  $('#fbt-hidden-qty').val();
+   addAllItems(variantArray, qtyArray);
+   });
+
+
+
+  function addAllItems(array, qtyArray){
+    Shopify.queue = [];
+    var quantity = 1 ;
+    var newArray = array.split(',');
+    var qArray = qtyArray.split(',');
+    for (var i = 0; i < newArray.length; i++) {
+      product = newArray[i]
+      qty = qArray[i]
+      Shopify.queue.push({
+        variantId: product,
+        quanity: qty,
+      });
+    }
+
+
+    Shopify.moveAlong = function() {
+      if (Shopify.queue.length) {
+        var request = Shopify.queue.shift();
+        var data = 'id='+ request.variantId + '&quantity='+request.quanity;
+        console.log(data);
+        $.ajax({
+          type: 'POST',
+          url: '/cart/add.js',
+          dataType: 'json',
+          data: data,
+          success: function(res){
+            Shopify.moveAlong();
+           // quantity += 1;
+          },
+          error: function(){
+            if (Shopify.queue.length){
+              Shopify.moveAlong();
+            } else {
+              ajaxCart.init({
+                formSelector: '[data-product-form]',
+                cartContainer: '#CartContainer',
+                addToCartSelector: '.dT_AddToCart',
+                cartCountSelector: '.CartCount',
+                cartCostSelector: '.CartCost',
+                moneyFormat: DT_THEME.moneyFormat
+              });
+              $('.dT_MiniCartModelBtn').trigger('click');
+            }
+          }
+        });
+      }
+      else {
+        quantity += 1;
+        addToCartOk(quantity);
+      }
+    };
+    Shopify.moveAlong();
+  };
+
+  function addToCartOk(quantity){
+    ajaxCart.init({
+      formSelector: '[data-product-form]',
+      cartContainer: '#CartContainer',
+      addToCartSelector: '.dT_AddToCart',
+      cartCountSelector: '.CartCount',
+      cartCostSelector: '.CartCost',
+      moneyFormat: DT_THEME.moneyFormat
+    });
+    $('.dT_MiniCartModelBtn').trigger('click');
+  }
+</script>
+{% endif %}
+
+<style type="text/css">
+  form[class*=shopify-product] .product-attributes.fbt { display: block; border: 1px solid var(--DTColor_Border); padding: 10px;}
+  form[class*=shopify-product] .product-attributes.fbt .fbt-wrapper { display: flex; flex-direction: column; margin:0; padding: 0; justify-content: flex-start; }
+  form[class*=shopify-product] .product-attributes.fbt .fbt-wrapper .select2  {display:none;}
+  form[class*=shopify-product] .product-attributes.fbt .fbt-wrapper .fbt-product {
+    margin: 10px;
+    text-align: center;
+    color: var(--DTPrimaryColor);
+    display: grid;
+    grid-template-columns: 100px 1fr;
+        gap: 15px;
+    background-color: var(--DTboxShadowcolor_light);
+    padding: 15px;
+  }
+  form[class*=shopify-product] .product-attributes.fbt .fbt-wrapper .fbt-product .price { padding:10px; }
+  form[class*=shopify-product] .product-attributes.fbt .fbt-wrapper .fbt-product img { aspect-ratio: 1/1; object-fit: contain;}
+  form[class*=shopify-product] .product-attributes.fbt #add-frequently-bought { margin:10px auto; }
+  form[class*=shopify-product] .product-attributes.fbt .qty-controls{ height:40px; border: 1px solid var(--DTColor_Border); display:flex; }
+  form[class*=shopify-product] .product-attributes.fbt .qty-controls span {
+    cursor: pointer;
+    flex: 1 1 auto;
+    position:relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--DTBaseTransition);
+  }
+  form[class*=shopify-product] .product-attributes.fbt .qty-controls span:hover {background-color: var(--DT_Button_BG_Color); color: var(--DT_Button_Text_Color);}
+  form[class*=shopify-product] .product-attributes.fbt .qty-controls .v-qty{
+    width: 60px;
+    text-align: center;
+    border-width: 0 1px
+  }
+  form[class*=shopify-product] .product-attributes.fbt .fbt-product__meta { align-items: center; display: grid; grid-template-columns: auto auto; gap: 15px;  }
+  form[class*=shopify-product] .product-attributes.fbt .fbt-product__meta .selectVariant { background-color: var(--DTBodyBGColor); padding: 10px;  }
+  form[class*=shopify-product] .product-attributes.fbt .qty-controls span[data-increase]:before,
+  form[class*=shopify-product] .product-attributes.fbt .qty-controls span[data-increase]:after,
+  form[class*=shopify-product] .product-attributes.fbt .qty-controls span[data-decrease]:before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 1px;
+    background-color: currentColor;
+    left:0;
+    right:0;
+    margin: auto;
+}
+  form[class*=shopify-product] .product-attributes.fbt .qty-controls span[data-increase]:after{
+    transform: rotate(90deg);
+}
+</style>

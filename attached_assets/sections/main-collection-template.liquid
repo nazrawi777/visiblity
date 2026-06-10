@@ -1,0 +1,605 @@
+{%- liquid
+  assign margin = section.settings.margin | split: ','
+  assign margin_top = margin[0]
+  assign margin_bottom = margin[1]
+  assign padding = section.settings.padding | split: ','
+  assign padding_top = padding[0]
+  assign padding_bottom = padding[1]
+  case section.settings.grid
+    when '2'
+      assign grid_item_width = 'two-column'
+      assign imageSize = '767x767'
+    when '3'
+      assign grid_item_width = 'three-column'
+      assign imageSize = '767x767'
+    when '4'
+      assign grid_item_width = 'four-column'
+      assign imageSize = '767x767'
+    when '5'
+      assign grid_item_width = 'five-column'
+      assign imageSize = '767x767'
+    when '6'
+      assign grid_item_width = 'six-column'
+      assign imageSize = '767x767'
+  endcase
+-%}
+
+{%- liquid
+  assign collection_alt = collection.title
+  assign collection_welcome = ''
+  assign collection_meta_desc = collection.description | strip_html | truncatewords: 25
+  if collection.handle contains 'mans-anime-merch'
+    assign collection_alt = "A showcase of Man's Anime Merch including vintage washed t-shirts, hoodies, and action figures from Solo Leveling and Demon Slayer"
+    assign collection_welcome = "Yo, King! Welcome to the ultimate armory at Infinite Visibility. Whether you're training to be the next Hokage, sailing for the One Piece, or just grinding dungeons in the real world, you need gear that keeps up. Stop wearing basic loot. It's time to upgrade your inventory with the hardest anime drops on the web. Let's get you suited up for greatness! Level up your lifestyle."
+    assign collection_meta_desc = "Upgrade your inventory with premium Man's Anime Merch! Shop trending streetwear, figures, and tech gear from Naruto, One Piece & more. Free worldwide shipping. Explore now!"
+  elsif collection.handle contains 'womens-anime-merch'
+    assign collection_alt = "A collection of Women's Anime Merch featuring cute Anya Forger t-shirts, oversized Demon Slayer hoodies, and kawaii phone cases"
+    assign collection_welcome = "Konnichiwa, Queen! Welcome to Infinite Visibility, your personal boutique for the cutest and fiercest looks in the anime world. Whether you're channeling your inner Magical Girl or suiting up like a Hashira, we believe your style should be as legendary as you are. Get ready to sparkle and slay! Unleash your inner Senpai!"
+    assign collection_meta_desc = "Level up your aesthetic with our Women's Anime Merch! Shop cute tees, cozy hoodies, and kawaii accessories. Free worldwide shipping. Find your style now!"
+  elsif collection.handle contains 'kids-anime-merch'
+    assign collection_alt = "A colorful collection of Kids Anime Merch featuring One Piece hoodies for boys, K-Pop girl group tops, and cute Pokemon figures"
+    assign collection_welcome = "Hey there, Little Heroes! Welcome to Infinite Visibility, the playground for the next generation of anime fans! Whether you're sending them off to the Ninja Academy (school) or on a Pokémon adventure in the backyard, we believe their gear should be as imaginative as they are. Let's power up their world! Start the adventure!"
+    assign collection_meta_desc = "Power up playtime with our Kids Anime Merch! Shop durable hoodies, cute Pokemon toys, and room decor. Free worldwide shipping. The perfect gift for little fans!"
+  elsif collection.handle contains 'anime-accessories'
+    assign collection_alt = "A curated display of Anime Accessories featuring Solo Leveling phone cases, One Piece Luffy figures, and Demon Slayer wall art scrolls"
+    assign collection_welcome = "Welcome to the Secret Item Shop! You've equipped the armor (clothes), now it's time to fill your inventory. At Infinite Visibility, we believe that true fandom lives in the details. From the phone in your hand to the art on your walls, we turn the mundane into the magical. Equip the best gear!"
+    assign collection_meta_desc = "Upgrade your world with premium Anime Accessories! Shop shockproof phone cases, detailed figures, posters, and stickers. Free worldwide shipping. Customize your life now!"
+  elsif collection.handle contains 'premium-anime-merchandise'
+    assign collection_alt = "A vast collection of Premium Anime Merchandise displaying t-shirts, phone cases, and action figures from Naruto, One Piece, and Demon Slayer"
+    assign collection_welcome = "Welcome to the Grand Archive! You have reached the source of all power at Infinite Visibility. Whether you are looking for armor (fashion), weapons (tech accessories), or rare treasures (collectibles), you will find it within these walls. Don't get lost in the sauce — use your map (filters) to navigate! The gate is open. Raid the dungeon!"
+    assign collection_meta_desc = "Explore our complete collection of Premium Anime Merchandise! Shop trendy streetwear, figures, phone cases, and decor. Free worldwide shipping. The ultimate otaku shop."
+  elsif collection.handle contains 'sale' or collection.handle contains 'clearance'
+    assign collection_alt = "A promotional banner for the Big Anime Sale displaying discounted Naruto figures, One Piece hoodies, and Demon Slayer accessories"
+    assign collection_welcome = "SYSTEM ALERT: Price Drop Detected! Welcome to the Infinite Visibility Treasure Room! You've stumbled upon a rare loot event. We're slashing prices like Zoro slashes enemies. But be warned: these deals are moving faster than a ninja using the Body Flicker Technique. Secure your loot before it vanishes!"
+    assign collection_meta_desc = "Shop the Big Anime Sale at Infinite Visibility! Massive discounts on hoodies, figures & phone cases. Free worldwide shipping. Limited time offers. Save big now!"
+  endif
+-%}
+
+<nav class="collection-breadcrumb" aria-label="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+  <ol>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <a itemprop="item" href="{{ shop.url }}">
+        <span itemprop="name">Home</span>
+      </a>
+      <meta itemprop="position" content="1">
+    </li>
+    <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+      <span itemprop="name">{{ collection.title }}</span>
+      <meta itemprop="position" content="2">
+    </li>
+  </ol>
+</nav>
+
+{% capture collection_meta %}
+<div class="collection-hero {{ section.settings.banner_position }}">
+  <div class="collection-hero__image">
+    <img
+      srcset="{%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if collection.image.width >= 360 -%}{{ collection.image | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if collection.image.width >= 535 -%}{{ collection.image | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if collection.image.width >= 750 -%}{{ collection.image | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if collection.image.width >= 1070 -%}{{ collection.image | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if collection.image.width >= 1500 -%}{{ collection.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ collection.image | image_url }} {{ collection.image.width }}w"
+      src="{{ collection.image | image_url: width: 750 }}"
+      sizes="(min-width: {{ settings.page_width }}px) {{ settings.page_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
+      alt="{{ collection_alt }}"
+      loading="eager"
+      fetchpriority="high"
+      width="{{ collection.image.width }}"
+      height="{{ collection.image.height }}"
+    >
+  </div>
+  <div class="hero-header">
+    <h1 itemprop="name">{{ collection.title }}</h1>
+    {%- if collection_welcome != '' -%}
+    <div class="collection-welcome-message">
+      <p>{{ collection_welcome }}</p>
+    </div>
+    {%- endif -%}
+    {% if collection.description != blank %}
+    <div class="rte collection-description" itemprop="description">
+      {{ collection.description }}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endcapture %}
+
+<div class="{% render 'container-settings' %}" data-section-id="{{ section.id }}" data-section-type="collection-template" itemscope itemtype="https://schema.org/CollectionPage">
+  <meta itemprop="name" content="{{ collection.title | escape }}">
+  <meta itemprop="description" content="{{ collection_meta_desc | escape }}">
+  <meta itemprop="url" content="{{ shop.url }}/collections/{{ collection.handle }}">
+  <div class="row">
+    {% if section.settings.show_collection_image and collection.image and section.settings.banner_position == 'below-navigation' %}
+    {{ collection_meta }}
+    {% endif %}
+
+    {% if section.settings.show_sub_collection %}
+    <div class="show_sub_collection list-collection-products dt-sc-column {{ grid_item_width }}">
+      {%- liquid
+        assign collection_handle = collection.handle
+        for link in linklists[collection_handle].links
+          assign sub_collection = link.object
+          assign featured = sub_collection.handle
+          render 'collection-grid-item', featured: featured
+        endfor
+      %}
+    </div>
+    {% endif %}
+
+    {%- liquid
+      if section.settings.enable_items_per_page
+        if cart.attributes.pagination != blank and cart.attributes.pagination
+          assign product_per_page = cart.attributes.pagination
+        else
+          assign product_per_page = 36
+        endif
+      else
+        assign product_per_page = 36
+      endif
+    -%}
+
+    {% paginate collection.products by product_per_page %}
+
+    {% if section.settings.filter_type == "drawer" %}
+    <div class="drawer-sidebar">
+      <div class="text-center sidebar_btn {% if settings.collection_sidebar_mobile %} hidden {% endif %}">
+        <a class="dt-sc-btn toggleIcon"> <i class="fa fa-caret-right" aria-hidden="true"></i> </a>
+      </div>
+      <div class="sidebar sidebar-height-{{ section.id }} {{ settings.sidebar_style }}_style sidebar-sticky" sidebar-sticky>
+        <a href="#" class="js-close-modal dt-sc-btn close-icon"></a>
+        <a href="#" class="clear-all dT_ClearAll" style="text-align: right;margin-bottom: 15px;">Clear All</a>
+        {% render 'collection-sidebar' %}
+      </div>
+      <div class="canvas-overlay"></div>
+    </div>
+    {% endif %}
+
+    {% if section.settings.filter_type == 'horizontal' %}
+    <div class="horizontal-filter-sidebar">
+      <p class="filter-heading">{% render 'icon-filter' %}</p>
+      {% render 'collection-filter' %}
+    </div>
+    {% endif %}
+
+    <div id="collection-template-query" class="{% if settings.collection_sidebar_use == 'full-width' or section.settings.filter_type == 'drawer' %}no-sidebar{% else %}has-sidebar {{ settings.collection_sidebar_use}}{% endif %}">
+      <div class="collection-grid product-grid-height-{{ section.id }}">
+        {% if section.settings.show_collection_image and collection.image and section.settings.banner_position == 'with-in-container' %}
+        {{ collection_meta }}
+        {% endif %}
+
+        {% if section.settings.collections_view_enable or section.settings.collections_sort_enable %}
+        <div class="collection-header">
+          {% if section.settings.filter_type == 'drawer' %}<a class="drawer_filter_action dt-sc-btn">{% render 'icon-filter' %} Filter</a>{% endif %}
+          {% if section.settings.collections_view_enable %}{% render 'collection-mode', grid_item_width: grid_item_width %}{% endif %}
+          {% if section.settings.collections_custom_cols %}
+          <ul class="custom-product-grid">
+            <li data-cols="one-column" class="{% if section.settings.grid == '1' %}active{% endif %}"></li>
+            <li data-cols="two-column" class="{% if section.settings.grid == '2' %}active{% endif %}"></li>
+            <li data-cols="three-column" class="{% if section.settings.grid == '3' %}active{% endif %}"></li>
+            <li data-cols="four-column" class="{% if section.settings.grid == '4' %}active{% endif %}"></li>
+            <li data-cols="five-column" class="{% if section.settings.grid == '5' %}active{% endif %}"></li>
+            <li data-cols="six-column" class="{% if section.settings.grid == '6' %}active{% endif %}"></li>
+          </ul>
+          {% endif %}
+          {% if section.settings.enable_items_per_page %}
+          <div class="items_per_page">
+            <label>{{ 'products.product.items_per_view' | t }}</label>
+            <select name="paginateBy" id="paginateBy" class="collection-sort__input">
+              <option value="6" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '6' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '6' %}selected="selected"{% endif %}{% endif %}>6</option>
+              <option value="12" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '12' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '12' %}selected="selected"{% endif %}{% endif %}>12</option>
+              <option value="18" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '18' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '18' %}selected="selected"{% endif %}{% endif %}>18</option>
+              <option value="24" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '24' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '24' %}selected="selected"{% endif %}{% endif %}>24</option>
+              <option value="36" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '36' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '36' %}selected="selected"{% endif %}{% endif %}>36</option>
+              <option value="48" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '48' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '48' %}selected="selected"{% endif %}{% endif %}>48</option>
+            </select>
+          </div>
+          {% endif %}
+          {% if section.settings.collections_sort_enable %}{% render 'collection-sorting' %}{% endif %}
+        </div>
+        {% endif %}
+
+        <div class="dT_VProdWrapper" id="dT_collectionGrid">
+          <ul class="grid product-collection dt-sc-column {{ grid_item_width }} dt-even-columns product-grid-style"
+            {% unless section.settings.pagination == 'numbers' %} id="AjaxinateContainer" {% endunless %}>
+            {% if collection.products.size > 0 %}
+              {% for product in collection.products %}
+                {% render 'product-grid-item', product: product, imageSize: imageSize %}
+              {% endfor %}
+            {% else %}
+              <li class="push">
+                <p><em>{{ 'home_page.onboarding.no_products_html' | t }}</em></p>
+              </li>
+            {% endif %}
+          </ul>
+
+          {% if section.settings.pagination == 'numbers' %}
+            {% if paginate.pages > 1 %}
+            <div class="text-center pagination">
+              {% render 'pagination', paginate: paginate %}
+            </div>
+            {% endif %}
+          {% endif %}
+
+          {% unless section.settings.pagination == 'numbers' %}
+          <div id="AjaxinatePagination" class="pagination-method-{{- section.settings.pagination -}}">
+            <div class="custom-page-progress-bar" data-page-items-count='{{ collection.products_count }}'>
+              {%- assign productSize = collection.products.size | plus: paginate.current_offset -%}
+              <p>{{ 'collections.general.count_text' | t: current_count: productSize, total_count: collection.products_count }}</p>
+              <div class="progress-bar">
+                <div class="active-bar" style="width: {{ productSize | times: 100.0 | divided_by: collection.products_count }}%"></div>
+              </div>
+            </div>
+            {% if paginate.next %}
+            <div class="load_more_btn"><a class="dt-sc-btn text-center" href="{{ paginate.next.url }}">{{ 'collections.general.load_more' | t }}</a></div>
+            {% endif %}
+          </div>
+          {% endunless %}
+        </div>
+      </div>
+
+      {% unless settings.collection_sidebar_use == 'full-width' %}
+        {% unless section.settings.filter_type == 'drawer' %}
+          {% render 'collection-sidebar' %}
+        {% endunless %}
+      {% endunless %}
+    </div>
+
+    {% endpaginate %}
+
+    <div class="iv-collection-links">
+      <p class="iv-collection-links__heading">Explore More at Infinite Visibility</p>
+      <ul class="iv-collection-links__list">
+        {%- unless collection.handle contains 'mans-anime-merch' -%}
+        <li><a href="/collections/mans-anime-merch-streetwear-gear-collectibles">Man's Anime Merch</a></li>
+        {%- endunless -%}
+        {%- unless collection.handle contains 'womens-anime-merch' -%}
+        <li><a href="/collections/womens-anime-merch-cute-trendy-gear-kawaii">Women's Anime Merch</a></li>
+        {%- endunless -%}
+        {%- unless collection.handle contains 'kids-anime-merch' -%}
+        <li><a href="/collections/kids-anime-merch-cool-clothes-toys-gifts">Kids Anime Merch</a></li>
+        {%- endunless -%}
+        {%- unless collection.handle contains 'anime-accessories' -%}
+        <li><a href="/collections/anime-accessories-figures-phone-cases-wall-art-decor">Anime Accessories</a></li>
+        {%- endunless -%}
+        {%- unless collection.handle contains 'premium-anime-merchandise' -%}
+        <li><a href="/collections/premium-anime-merchandise-clothing-collectibles-shop-all">Premium Anime Merchandise</a></li>
+        {%- endunless -%}
+        {%- unless collection.handle contains 'sale' or collection.handle contains 'clearance' -%}
+        <li><a href="/collections/big-anime-sale-clearance-discounts-merch-collectibles">Big Anime Sale</a></li>
+        {%- endunless -%}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{%- comment -%} ── DISCOUNT AUTO-APPLY (sale/clearance collections only) ── {%- endcomment -%}
+{%- if collection.handle contains 'sale' or collection.handle contains 'clearance' -%}
+<script>
+(function () {
+  var code = 'INFINITE';
+  var appliedKey = 'iv_discount_applied';
+  if (sessionStorage.getItem(appliedKey)) return;
+  fetch('/discount/' + code, { method: 'GET', credentials: 'same-origin' })
+    .then(function () {
+      sessionStorage.setItem(appliedKey, '1');
+      var bar = document.createElement('div');
+      bar.id = 'iv-discount-bar';
+      bar.innerHTML = '🎉 20% discount <strong>INFINITE</strong> automatically applied to your cart!';
+      bar.style.cssText = [
+        'position:fixed', 'bottom:20px', 'left:50%',
+        'transform:translateX(-50%)',
+        'background:#31378F', 'color:#ffc72f',
+        'padding:12px 24px', 'border-radius:6px',
+        'font-size:14px', 'font-weight:600', 'z-index:9999',
+        'box-shadow:0 4px 16px rgba(0,0,0,0.25)',
+        'text-align:center', 'max-width:90vw',
+        'animation:ivSlideUp 0.4s ease'
+      ].join(';');
+      document.body.appendChild(bar);
+      setTimeout(function () {
+        bar.style.opacity = '0';
+        bar.style.transition = 'opacity 0.4s ease';
+        setTimeout(function () { bar.remove(); }, 400);
+      }, 5000);
+    });
+})();
+</script>
+{%- else -%}
+<script>
+(function () {
+  var appliedKey = 'iv_discount_applied';
+  if (!sessionStorage.getItem(appliedKey)) return;
+  fetch('/cart/update.js', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ discount: '' })
+  }).then(function () {
+    sessionStorage.removeItem(appliedKey);
+  });
+})();
+</script>
+{%- endif -%}
+
+<style>
+  @keyframes ivSlideUp {
+    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+  }
+</style>
+
+{%- style -%}
+  /* ── BREADCRUMB ── */
+  .collection-breadcrumb ol {
+    display: flex; flex-wrap: wrap; list-style: none;
+    padding: 0; margin: 0 0 15px 0; font-size: 13px; gap: 5px;
+  }
+  .collection-breadcrumb ol li::after { content: "/"; margin-left: 5px; color: #999; }
+  .collection-breadcrumb ol li:last-child::after { content: ""; }
+  .collection-breadcrumb ol li a { color: #31378F; text-decoration: none; }
+  .collection-breadcrumb ol li a:hover { text-decoration: underline; }
+
+  /* ── WELCOME MESSAGE ── */
+  .collection-welcome-message {
+    background: linear-gradient(135deg, #31378F 0%, #1e2460 100%);
+    color: #ffffff;
+    padding: 18px 22px;
+    border-radius: 6px;
+    margin: 15px 0 20px 0;
+  }
+  .collection-welcome-message p { margin: 0; font-size: 14px; line-height: 1.7; font-style: italic; }
+
+  /* ── COLLECTION DESCRIPTION ── */
+  .rte.collection-description {
+    background: #f8f9ff;
+    border: 1px solid #e8eaff;
+    border-left: 4px solid #ffc72f;
+    border-radius: 0 6px 6px 0;
+    padding: 24px 28px;
+    margin: 0 0 28px 0;
+    position: relative;
+  }
+  .rte.collection-description::before {
+    content: '⚔️';
+    position: absolute;
+    top: -14px;
+    left: 20px;
+    background: #ffc72f;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: block;
+    line-height: 28px;
+    text-align: center;
+    font-size: 13px;
+  }
+  .rte.collection-description p { font-size: 14px; line-height: 1.8; color: #444; margin: 0 0 12px 0; }
+  .rte.collection-description p:last-child { margin: 0; }
+  .rte.collection-description strong { color: #31378F; }
+  .rte.collection-description a { color: #31378F; text-decoration: underline; }
+  .rte.collection-description a:hover { color: #ffc72f; }
+  .rte.collection-description::after {
+    content: 'US-Based · Free Worldwide Shipping · S-Rank Quality';
+    display: block;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #e8eaff;
+    font-size: 11px;
+    font-weight: 700;
+    color: #31378F;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* ── INTERNAL COLLECTION LINKS ── */
+  .iv-collection-links { margin: 40px 0 20px 0; padding: 20px; border-top: 2px solid #31378F; }
+  .iv-collection-links__heading { font-size: 14px; font-weight: 600; color: #31378F; margin: 0 0 12px 0; text-transform: uppercase; letter-spacing: 0.05em; }
+  .iv-collection-links__list { display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; gap: 10px; }
+  .iv-collection-links__list li a {
+    display: inline-block; padding: 6px 14px;
+    border: 1px solid #31378F; color: #31378F;
+    font-size: 13px; border-radius: 3px;
+    text-decoration: none; transition: all 0.2s ease;
+  }
+  .iv-collection-links__list li a:hover { background: #31378F; color: #ffffff; }
+
+  /* ── MISC ── */
+  .list-collection-products { grid-gap: var(--DTGutter_Width); }
+  .increasedzindexclass { z-index: 2; }
+
+  /* ── DRAWER SIDEBAR ── */
+  {% if section.settings.filter_type == 'drawer' %}
+  .sidebar_btn { position: fixed; left: 0; top: 0; bottom: 0; display: none; align-items: center; z-index: 9; }
+  .sidebar_btn .dt-sc-btn { border-radius: 0 var(--DTRadius) var(--DTRadius) 0; }
+  .sidebar .dt-sc-btn.close-icon, .drawer-sidebar .dt-sc-btn.toggleIcon { display: inline-block; margin: 0; }
+  .drawer-sidebar.open .sidebar .dt-sc-btn.close-icon { left: {{ settings.sidebar_width }}px; display: inline-block; position: sticky; }
+  .drawer-sidebar.open .sidebar .dt-sc-btn.close-icon:not(:hover) { background: transparent; color: currentColor; }
+  .dt-sc-btn.toggleIcon { padding: 7px 15px; margin: 0 0 20px; }
+  .drawer-sidebar .sidebar {
+    position: fixed !important; overflow-y: scroll !important;
+    padding: 15px; width: 80%; max-width: {{ settings.sidebar_width }}px;
+    top: 0; left: -{{ settings.sidebar_width }}px; height: 100%;
+    background: var(--DTBodyBGColor); margin: 0; z-index: 17;
+    transition: var(--DTBaseTransition);
+  }
+  .drawer-sidebar.open .sidebar { left: 0; }
+  .drawer-sidebar.open .canvas-overlay {
+    position: fixed; top: 0; bottom: 0; left: 0; right: 0;
+    background-color: {{ settings.overlay_color | color_modify: 'alpha', 0.7 }};
+    width: 100%; height: 100%; z-index: 16;
+  }
+  {% endif %}
+
+  /* ── RESPONSIVE MARGINS ── */
+  @media only screen and (min-width: 1200px) {
+    #shopify-section-{{ section.id }}.main-collection-template .row > #collection-template-query {
+      margin-top: {{ margin_top }}px; margin-bottom: {{ margin_bottom }}px;
+      padding-top: {{ padding_top }}px; padding-bottom: {{ padding_bottom }}px;
+    }
+  }
+  @media only screen and (max-width: 1199px) {
+    #shopify-section-{{ section.id }}.main-collection-template .row > #collection-template-query {
+      margin-top: {{ margin_top | divided_by: 2 }}px; margin-bottom: {{ margin_bottom | divided_by: 2 }}px;
+      padding-top: {{ padding_top | divided_by: 2 }}px; padding-bottom: {{ padding_bottom | divided_by: 2 }}px;
+    }
+    #shopify-section-{{ section.id }}.main-collection-template .custom-product-grid { display: none; }
+  }
+  @media only screen and (max-width: 767px) {
+    .iv-collection-links__list { gap: 8px; }
+    .iv-collection-links__list li a { font-size: 12px; padding: 5px 10px; }
+    .collection-welcome-message { padding: 14px 16px; }
+    .collection-welcome-message p { font-size: 13px; }
+    .rte.collection-description { padding: 20px 18px; }
+    .rte.collection-description::before { top: -12px; width: 24px; height: 24px; font-size: 11px; line-height: 24px; }
+  }
+{%- endstyle -%}
+
+<script type="text/javascript">
+  jQuery('[data-view] a').on('click', function(){
+    jQuery('[data-view] a.active').removeClass('active');
+    jQuery(this).addClass('active');
+    var flag = jQuery('[data-view="list"]').hasClass("active");
+    if (flag) {
+      jQuery(this).parents('#collection-template-query').find('.product-collection').removeClass('{{ grid_item_width }}').removeClass('product-grid-style').addClass('product-list-style');
+      jQuery(this).parents('#collection-template-query').find('.custom-product-grid').addClass('panel-disabled');
+      thumbGallerySwiper();
+    } else {
+      jQuery(this).parents('#collection-template-query').find('.product-collection').addClass('{{ grid_item_width }}').addClass('product-grid-style').removeClass('product-list-style');
+      jQuery(this).parents('#collection-template-query').find('.custom-product-grid').removeClass('panel-disabled');
+      thumbGallerySwiper();
+    }
+  });
+
+  jQuery(".custom-product-grid li").click(function(){
+    jQuery('li').removeClass('active');
+    jQuery(this).toggleClass("active");
+  });
+
+  if ($('.show_sub_collection').length > 0) {
+    $('.show_sub_collection.list-collection-products').not('.slick-initialized').slick({
+      slidesToShow: {{- section.settings.items }},
+      slidesToScroll: 1,
+      adaptiveHeight: true,
+      arrows: true,
+      dots: false,
+      responsive: [
+        { breakpoint: 1199, settings: { slidesToShow: 2, slidesToScroll: 2 } },
+        { breakpoint: 767, settings: { slidesToShow: 1, slidesToScroll: 1 } }
+      ]
+    });
+  }
+
+  $('#paginateBy').on('change', function(){
+    var val = $(this).val();
+    $.ajax({
+      type: "POST",
+      url: '/cart.js',
+      data: { "attributes[pagination]": val },
+      success: function(d){ window.location.reload(); },
+      dataType: 'json'
+    });
+  });
+</script>
+
+{% for block in section.blocks %}
+{% case block.type %}
+{% when 'carousel' %}
+<script type="text/javascript">
+  function collectionSidebarCarousel(){
+    var dataSectionType = $('[data-section-type="collection-sidebar-carousel-section"]');
+    var id = dataSectionType.attr('data-section-id');
+    var ItemsPerView = +dataSectionType.attr('data-item-per-view');
+    var ItemsSpace = +dataSectionType.attr('data-item-space');
+    var autoHeight = +dataSectionType.attr('data-auto-height') || false;
+    var Autoplay = +dataSectionType.attr('data-autoplay') * 1000;
+    var initAutoplay = Autoplay ? { delay: Autoplay } : false;
+    var swiper = new Swiper('#swiper-' + id + '-slider', {
+      pagination: { el: '#swiper-' + id + '-pagination', clickable: true },
+      navigation: { nextEl: '#swiper-' + id + '-next', prevEl: '#swiper-' + id + '-prev' },
+      loop: false,
+      slidesPerView: ItemsPerView,
+      spaceBetween: ItemsSpace,
+      autoHeight: autoHeight,
+      simulateTouch: true,
+      autoplay: initAutoplay
+    });
+  }
+  $(document).ready(function(){ collectionSidebarCarousel(); });
+  $(document)
+    .on('shopify:section:load', collectionSidebarCarousel)
+    .on('shopify:section:unload', collectionSidebarCarousel);
+</script>
+{% endcase %}
+{% endfor %}
+
+{% schema %}
+{
+  "name": "Collection Page",
+  "class": "main-collection-template",
+  "settings": [
+    {"type": "checkbox", "id": "full", "label": "Show Full width"},
+    {"type": "checkbox", "id": "spacing_both_ends", "label": "Enable Right & Left Spacing (Works only on Fullwidth)", "default": false},
+    {"type": "text", "id": "padding", "label": "Style value (Padding)", "default": "0,0", "info": "Top(px),Bottom(px)"},
+    {"type": "text", "id": "margin", "label": "Style value (Margin)", "default": "0,0", "info": "Top(px),Bottom(px)"},
+    {"type": "checkbox", "id": "show_collection_image", "label": "Show collection image", "default": true},
+    {"type": "select", "id": "banner_position", "label": "Collection image position", "default": "with-in-container", "options": [
+      {"value": "with-in-container", "label": "With in container"},
+      {"value": "below-navigation", "label": "Below navigation"}
+    ]},
+    {"type": "checkbox", "id": "show_excerpt", "label": "Show excerpt", "default": true},
+    {"type": "checkbox", "id": "show_sub_collection", "label": "Show sub collections", "default": true},
+    {"type": "select", "id": "items", "label": "Products per row - sub collection", "default": "4", "options": [
+      {"value": "2", "label": "2"}, {"value": "3", "label": "3"},
+      {"value": "4", "label": "4"}, {"value": "5", "label": "5"}, {"value": "6", "label": "6"}
+    ]},
+    {"type": "checkbox", "id": "collections_sort_enable", "label": "Enable collection sorting", "default": true},
+    {"type": "checkbox", "id": "collections_view_enable", "label": "Enable collection view", "default": true},
+    {"type": "checkbox", "id": "enable_items_per_page", "label": "Enable items per page", "default": true},
+    {"type": "checkbox", "id": "collections_custom_cols", "label": "Custom columns", "default": true},
+    {"type": "select", "id": "pagination", "label": "Pagination", "default": "numbers", "options": [
+      {"value": "numbers", "label": "Numbers"},
+      {"value": "loadmore_btn", "label": "Load more button"},
+      {"value": "infinit_scroll", "label": "Infinit scrolling"}
+    ]},
+    {"type": "select", "id": "grid", "label": "Products per row", "default": "4", "options": [
+      {"value": "2", "label": "2"}, {"value": "3", "label": "3"},
+      {"value": "4", "label": "4"}, {"value": "5", "label": "5"}, {"value": "6", "label": "6"}
+    ]},
+    {"type": "select", "id": "rows", "label": "Rows per page", "default": "3", "options": [
+      {"value": "2", "label": "2"}, {"value": "3", "label": "3"},
+      {"value": "4", "label": "4"}, {"value": "5", "label": "5"}, {"value": "6", "label": "6"}
+    ]},
+    {"type": "select", "id": "filter_type", "label": "Filter type", "default": "vertical", "options": [
+      {"value": "vertical", "label": "Vertical"},
+      {"value": "horizontal", "label": "Horizontal"},
+      {"value": "drawer", "label": "Drawer"}
+    ]}
+  ],
+  "blocks": [
+    {"type": "image", "limit": 1, "name": "Image", "settings": [
+      {"type": "text", "id": "title", "label": "Title", "default": "Heading"},
+      {"type": "image_picker", "id": "image", "label": "Image"},
+      {"type": "text", "id": "link_text", "label": "Link Text", "default": "Shop Now"},
+      {"type": "url", "id": "link", "label": "Link"}
+    ]},
+    {"type": "carousel", "name": "Product Carousel", "limit": 1, "settings": [
+      {"type": "text", "id": "title", "label": "Heading"},
+      {"type": "collection", "id": "collection", "label": "Collection"},
+      {"type": "range", "id": "limit", "min": 1, "max": 5, "step": 1, "label": "Limit", "default": 5}
+    ]},
+    {"type": "collection", "name": "Product List", "limit": 1, "settings": [
+      {"type": "text", "id": "title", "label": "Heading"},
+      {"type": "collection", "id": "collection", "label": "Collection"},
+      {"type": "range", "id": "limit", "min": 1, "max": 5, "step": 1, "label": "Limit", "default": 2}
+    ]},
+    {"type": "menu", "name": "Menu", "limit": 1, "settings": [
+      {"type": "text", "id": "filter_title", "label": "Title", "default": "Custom Menu"},
+      {"type": "link_list", "id": "linklist", "label": "Menu"}
+    ]},
+    {"type": "collection_filter", "name": "Collection Filter", "limit": 1, "settings": []},
+    {"type": "search", "name": "Search", "limit": 1, "settings": []}
+  ]
+}
+{% endschema %}

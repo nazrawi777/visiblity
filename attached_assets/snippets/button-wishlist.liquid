@@ -1,0 +1,6 @@
+{%- if product.handle != blank -%}
+<div>
+	<dtx-wishlist><a href="javascript:void(0);" class="dt-sc-btn add-wishlist" data-product_handle="{{ product.handle }}"></a></dtx-wishlist>
+    <tooltip class="tooltip">{{ 'products.wishlist.wishlist_name' | t }}</tooltip>
+</div>
+{%- endif -%}

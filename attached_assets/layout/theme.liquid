@@ -1,0 +1,319 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#31378F" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#1a1d4d" media="(prefers-color-scheme: dark)">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="canonical" href="{{ canonical_url }}">
+  <link rel="alternate" type="text/plain" href="{{ shop.url }}/pages/llms" title="llms.txt">
+  {%- for locale in shop.published_locales -%}
+    <link rel="alternate" hreflang="{{ locale.iso_code }}" href="{{ canonical_url }}">
+  {%- endfor -%}
+  <link rel="alternate" hreflang="x-default" href="{{ canonical_url }}">
+  {%- if current_page > 1 -%}
+    <meta name="robots" content="noindex, follow">
+  {%- else -%}
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  {%- endif -%}
+  <meta name="google-site-verification" content="YkqSziIh3FduaB6KqdG0-nNgy0jfrKlQSuizCAL5Tt4">
+  <meta name="p:domain_verify" content="90f5211bbb08d7900e3e320561d4214c">
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- endif -%}
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin>
+  <link rel="preconnect" href="https://www.google-analytics.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.judge.me" crossorigin>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  {%- unless settings.header_font.system? and settings.base_font.system? and settings.additional_font.system? -%}
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+  {%- endunless -%}
+  <link rel="dns-prefetch" href="https://judge.me">
+  <link rel="dns-prefetch" href="https://apis.google.com">
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  {%- if template contains 'collection' and collection.image -%}
+    <link rel="preload" as="image"
+      href="{{ collection.image | image_url: width: 1200 }}"
+      imagesrcset="{{ collection.image | image_url: width: 600 }} 600w,
+                   {{ collection.image | image_url: width: 1200 }} 1200w,
+                   {{ collection.image | image_url: width: 1800 }} 1800w"
+      imagesizes="100vw"
+      fetchpriority="high">
+  {%- endif -%}
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- else -%}
+    <meta name="description" content="Shop premium anime merchandise at Infinite Visibility — vintage-washed streetwear, collectible figures, and tech accessories from Naruto, One Piece, Demon Slayer & more. Free worldwide shipping on all orders. Based in Riverview, FL.">
+  {%- endif -%}
+  <meta property="og:site_name" content="Infinite Visibility">
+  <meta property="og:locale" content="{{ request.locale.iso_code | replace: '-', '_' }}">
+  <meta property="og:url" content="{{ canonical_url }}">
+  {%- if template contains 'product' and product -%}
+    <meta property="og:type" content="product">
+    <meta property="og:title" content="{{ product.title | escape }} | Infinite Visibility">
+    <meta property="og:description" content="{{ product.description | strip_html | truncatewords: 50 | escape }}">
+    <meta property="og:image" content="https:{{ product.featured_image | image_url: width: 1200 }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="1200">
+    <meta property="og:image:alt" content="{{ product.featured_image.alt | default: product.title | escape }}">
+    <meta property="product:price:amount" content="{{ product.price | money_without_currency }}">
+    <meta property="product:price:currency" content="{{ cart.currency.iso_code }}">
+    <meta property="product:availability" content="{% if product.available %}in stock{% else %}out of stock{% endif %}">
+  {%- elsif template contains 'collection' and collection -%}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ collection.title | escape }} | Infinite Visibility">
+    <meta property="og:description" content="{{ collection.description | strip_html | truncatewords: 50 | default: 'Shop premium anime merchandise at Infinite Visibility. Free worldwide shipping on all orders.' | escape }}">
+    {%- if collection.image -%}
+      <meta property="og:image" content="https:{{ collection.image | image_url: width: 1200 }}">
+      <meta property="og:image:width" content="1200">
+      <meta property="og:image:height" content="630">
+      <meta property="og:image:alt" content="{{ collection.image.alt | default: collection.title | escape }}">
+    {%- endif -%}
+  {%- elsif template contains 'article' and article -%}
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{ article.title | escape }} | Infinite Visibility">
+    <meta property="og:description" content="{{ article.excerpt_or_content | strip_html | truncatewords: 50 | escape }}">
+    {%- if article.image -%}
+      <meta property="og:image" content="https:{{ article.image | image_url: width: 1200 }}">
+      <meta property="og:image:width" content="1200">
+      <meta property="og:image:height" content="630">
+    {%- endif -%}
+    <meta property="article:published_time" content="{{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' }}">
+    <meta property="article:modified_time" content="{{ article.updated_at | date: '%Y-%m-%dT%H:%M:%SZ' }}">
+  {%- else -%}
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ page_title | escape }} | Infinite Visibility">
+    <meta property="og:description" content="{{ page_description | default: 'Shop premium anime merchandise at Infinite Visibility — streetwear, figures & tech accessories from Naruto, One Piece, Demon Slayer & more. Free worldwide shipping on all orders.' | escape }}">
+    {%- if settings.logo -%}
+      <meta property="og:image" content="https:{{ settings.logo | image_url: width: 1200 }}">
+      <meta property="og:image:width" content="1200">
+      <meta property="og:image:height" content="630">
+    {%- endif -%}
+  {%- endif -%}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@infinitevisibility07">
+  <meta name="twitter:creator" content="@infinitevisibility07">
+  {%- if template contains 'product' and product -%}
+    <meta name="twitter:title" content="{{ product.title | escape }} | Infinite Visibility">
+    <meta name="twitter:description" content="{{ product.description | strip_html | truncatewords: 50 | escape }}">
+    <meta name="twitter:image" content="https:{{ product.featured_image | image_url: width: 1200 }}">
+    <meta name="twitter:label1" content="Price">
+    <meta name="twitter:data1" content="{{ product.price | money }}">
+    <meta name="twitter:label2" content="Availability">
+    <meta name="twitter:data2" content="{% if product.available %}In Stock{% else %}Out of Stock{% endif %}">
+  {%- else -%}
+    <meta name="twitter:title" content="{{ page_title | escape }} | Infinite Visibility">
+    <meta name="twitter:description" content="{{ page_description | default: 'Shop premium anime merchandise at Infinite Visibility. Free worldwide shipping on all orders — no minimum required.' | escape }}">
+  {%- endif -%}
+  {% render 'social-meta-tags' %}
+  {%- render 'jsonld-schema' -%}
+  {% render 'css-root-variables' %}
+  {% render 'header-css' %}
+  <style>
+    img { height: auto; }
+    .product-image img,
+    .product-card img,
+    .grid-item img,
+    .dT_VProdWrapper img,
+    .product-item img,
+    .product_img img,
+    .collection-grid img {
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .collection-hero__image,
+    .collection-hero__image img {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .swiper-slide img { display: block; width: 100%; height: auto; }
+    iframe { aspect-ratio: 16 / 9; width: 100%; height: auto; max-width: 100%; }
+    .product-detail [class*="variant-"],
+    .grid-link__meta [class*="variant-"],
+    [class*="dT_var"],
+    .variant-color,
+    .dT_varColor {
+      display: none !important;
+    }
+    #google-rating-badge {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      z-index: 9000;
+      width: auto;
+      height: auto;
+      pointer-events: auto;
+    }
+    .skip-to-content-link:focus {
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding: 1rem 1.5rem;
+      background: #fff;
+      color: #31378F;
+      z-index: 10000;
+      font-weight: 600;
+      clip: auto;
+      width: auto;
+      height: auto;
+      outline: 3px solid #31378F;
+    }
+    .top-bar-marquee-section { min-height: 44px; }
+    .iv-deal-timer-wrapper   { min-height: 300px; }
+    @media (max-width: 767px) {
+      .iv-deal-timer-wrapper { min-height: 480px; }
+    }
+  </style>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('consent', 'default', {
+      'ad_storage':         'denied',
+      'analytics_storage':  'denied',
+      'ad_user_data':       'denied',
+      'ad_personalization': 'denied',
+      'wait_for_update':    500,
+      'region': ['AT','BE','BG','CY','CZ','DE','DK','EE','ES','FI',
+                 'FR','GR','HR','HU','IE','IT','LT','LU','LV','MT',
+                 'NL','PL','PT','RO','SE','SI','SK','GB','NO','IS','LI']
+    });
+    gtag('consent', 'default', {
+      'ad_storage':         'granted',
+      'analytics_storage':  'granted',
+      'ad_user_data':       'granted',
+      'ad_personalization': 'granted'
+    });
+  </script>
+  <script>
+    window.initMerchantWidget = function() {
+      if (window.merchantwidget) {
+        merchantwidget.start({
+          merchant_id: 5493889057,
+          position:    'BOTTOM_RIGHT',
+          region:      'US'
+        });
+      }
+    };
+  </script>
+  {% render 'header-js' %}
+  {{ content_for_header }}
+</head>
+<body
+  id="{{ page_title | handle }}"
+  class="
+    {% if settings.enable_rtl %}rtl-enabled{% endif %}
+    {% if customer %}customer-logged-in{% endif %}
+    template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}
+    {% unless template contains 'index' %}others{% endunless %}
+  ">
+  <a class="skip-to-content-link visually-hidden" href="#MainContent">
+    {{ "accessibility.skip_to_text" | t }}
+  </a>
+  {%- if settings.preloader_enable -%}
+    <style>
+      .se-pre-con {
+        position: fixed; inset: 0;
+        background: #31378F;
+        z-index: 9999;
+        pointer-events: none;
+        animation: fadePreloader 0.4s ease 0.8s forwards;
+      }
+      @keyframes fadePreloader { to { opacity: 0; visibility: hidden; } }
+    </style>
+    <div class="se-pre-con" aria-hidden="true"></div>
+  {%- endif -%}
+  <div class="mobile-menu" data-menu="dt-main-menu"></div>
+  <div class="mobile-vmenu" data-vmenu="dt-vmenu"></div>
+  <div class="mobile-menu-overlay"></div>
+  <div class="vertical-mobile-menu-overlay"></div>
+  <div class="zeynep-overlay"></div>
+  <div id="video_modal" class="video_overlay">
+    <div class="inner">
+      <span id="close_icon" class="dt-sc-btn close-icon"
+        style="position: absolute; right: 10px; top: 10px;"></span>
+    </div>
+  </div>
+  {%- if settings.box_layout -%}
+    <div class="box_layout">
+  {%- endif -%}
+  <div class="off-canvas--viewport" id="MainContent">
+    {%- liquid
+      if settings.ajax_cart_method == 'drawer'
+        render 'timber-cart'
+      endif
+      section 'top-bar-marquee'
+      section 'header'
+      if settings.enable_vertical_menu
+        section 'index-vertical-mega-menu'
+      endif
+      render 'breadcrumb'
+    -%}
+    <div class="clearfix"></div>
+    {%- if settings.enable_fullheight_menu -%}
+      <a class="dt-sc-btn mobileToggleIcon">
+        <i class="fa fa-bars"></i>
+      </a>
+      {%- section 'index-menu' -%}
+    {%- endif -%}
+    <div class="shifter-page {% if settings.ajax_cart_method == 'drawer' %}is-moved-by-drawer{% endif %}" id="container">
+      {{ content_for_layout }}
+      {%- if template == 'index' -%}
+        {%- render 'iv-homepage-seo' -%}
+      {%- endif -%}
+      {%- if template contains 'product' -%}
+        {%- if settings.enable_recently_viewed -%}
+          {%- render 'recently-viewed' -%}
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+    <div class="clearfix"></div>
+  </div>
+  {%- liquid
+    section 'footer'
+    render 'footer-js'
+    section 'modal-newsletter'
+    section 'customer-purchased'
+    render 'dT_loading-overlay'
+    render 'scroll-to-top'
+    section 'gdpr-cookies'
+  -%}
+  {%- if settings.box_layout -%}
+    </div>
+  {%- endif -%}
+  {%- if template contains 'product' -%}
+    {%- if settings.enable_recently_viewed -%}
+      {%- comment -%}theme-check-disable{%- endcomment -%}
+      <script src="{{ 'jquery.tmpl.min.js' | asset_url }}" defer></script>
+      {%- comment -%}theme-check-enable{%- endcomment -%}
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          Shopify.Products.recordRecentlyViewed();
+        });
+      </script>
+    {%- endif -%}
+  {%- endif -%}
+  <div id="google-rating-badge"></div>
+  <script
+    src="https://www.gstatic.com/shopping/merchant/merchantwidget.js"
+    onload="initMerchantWidget()"
+    async>
+  </script>
+  <ul hidden>
+    <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
+    <li id="a11y-new-window-message">{{ 'general.accessibility.link_messages.new_window' | t }}</li>
+  </ul>
+</body>
+</html>

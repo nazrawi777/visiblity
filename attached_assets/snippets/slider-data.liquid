@@ -1,0 +1,141 @@
+{%- liquid
+  assign img_loading = 'lazy'
+  assign img_priority = 'low'
+  if is_first == true
+    assign img_loading = 'eager'
+    assign img_priority = 'high'
+  endif
+-%}
+
+{% if block.settings.slider_type == 'image' %}
+  {% if block.settings.image != blank %}
+    {%- assign height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round -%}
+    {{- block.settings.image | image_url: width: 1920 | image_tag:
+        loading: img_loading,
+        fetchpriority: img_priority,
+        height: height,
+        sizes: '100vw',
+        widths: '375, 550, 750, 1100, 1500, 1780, 1920',
+        class: 'slide-img' -}}
+  {% else %}
+    {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg slide-img desktop-only' }}
+  {% endif %}
+  {% if block.settings.mobile_image != blank %}
+    {%- assign height = block.settings.mobile_image.width | divided_by: block.settings.mobile_image.aspect_ratio | round -%}
+    {{- block.settings.mobile_image | image_url: width: 800 | image_tag:
+        loading: img_loading,
+        fetchpriority: img_priority,
+        height: height,
+        sizes: '100vw',
+        widths: '375, 550, 750, 800',
+        class: 'slide-img mobile-only' -}}
+  {% elsif block.settings.image != blank %}
+    {%- assign height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round -%}
+    {{- block.settings.image | image_url: width: 800 | image_tag:
+        loading: img_loading,
+        fetchpriority: img_priority,
+        height: height,
+        sizes: '100vw',
+        widths: '375, 550, 750, 800',
+        class: 'slide-img mobile-only' -}}
+  {% endif %}
+
+{% elsif block.settings.slider_type == 'video' %}
+  {% if block.settings.video_url != blank %}
+    {%- comment -%}
+      Video dimensions derived from poster image so the browser
+      reserves the correct space before the video loads.
+      Hardcoded 1920x740 was causing CLS when the actual video
+      dimensions did not match.
+      aria-label added for accessibility — video elements without
+      text content need a label for screen readers.
+    {%- endcomment -%}
+    {%- if block.settings.image != blank -%}
+      {%- assign video_width = block.settings.image.width -%}
+      {%- assign video_height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round -%}
+    {%- else -%}
+      {%- assign video_width = 1920 -%}
+      {%- assign video_height = 1080 -%}
+    {%- endif -%}
+    <video
+      poster="{{ block.settings.image | image_url: width: 1920 }}"
+      width="{{ video_width }}"
+      height="{{ video_height }}"
+      aria-label="{{ block.settings.title | default: 'Slideshow video' | escape }}"
+      muted
+      loop
+      playsinline>
+      <source src="{{ block.settings.video_url }}" type="video/mp4">
+    </video>
+  {% else %}
+    {{ block.settings.iframe_url }}
+  {% endif %}
+{% endif %}
+
+{% if block.settings.show_content %}
+<div class="slider-content slider-content-bg {{ block.settings.text_alignment }} {{ block.settings.content_position }}">
+  <div class="slide_{{ forloop.index }}{% if block.settings.enable_block_image_with_content %} image-with-content{% endif %}">
+    {% if block.settings.show_image %}
+    <div class="slide_block_image">
+      {% if block.settings.block_image != blank %}
+        {%- assign height = block.settings.block_image.width | divided_by: block.settings.block_image.aspect_ratio | round -%}
+        {{- block.settings.block_image | image_url: width: 400 | image_tag:
+            loading: 'lazy',
+            height: height,
+            sizes: '100px',
+            widths: '100, 200, 400',
+            class: 'slide-img' -}}
+      {% else %}
+        {{ 'image' | placeholder_svg_tag: 'placeholder_svg' }}
+      {% endif %}
+    </div>
+    {% endif %}
+    <div class="slide_block_content">
+      {% if block.settings.title_2 != blank %}
+      <p class="slide-sub-heading-2"
+         style="color: {{ settings.body_text_color }};{% if block.settings.subheading_color != blank %} color:{{ block.settings.subheading_color }};{% endif %}">
+        {{ block.settings.title_2 }}
+      </p>
+      {% endif %}
+      {% if block.settings.title != blank %}
+      <h2 class="slide-heading"
+          style="color: {{ settings.body_text_color }};{% if block.settings.heading_color != blank %} color:{{ block.settings.heading_color }};{% endif %}">
+        {{ block.settings.title }}
+      </h2>
+      {% endif %}
+      {% if block.settings.desc != blank %}
+      <div class="slide-text"
+           style="color: {{ settings.body_text_color }};{% if block.settings.desc_color != blank %} color:{{ block.settings.desc_color }};{% endif %}">
+        {{ block.settings.desc }}
+      </div>
+      {% endif %}
+      <div class="multiple-buttons">
+        {% if block.settings.button != blank %}
+        <a href="{{ block.settings.link }}" class="slide-button dt-sc-btn">{{ block.settings.button }}</a>
+        {% endif %}
+        {% if block.settings.button_2 != blank %}
+        <a href="{{ block.settings.link_2 }}" class="slide-button dt-sc-btn secondary">{{ block.settings.button_2 }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if block.settings.slider_type == 'video' and block.settings.video_url != blank %}
+<div class="play-btn">
+  <a class="slide-button dt-sc-btn btn play" aria-label="Play video">
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+      <path d="M506,256.8c-0.4,139.4-112.9,250-253.8,249.3C116.6,505.4,6.2,392.2,6.3,254.2C6.5,116.1,118.6,4.5,256.5,5.2 C396.1,5.9,506.4,117.1,506,256.8z M35.2,254.9C35.1,377.2,133.7,477.2,254.2,477c123.7-0.2,222.9-98.2,222.9-220.1 c-0.1-125.2-98-222.8-223.5-222.9C133.9,34,35.4,133.7,35.2,254.9z"/>
+      <path d="M181.3,361.5c0-72.5,0-139.3,0-212c61.9,35.7,120,69.3,183.3,105.9C301.5,291.9,243.7,325.4,181.3,361.5z"/>
+    </svg>
+  </a>
+  <a class="slide-button dt-sc-btn btn pause" aria-label="Pause video" style="display:none">
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-hidden="true" focusable="false">
+      <path d="M6,255.7C6,115.9,117.9,5.4,258.8,5.6c135.5,0.2,247.6,114,247.1,250.8c-0.5,136.5-112.1,250-246.1,250.3 C118,507,5.9,396.2,6,255.7z M34.9,254.9c-0.1,124.6,98.4,222.7,223.7,222.8c118.8,0.1,217.8-100.3,218.2-221.3 c0.4-120.6-98.5-221.4-217.6-221.8C134.7,34.2,35,132.1,34.9,254.9z"/>
+      <path d="M281.2,257.7c0-28.5,0.6-56.9-0.3-85.4c-0.5-15.3,7.5-16.9,19.5-16.6c11.1,0.3,20.5-0.6,20.4,15.6 c-0.6,56.9-0.6,113.8,0,170.7c0.2,16.1-9.1,15.6-20.3,15.8c-11.8,0.2-20.1-1.1-19.6-16.6C281.9,313.5,281.2,285.6,281.2,257.7z"/>
+      <path d="M231.8,255.8c0,28.4-0.8,56.7,0.3,85.1c0.7,16.8-8.1,17.6-20.9,17.7c-13.4,0.1-20.6-2.3-20.4-18.4 c0.9-56.7,0.9-113.4,0-170.1c-0.3-17.9,10.2-16.2,21.7-16.7c12.7-0.6,19.9,2.3,19.4,17.3C231.2,199.1,231.8,227.5,231.8,255.8z"/>
+    </svg>
+  </a>
+</div>
+{% endif %}

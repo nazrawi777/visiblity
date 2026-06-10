@@ -1,0 +1,89 @@
+{% if block.settings.image != blank %}
+  {% liquid
+    assign height = block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round
+    echo block.settings.image | image_url: width: 3840 | image_tag: loading: 'lazy', height: height, sizes: "100vw", widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840', class: 'slide-img'
+  %}
+{% endif %}
+
+{% if block.settings.mobile_image %}
+  {% liquid
+    assign height = block.settings.mobile_image.width | divided_by: block.settings.mobile_image.aspect_ratio | round 
+    echo block.settings.mobile_image | image_url: width: 768 | image_tag: loading: 'lazy', height: height, sizes: "100vw", widths: '768, 1100, 1500', class: 'slide-img mobile-only'
+  %}
+{% endif %}
+
+
+
+{% if block.settings.show_content %}
+  <div class="slider-content slider-content-bg {{ block.settings.text_alignment }}  {{ block.settings.content_position }}">
+    <div class="slide_{{ forloop.index }}">
+      <div class="block-img">
+        {% if block.settings.show_image %}
+          {% if block.settings.block_image != blank %}
+            {%- assign height = block.settings.block_image.width | divided_by: block.settings.block_image.aspect_ratio | round -%}
+            {{ block.settings.block_image | image_url: width: 3840 | image_tag:
+             loading: 'lazy',
+             height: height,
+             sizes: "100vw",
+             widths: '375, 550, 750, 1100, 1500, 1780, 2000, 3000, 3840',
+             class: 'slide-img' }}
+          {% else %}
+            {{ 'image' | placeholder_svg_tag: 'placeholder_svg' }}
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <div class="block-content">
+
+        {% if block.settings.title_2 != blank %}
+          <p class="slide-sub-heading-2" style="color: {{ settings.body_text_color }}; {% if block.settings.subheading_color != blank %}
+                                                          color:{{ block.settings.subheading_color }};
+                                                          {% endif %}">
+            {{ block.settings.title_2 }}
+          </p>
+        {% endif %}
+
+        {% if block.settings.title != blank %}
+          <h2 class="slide-heading" style="color: {{ settings.body_text_color }}; {% if block.settings.heading_color != blank %}
+                                                           color:{{ block.settings.heading_color }};
+                                                           {% endif %}">
+            {{ block.settings.title }}
+          </h2>
+        {% endif %}
+
+        {% if block.settings.desc != blank %}
+          <div class="slide-text" style="color: {{ settings.body_text_color }}; {% if block.settings.desc_color != blank %}
+                                                            color:{{ block.settings.desc_color }};
+                                                            {% endif %}">
+            {{ block.settings.desc }}
+          </div>
+        {% endif %}
+
+        <div class="multiple-buttons">
+          {% if block.settings.button != blank %}
+            <a href="{{ block.settings.link }}" class="slide-button dt-sc-btn">{{ block.settings.button }}</a>
+          {% endif %}
+          {% if block.settings.button_2 != blank %}
+            <a href="{{ block.settings.link_2 }}" class="slide-button dt-sc-btn secondary">{{ block.settings.button_2 }}</a>
+          {% endif %}
+        </div>
+        {% if block.settings.enable_additional_button %}
+          <div class="additional_button">
+            {% if block.settings.additional_button_text != blank %}
+              <a
+                href="{{ block.settings.additional_button_link }}"
+                target="_blank"
+                class="slide-button  additional">
+                {% if block.settings.additional_image != blank %}
+                  <span class="additional_icon"></span>
+                {% else %}
+                  <i class="fa fa-play-circle"></i>
+                {% endif %}
+                {{ block.settings.additional_button_text }}</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}

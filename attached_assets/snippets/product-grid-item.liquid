@@ -1,0 +1,268 @@
+{%- liquid
+  unless current_collection == blank
+    assign current_collection = collection
+  endunless
+  assign on_sale = false
+  assign sale_text = 'products.product.sale' | t
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+  assign sold_out = true
+  assign sold_out_text = 'products.product.sold_out' | t
+  if product.available
+    assign sold_out = false
+  endif
+  assign productURL = "/products/" | append: product.handle | append: '?view=quickview'
+-%}
+
+{%- comment -%}
+  ── IMAGE LOADING STRATEGY ──
+  forloop.index is nil when called outside a for loop context
+  (homepage tabs, sidebar carousels, deal timer).
+  We use a passed-in forloop parameter OR forloop.index as fallback.
+  The | default: 99 ensures nil becomes 99, which is > 4,
+  so non-loop contexts correctly get lazy loading.
+  First 4 products in a loop get eager + high fetchpriority for LCP.
+{%- endcomment -%}
+{%- assign img_loading = 'lazy' -%}
+{%- assign img_fetchpriority = 'auto' -%}
+{%- assign _loop_index = forloop.index | default: 99 -%}
+{%- if _loop_index <= 4 -%}
+  {%- assign img_loading = 'eager' -%}
+  {%- assign img_fetchpriority = 'high' -%}
+{%- endif -%}
+
+{%- comment -%} ── ALT TEXT WITH FALLBACK ── {%- endcomment -%}
+{%- assign featured_alt = product.featured_media.alt | default: product.title | escape -%}
+
+{%- comment -%} ── REVIEWS METAFIELDS ── {%- endcomment -%}
+{%- assign review_count = product.metafields.judgeme.badge_review_count | default: product.metafields.reviews.rating_count | default: 0 -%}
+{%- assign review_rating = product.metafields.judgeme.badge_rating | default: product.metafields.reviews.rating.value -%}
+
+{% capture product_form_config %}{"money_format":{{ shop.money_format | json }},"enable_history":true,"currency_switcher_enabled":{{ settings.display_currency | json }},"sold_out":{{ "products.product.sold_out" | t | json }},"button":{{ 'products.product.add_to_cart' | t | json }},"unavailable":{{ 'products.product.unavailable' | t | json }}}{% endcapture %}
+
+<li class="{{ swiperSlideClass }} grid-item {{ iteSwiperInit }} product-grid-item{% if sold_out %} sold-out{% endif %}{% if on_sale %} on-sale{% endif %} {{ carousel }}" id="product-{{ product.id }}" itemscope itemtype="https://schema.org/Product">
+
+  {%- comment -%}
+    JSON-LD is intentionally NOT rendered here.
+    Product schema belongs on the individual product page only.
+    Rendering it on collection pages (36 products × 1 script each)
+    causes Google to ignore all schema on the page and adds ~15KB
+    of extra HTML per collection page load.
+    Full Product schema with variants, shipping and return policy
+    is handled in snippets/jsonld-schema.liquid on product pages.
+  {%- endcomment -%}
+
+  <div class="products">
+    <div class="product-container">
+      {% if settings.enable_timer %}
+        {% render 'deal-snippet', productID: product.id, product: product %}
+      {% endif %}
+      <a href="{{ product.url | within: collection }}" class="grid-link product-group" aria-label="{{ product.title | escape }}">
+        {% unless sold_out %}
+          {% if on_sale and settings.collections_show_sale_circle %}
+          <div class="featured-tag">
+            <span class="badge badge--sale">
+              <span class="gift-tag badge__text{% if sale_text.size > 7 %} badge__text--small{% endif %}">{{ 'products.product.sale' | t }}</span>
+            </span>
+          </div>
+          {% endif %}
+        {% endunless %}
+        {% if sold_out and settings.collections_show_sold_out_circle %}
+        <span class="badge badge--sold-out">
+          <span class="badge__text{% if sold_out_text.size > 9 %} badge__text--small{% endif %}">{{ 'products.product.sold_out' | t }}</span>
+        </span>
+        {% endif %}
+        {%- if settings.gallery_thumb_carosule -%}
+          <div class="image_group">
+            <div class="dt-sc-swiper-slider swiper-container thumb-gallery-carousel" item-swiper="{{ product.id }}">
+              <div class="swiper-wrapper">
+                {%- for media in product.media -%}
+                  {%- if media.media_type == 'image' -%}
+                  <div class="swiper-slide">
+                    <img
+                      srcset="{%- if media.preview_image.width >= 360 -%}{{ media.preview_image | image_url: width: 360 }} 360w,{%- endif -%}
+                        {%- if media.preview_image.width >= 540 -%}{{ media.preview_image | image_url: width: 540 }} 540w,{%- endif -%}
+                        {%- if media.preview_image.width >= 720 -%}{{ media.preview_image | image_url: width: 720 }} 720w,{%- endif -%}
+                        {%- if media.preview_image.width >= 1080 -%}{{ media.preview_image | image_url: width: 1080 }} 1080w,{%- endif -%}
+                        {{ media.preview_image | image_url: width: 720 }} {{ media.preview_image.width }}w"
+                      src="{{ media.preview_image | image_url: width: 540 }}"
+                      sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 3), (min-width: 750px) calc((100vw - 120px) / 2), calc((100vw - 35px) / 2)"
+                      alt="{{ media.preview_image.alt | default: product.title | escape }}"
+                      loading="{{ img_loading }}"
+                      fetchpriority="{{ img_fetchpriority }}"
+                      decoding="async"
+                      class="motion-reduce featured-image teaser"
+                      width="{{ media.preview_image.width }}"
+                      height="{{ media.preview_image.height }}">
+                  </div>
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <div class="swiper-button swiper-button-prev btn-next-{{ product.id }}" role="button" aria-label="Previous image"></div>
+              <div class="swiper-button swiper-button-next btn-prev-{{ product.id }}" role="button" aria-label="Next image"></div>
+            </div>
+          </div>
+        {%- else -%}
+          <div class="image_group">
+            <div class="ImageOverlayCa"></div>
+            <div class="reveal {{ settings.product_hover_effect }}">
+              <span class="{% unless product.media[1] == nil %}product-additional{% endunless %}">
+                <img
+                  srcset="{%- if product.featured_media.width >= 165 -%}{{ product.featured_media | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if product.featured_media.width >= 360 -%}{{ product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if product.featured_media.width >= 533 -%}{{ product.featured_media | image_url: width: 533 }} 533w,{%- endif -%}
+                    {%- if product.featured_media.width >= 720 -%}{{ product.featured_media | image_url: width: 720 }} 720w,{%- endif -%}
+                    {{ product.featured_media | image_url: width: 720 }} {{ product.featured_media.width }}w"
+                  src="{{ product.featured_media | image_url: width: 540 }}"
+                  sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 3), (min-width: 480px) calc((100vw - 120px) / 2), calc((100vw - 35px) / 2)"
+                  alt="{{ featured_alt }}"
+                  loading="{{ img_loading }}"
+                  fetchpriority="{{ img_fetchpriority }}"
+                  decoding="async"
+                  class="motion-reduce featured-image teaser"
+                  itemprop="image"
+                  width="{{ product.featured_media.width }}"
+                  height="{{ product.featured_media.height }}">
+              </span>
+              {%- if product.media[1] != nil and settings.secondary_image_use -%}
+                <img
+                  srcset="{%- if product.media[1].width >= 165 -%}{{ product.media[1] | image_url: width: 165 }} 165w,{%- endif -%}
+                    {%- if product.media[1].width >= 360 -%}{{ product.media[1] | image_url: width: 360 }} 360w,{%- endif -%}
+                    {%- if product.media[1].width >= 533 -%}{{ product.media[1] | image_url: width: 533 }} 533w,{%- endif -%}
+                    {%- if product.media[1].width >= 720 -%}{{ product.media[1] | image_url: width: 720 }} 720w,{%- endif -%}
+                    {{ product.media[1] | image_url: width: 720 }} {{ product.media[1].width }}w"
+                  src="{{ product.media[1] | image_url: width: 540 }}"
+                  sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 130 | divided_by: 4 }}px, (min-width: 990px) calc((100vw - 130px) / 3), (min-width: 480px) calc((100vw - 120px) / 2), calc((100vw - 35px) / 2)"
+                  alt="{{ product.media[1].alt | default: product.title | escape }}"
+                  loading="lazy"
+                  fetchpriority="low"
+                  decoding="async"
+                  class="motion-reduce hidden-feature_img teaser"
+                  width="{{ product.media[1].width }}"
+                  height="{{ product.media[1].height }}">
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+      </a>
+      <div class="ImageWrapper">
+        <div class="product-button dt-sc_{{ settings.product_button_style }} {{ settings.icon_alignment }}">
+          {% form 'product', product, data-product-form: product_form_config %}
+            <input type="hidden" name="id" class="variant-push" value="{{ product.variants[0].id }}">
+            {% if product.available and settings.enable_add_cart %}
+            <div class="dt-sc-btn-group">
+              <button type="submit" name="add" class="dT_AddToCart dt-sc-btn" aria-label="{{ 'products.product.add_to_cart' | t }} {{ product.title | escape }}">{{ 'products.product.add_to_cart' | t }}</button>
+            </div>
+            {% endif %}
+          {% endform %}
+          {% if settings.enable_compare %}
+          <div>
+            <dtx-compare><a href="javascript:void(0);" class="add-compare" data-product_handle="{{ product.handle }}" aria-label="Compare {{ product.title | escape }}"></a></dtx-compare>
+            <tooltip class="tooltip">{{ 'products.compare.compare_name' | t }}</tooltip>
+          </div>
+          {% endif %}
+          {% if settings.enable_wishlist %}
+            {%- render 'button-wishlist', product: product -%}
+          {% endif %}
+          {% if settings.enable_quick_view %}
+          <div>
+            <a data-url="{{ productURL }}"
+               class="product-thumb-full-quick-view popup-product quick-view-btn dt-sc-btn"
+               href="{{ product.url | within: collection }}"
+               data-product-id="{{ product.id }}"
+               data-slider-type="slider_gallery"
+               data-effect="mfp-move-from-top"
+               aria-label="Quick view {{ product.title | escape }}"></a>
+            <tooltip class="tooltip">{{ 'products.product.quick_view' | t }}</tooltip>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="product-detail {{ settings.item_aignment }}">
+      {% render 'new-label', product: product %}
+      {% if settings.display_vendor %}<p class="product-vendor"><span>{{ product.vendor }}</span></p>{% endif %}
+      <h5 class="grid-link__title" itemprop="name">
+        <a href="{{ product.url | within: collection }}">
+          <p>{{ product.title }}{% if settings.enable_choosen_variant %}<span class="choosen-swatch"></span>{% endif %}</p>
+        </a>
+      </h5>
+      {% if settings.product_review %}
+        <span class="shopify-product-reviews-badge spr-badge" data-id="{{ product.id }}"></span>
+      {% endif %}
+      <div class="grid-link__meta">
+        {% render 'product-price', variant: product %}
+        <div class="product_right_tag{% if on_sale %} offer_exist{% endif %}">
+          {% if on_sale and settings.offer_price_enable %}
+            {% if product.compare_at_price > product.price %}
+            <span class="offer-price">
+              ( {{ product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price }}% {{ 'products.product.save' | t }} )
+            </span>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+      {% if settings.product_button_style == 'icon' %}
+        {% render 'variant-tag-color', product: product %}
+      {% endif %}
+      {% if settings.truncated_description %}
+        <div class="product_desc grid_list" itemprop="description">{{ product.description | strip_html | truncatewords: settings.excerpt_count }}</div>
+      {% endif %}
+      {% if product.available and settings.enable_add_cart %}
+        {% form 'product', product, data-product-form: product_form_config %}
+          <input type="hidden" name="id" class="variant-push" value="{{ product.variants[0].id }}">
+          {% if settings.product_button_style == 'button' %}
+            {% render 'variant-tag-color', product: product %}
+            <button type="submit" name="add" class="dT_AddToCart dt-sc-btn">{{ 'products.product.add_to_cart' | t }}</button>
+          {% endif %}
+          {% if settings.product_button_style == 'with_qty_btn' %}
+            {% render 'variant-tag-color', product: product %}
+            <div class="add-to-cart-group with-qty_btn">
+              <button type="submit" name="add" class="dT_AddToCart dt-sc-btn">{{ 'products.product.add_to_cart' | t }}</button>
+              <div class="cart-plus-minus">
+                <div class="product-attributes dt-sc-qty">
+                  <div class="quantity product-form__item product-form__item--quantity product-item-caption-qty grid-qty">
+                    <button class="quantity-btn quantity-btn-minus btn-number btn-number-{{ product.id }}" type="button" data-qty-btn="btn-number-{{ product.id }}" data-type="minus" data-field="quant[1]" aria-label="Decrease quantity"></button>
+                    <label for="Quantity-{{ product.id }}" class="visually-hidden">Quantity</label>
+                    <input type="text" id="Quantity-{{ product.id }}" name="quantity" value="1" class="quantity-btn-number form-control input-number input-number-{{ product.id }} product-form__input" pattern="[0-9]*">
+                    <button class="quantity-btn quantity-btn-plus btn-number btn-number-{{ product.id }}" data-qty-btn="btn-number-{{ product.id }}" type="button" data-type="plus" data-field="quant[1]" aria-label="Increase quantity"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endform %}
+      {% endif %}
+      {% if product.variants.first.inventory_quantity > 0 and product.metafields.my_fields.stock_initial != blank %}
+        {% assign productStartCount = product.metafields.my_fields.stock_initial | times: 1 %}
+        {% if productStartCount > 0 %}
+          {% assign productInventory = product.variants.first.inventory_quantity %}
+          <div class="items-left">
+            <div class="status-bar">
+              <div class="sold-bar" style="width: {{ productStartCount | minus: productInventory }}%"></div>
+            </div>
+            <p><span class="item_sold">{{ 'products.product.sold' | t }} {{ productStartCount | minus: productInventory }}</span> <span class="item-ramain">{{ 'products.product.remain' | t }} {{ productInventory }}</span></p>
+          </div>
+        {% else %}
+          <p>{{ 'products.product.all_sold' | t }}</p>
+        {% endif %}
+      {% endif %}
+      {% if product.available and settings.enable_add_cart %}
+        <div class="for-list-alone">
+          {% assign productVariantSize = product.variants | size %}
+          {% if productVariantSize > 1 %}
+            <a title="{{ 'products.product.select_options' | t }}" href="{{ product.url }}" class="dt-sc-btn">{{ 'products.product.select_options' | t }}</a>
+          {% else %}
+            {% form 'product', product, data-product-form: product_form_config %}
+              <input type="hidden" name="id" class="variant-push" value="{{ product.variants[0].id }}">
+              <div class="dt-sc-btn-group">
+                <button type="submit" name="add" class="dT_AddToCart dt-sc-btn">{{ 'products.product.add_to_cart' | t }}</button>
+              </div>
+            {% endform %}
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</li>

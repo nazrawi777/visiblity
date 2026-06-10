@@ -1,0 +1,81 @@
+{% if section.settings.search_type == 'search-icon' %}
+<div id="dT_top-sticky">
+    <div class="sticky_search_inner">
+      <a href="#" class="dT_TopStickySearchCloseBtn close dt-sc-btn close-icon"></a>
+      <div class="search-form {% if section.settings.enable_predictive_search %}dT_ProductProactiveSearch {% endif %}">
+        <div class="search_form">
+          <form method="GET" action="/search" autocomplete="off">
+          <div class="search-box">
+            <input type="text" name="q" class="form-control" autocomplete="off" placeholder="Search Our Store" aria-label="Search Our Store"
+                   v-model="search" @keyup="inputChanged" @keydown.down="onArrow" @keydown.up="onArrow">
+            <input type="hidden" name="product" value="product" />
+            <div class="input-group-append">
+              <button class="dt-sc-btn" type="submit">
+                {% render 'icon-search' %}
+              </button>
+            </div>
+          </div>
+        </form>
+  <div class="dT_PredictiveSearchResult_Section">
+          <template v-if="dT_ProductProactiveSugesstions">
+            <ul class="dt-sc-ProductSugesstions">
+              <li v-for="(item, i) in filteredSearchResults" :key="i" class="autocomplete-results" v-show="isOpen" :class="{ 'is-active': i === arrowCounter }">
+                <template v-if="item.image">
+                  <a :href="item.url">
+                    <img class="img-fluid" width="150" :src="item.image" alt="" loading="lazy">
+                  </a>
+                </template>
+                <div class="media-body">
+                  <a :href="item.url">${ item.product_title }</a>
+                  <div class="price">
+                    <span class="dt-price-symbol">{{ cart.currency.symbol }}</span> ${item.price}
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </template>
+        </div>
+        </div>
+        {% unless section.settings.search_tags == blank %}
+        {% assign searchTags = section.settings.search_tags | split: ',' %}
+        <ul class="search-tags">
+          <li>{{ 'general.search.category_title' | t }}</li>
+          {% for tag in searchTags %}
+          <li class="tag-item">
+            <a  href="/search?q={{ tag | handle }}&product=product" title="{{ tag }}">
+              <span>{{ tag }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+        {% endunless %}
+        {% unless section.settings.search_collection == blank %}
+            <h3 class="recently_purchased">{{ 'general.search.recently_purchased_title' | t }}</h3>
+                <div data-section-id="init-search" data-section-type="top-search-collection" class="top-search-collection">
+                        <div class="dt-sc-swiper-slider swiper-container  navigation-top-right inside_container ">
+                       <div id="swiper-init-search-slider" class="dT_vDynamicPWrap-{{ section.id }} dT_vProdWrap  swiper-container-initialized swiper-container-horizontal">
+                        <ul class="swiper-wrapper">
+                            {%- liquid
+                            assign collection = collections[section.settings.search_collection]
+                            for product in collection.products
+                            render 'product-grid-item', product: product, swiperSlideClass: 'swiper-slide'
+                            else
+                            for i in (1..4)
+                            render 'empty-row'
+                            endfor
+                            endfor %}
+                          </ul>
+                          <div class="swiper-init-search-arrows swiper-arrows">
+                            <div id="swiper-init-search-next" class="swiper-button-next dt-sc-btn"></div>
+                            <div id="swiper-init-search-prev" class="swiper-button-prev dt-sc-btn"></div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+        {% endunless %}
+
+      </div>
+    </div>
+    <div class="search-overlay"></div>
+</div>
+{% endif %}

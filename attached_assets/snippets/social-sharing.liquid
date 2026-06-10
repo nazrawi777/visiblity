@@ -1,0 +1,28 @@
+<div class="social-sharing" data-permalink="{{ permalinkURL }}">
+  <p class="social_share_title">{{ 'general.social.share_title' | t }}:</p>
+
+  {% if settings.share_facebook %}
+    <a target="_blank" href="//www.facebook.com/sharer.php?u={{ permalinkURL }}" class="share-facebook">
+      <span class="fa fa-facebook"></span>
+    </a>
+  {% endif %}
+
+  {% if settings.share_twitter %}
+    <a target="_blank" href="//twitter.com/share?text={{ shareTitle }}&amp;url={{ permalinkURL }}" class="share-twitter">
+      <span class="fa fa-twitter"></span>
+    </a>
+  {% endif %}
+
+    {% if settings.share_pinterest %}
+      <a target="_blank" href="//pinterest.com/pin/create/button/?url={{ permalinkURL }}&amp;media=http:{% if template contains 'product' %}{{ product | image_url: width: 1024 }}{% else %}{{ article | image_url: width: 1024 }}{% endif %}&amp;description={{ shareTitle }}" class="share-pinterest">
+        <span class="fa fa-pinterest"></span>
+      </a>
+
+  {% endif %}
+
+  {% if settings.share_google %}
+    <a target="_blank" href="//plus.google.com/share?url={{ permalinkURL }}" class="share-google">
+      <span class="fa fa-google"></span>
+    </a>
+  {% endif %}
+</div>

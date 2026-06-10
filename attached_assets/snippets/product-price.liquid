@@ -1,0 +1,25 @@
+{%- liquid
+  if variant.title
+  assign compare_at_price = variant.compare_at_price
+  assign price = variant.price
+  else
+  assign compare_at_price = 1999
+  assign price = 1999
+  endif
+  assign money_price = price | money
+  if compare_at_price > price
+  assign on_sale = true
+  endif
+%}
+<div class="product_price">
+  <div class="grid-link__org_price" id="ProductPrice">
+    {{ money_price }}
+  </div>
+</div>
+
+{% if on_sale %}
+<del class="grid-link__sale_price" id="ComparePrice">
+  {{ compare_at_price | money }}
+</del>
+{% endif %}
+

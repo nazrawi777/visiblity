@@ -1,0 +1,682 @@
+{% comment %}
+=============================================================
+  Infinite Visibility — JSON-LD Schema Snippet
+  File: snippets/jsonld-schema.liquid
+  Updated: May 2026
+  Free worldwide shipping — no minimum — no expiry set.
+  %s is NOT used anywhere — broken on Shopify servers.
+  All dates use %Y-%m-%d or hardcoded ISO strings.
+=============================================================
+{% endcomment %}
+{%- liquid
+  assign shop_url     = 'https://infinitevisibility7.com'
+  assign shop_name    = 'Infinite Visibility'
+  assign shop_email   = 'infinitevisibility07@gmail.com'
+  assign shop_lat     = '27.8306'
+  assign shop_lng     = '-82.3232'
+  assign logo_url     = settings.logo | image_url: width: 400
+  assign default_img  = settings.share_image | image_url: width: 1200
+  assign price_valid_year = 'now' | date: '%Y' | plus: 1
+  assign price_valid_until = price_valid_year | append: '-12-31'
+-%}
+{%- comment %} ── 1. ORGANIZATION (sitewide) ── {% endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "{{ shop_url }}/#organization",
+  "name": "{{ shop_name }}",
+  "url": "{{ shop_url }}",
+  "foundingDate": "2022",
+  "founder": {
+    "@type": "Person",
+    "name": "Infinite Visibility Team",
+    "jobTitle": "Founder",
+    "worksFor": {
+      "@id": "{{ shop_url }}/#organization"
+    }
+  },
+  "logo": {
+    "@type": "ImageObject",
+    "url": "https:{{ logo_url }}",
+    "width": 400,
+    "height": 120
+  },
+  "description": "Premium anime merchandise and streetwear fashion including vintage-washed oversized t-shirts, heavyweight hoodies, and collectible action figures for fans of One Piece, Naruto, Demon Slayer, Solo Leveling, and Jujutsu Kaisen. Free worldwide shipping on all orders.",
+  "email": "{{ shop_email }}",
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "email": "infinitevisibility07@gmail.com",
+      "contactType": "customer service",
+      "availableLanguage": "English"
+    }
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "9930 Jonas Salk Drive",
+    "addressLocality": "Riverview",
+    "addressRegion": "FL",
+    "postalCode": "33578",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "{{ shop_lat }}",
+    "longitude": "{{ shop_lng }}"
+  },
+  "sameAs": [
+    "https://www.facebook.com/infinitevisibility7",
+    "https://www.instagram.com/infinitevisibility07",
+    "https://www.pinterest.com/infinitevisibility",
+    "https://www.youtube.com/@infinitevisibility07",
+    "https://x.com/infinitevisi",
+    "{{ shop_url }}/pages/llms"
+  ]
+}
+</script>
+{%- comment %} ── 2. WEBSITE + SITELINKS SEARCHBOX (sitewide) ── {% endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "{{ shop_url }}/#website",
+  "url": "{{ shop_url }}",
+  "name": "{{ shop_name }}",
+  "description": "The ultimate Online Anime Shop for premium streetwear, figures, phone cases, and home decor. Free worldwide shipping on all orders — no minimum required.",
+  "publisher": {
+    "@id": "{{ shop_url }}/#organization"
+  },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ shop_url }}/search?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{%- comment %} ── 3. BREADCRUMB (sitewide, not on homepage) ── {% endcomment -%}
+{%- if template != 'index' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ shop_url }}"
+    }
+    {%- if template contains 'collection' and collection -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ collection.title | escape }}",
+      "item": "{{ shop_url }}/collections/{{ collection.handle }}"
+    }
+    {%- endif -%}
+    {%- if template contains 'product' and product -%}
+      {%- if collection -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ collection.title | escape }}",
+      "item": "{{ shop_url }}/collections/{{ collection.handle }}"
+    }
+    ,{
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ product.title | escape }}",
+      "item": "{{ shop_url }}/products/{{ product.handle }}"
+    }
+      {%- else -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ product.title | escape }}",
+      "item": "{{ shop_url }}/products/{{ product.handle }}"
+    }
+      {%- endif -%}
+    {%- endif -%}
+    {%- if template contains 'article' and article -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ blog.title | escape }}",
+      "item": "{{ shop_url }}/blogs/{{ blog.handle }}"
+    }
+    ,{
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ article.title | escape }}",
+      "item": "{{ shop_url }}/blogs/{{ blog.handle }}/{{ article.handle }}"
+    }
+    {%- endif -%}
+    {%- if template contains 'page' and page -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": "{{ page.title | escape }}",
+      "item": "{{ shop_url }}/pages/{{ page.handle }}"
+    }
+    {%- endif -%}
+  ]
+}
+</script>
+{%- endif -%}
+{%- comment %} ── 4. PRODUCT PAGE SCHEMA ── {% endcomment -%}
+{%- if template contains 'product' and product -%}
+{%- assign product_url   = shop_url | append: '/products/' | append: product.handle -%}
+{%- assign first_variant = product.selected_or_first_available_variant -%}
+{%- assign jm_rating     = product.metafields.judgeme.avg_rating | default: '' -%}
+{%- assign jm_count      = product.metafields.judgeme.review_count | default: '' -%}
+{%- assign native_rating = product.metafields.reviews.rating.value | default: '' -%}
+{%- assign native_count  = product.metafields.reviews.rating_count.value | default: '' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": "{{ product_url }}",
+  "name": "{{ product.title | escape }}",
+  "url": "{{ product_url }}",
+  "description": "{{ product.description | strip_html | truncatewords: 80 | escape }}",
+  "image": [
+    {%- for image in product.images limit: 5 -%}
+      "https:{{ image | image_url: width: 1200 }}"
+      {%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+  ],
+  "brand": {
+    "@type": "Brand",
+    "name": "Infinite Visibility"
+  },
+  "sku": "{{ first_variant.sku | escape }}"
+  {%- if product.metafields.global.barcode != blank -%}
+  ,"gtin": "{{ product.metafields.global.barcode }}"
+  {%- elsif first_variant.barcode != blank -%}
+  ,"gtin": "{{ first_variant.barcode }}"
+  {%- endif -%}
+  ,"offers": [
+    {%- for variant in product.variants -%}
+    {
+      "@type": "Offer",
+      "url": "{{ product_url }}?variant={{ variant.id }}",
+      "priceCurrency": "{{ cart.currency.iso_code }}",
+      "price": "{{ variant.price | money_without_currency | remove: ',' }}",
+      "priceValidUntil": "{{ price_valid_until }}",
+      "itemCondition": "https://schema.org/NewCondition",
+      "availability": "{% if variant.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+      "seller": {
+        "@type": "Organization",
+        "name": "Infinite Visibility"
+      },
+      "shippingDetails": {
+        "@type": "OfferShippingDetails",
+        "shippingRate": {
+          "@type": "MonetaryAmount",
+          "value": "0",
+          "currency": "USD"
+        },
+        "shippingDestination": [
+          { "@type": "DefinedRegion", "addressCountry": "US" },
+          { "@type": "DefinedRegion", "addressCountry": "CA" },
+          { "@type": "DefinedRegion", "addressCountry": "GB" },
+          { "@type": "DefinedRegion", "addressCountry": "AU" },
+          { "@type": "DefinedRegion", "addressCountry": "DE" },
+          { "@type": "DefinedRegion", "addressCountry": "FR" },
+          { "@type": "DefinedRegion", "addressCountry": "JP" },
+          { "@type": "DefinedRegion", "addressCountry": "MX" },
+          { "@type": "DefinedRegion", "addressCountry": "BR" },
+          { "@type": "DefinedRegion", "addressCountry": "NL" },
+          { "@type": "DefinedRegion", "addressCountry": "SE" },
+          { "@type": "DefinedRegion", "addressCountry": "SG" },
+          { "@type": "DefinedRegion", "addressCountry": "NZ" },
+          { "@type": "DefinedRegion", "addressCountry": "PH" }
+        ],
+        "doesNotShip": false,
+        "deliveryTime": {
+          "@type": "ShippingDeliveryTime",
+          "handlingTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 1,
+            "maxValue": 3,
+            "unitCode": "DAY"
+          },
+          "transitTime": {
+            "@type": "QuantitativeValue",
+            "minValue": 5,
+            "maxValue": 14,
+            "unitCode": "DAY"
+          }
+        }
+      },
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "US",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 15,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
+      }
+      {%- unless variant.title == 'Default Title' -%}
+      ,"name": "{{ variant.title | escape }}"
+      {%- endunless -%}
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+  {%- if jm_rating != '' and jm_count != '' -%}
+  ,"aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ jm_rating }}",
+    "reviewCount": "{{ jm_count }}",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+  {%- elsif native_rating != '' and native_count != '' -%}
+  ,"aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ native_rating }}",
+    "reviewCount": "{{ native_count }}",
+    "bestRating": "5",
+    "worstRating": "1"
+  }
+  {%- endif -%}
+}
+</script>
+{%- endif -%}
+{%- comment %} ── 5. COLLECTION PAGE SCHEMAS ── {% endcomment -%}
+{%- if template contains 'collection' and collection -%}
+{%- assign col_url   = shop_url | append: '/collections/' | append: collection.handle -%}
+{%- assign col_image = collection.image | image_url: width: 1200 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "@id": "{{ col_url }}",
+  "name": "{{ collection.title | escape }}",
+  "url": "{{ col_url }}",
+  "description": "{{ collection.description | strip_html | truncatewords: 80 | escape }}",
+  {%- if collection.image -%}
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:{{ col_image }}",
+    "description": "{{ collection.title | escape }} collection banner at Infinite Visibility"
+  },
+  {%- endif -%}
+  "isPartOf": {
+    "@id": "{{ shop_url }}/#website"
+  },
+  "publisher": {
+    "@id": "{{ shop_url }}/#organization"
+  }
+}
+</script>
+{%- if collection.products.size > 0 -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "{{ collection.title | escape }} — Featured Products",
+  "url": "{{ col_url }}",
+  "numberOfItems": {{ collection.products_count }},
+  "itemListElement": [
+    {%- assign col_products = collection.products | slice: 0, 12 -%}
+    {%- for p in col_products -%}
+    {
+      "@type": "ListItem",
+      "position": {{ forloop.index }},
+      "url": "{{ shop_url }}/products/{{ p.handle }}",
+      "name": "{{ p.title | escape }}",
+      "image": "https:{{ p.featured_image | image_url: width: 600 }}",
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "{{ cart.currency.iso_code }}",
+        "price": "{{ p.price | money_without_currency | remove: ',' }}",
+        "availability": "{% if p.available %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}",
+        "shippingDetails": {
+          "@type": "OfferShippingDetails",
+          "shippingRate": {
+            "@type": "MonetaryAmount",
+            "value": "0",
+            "currency": "USD"
+          },
+          "shippingDestination": [
+            { "@type": "DefinedRegion", "addressCountry": "US" },
+            { "@type": "DefinedRegion", "addressCountry": "CA" },
+            { "@type": "DefinedRegion", "addressCountry": "GB" },
+            { "@type": "DefinedRegion", "addressCountry": "AU" }
+          ]
+        }
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+{%- endif -%}
+{%- if collection.handle contains 'sale' or collection.handle contains 'clearance' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SpecialAnnouncement",
+  "name": "Big Anime Sale + Free Worldwide Shipping at Infinite Visibility",
+  "text": "Massive discounts on premium anime hoodies, figures, and phone cases — plus free worldwide shipping on all orders with no minimum. US, Canada and international customers all qualify.",
+  "datePosted": "2026-05-04",
+  "url": "{{ col_url }}",
+  "announcementLocation": {
+    "@type": "Store",
+    "name": "Infinite Visibility",
+    "url": "{{ shop_url }}"
+  }
+}
+</script>
+{%- endif -%}
+{%- endif -%}
+{%- comment %} ── 6. STATIC PAGE SCHEMAS ── {% endcomment -%}
+{%- if template contains 'page' and page -%}
+{%- if page.handle contains 'about' or page.handle contains 'online-anime-shop' or page.handle contains 'imagination' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "@id": "{{ shop_url }}/pages/{{ page.handle }}",
+  "name": "Online Anime Shop | Infinite Visibility",
+  "url": "{{ shop_url }}/pages/{{ page.handle }}",
+  "description": "The premier Online Anime Shop for premium streetwear, figures, and tech accessories. Free worldwide shipping on all orders. Proudly headquartered in Riverview, FL.",
+  "isPartOf": { "@id": "{{ shop_url }}/#website" },
+  "publisher": { "@id": "{{ shop_url }}/#organization" },
+  "mainEntity": {
+    "@type": "Store",
+    "name": "Infinite Visibility",
+    "url": "{{ shop_url }}",
+    "image": "https:{{ logo_url }}",
+    "foundingDate": "2022",
+    "description": "Premium anime merchandise and streetwear. Vintage-washed 100% cotton tees, heavyweight hoodies with Y2K Harajuku aesthetics, museum-grade collectible figures, and shockproof tech accessories from One Piece, Naruto, Demon Slayer, Solo Leveling, and Jujutsu Kaisen. Free worldwide shipping on all orders — no minimum required.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "9930 Jonas Salk Drive",
+      "addressLocality": "Riverview",
+      "addressRegion": "FL",
+      "postalCode": "33578",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "{{ shop_lat }}",
+      "longitude": "{{ shop_lng }}"
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+      "opens": "00:00",
+      "closes": "23:59"
+    },
+    "priceRange": "$$",
+    "hasMap": "https://maps.google.com/?q=9930+Jonas+Salk+Drive+Riverview+FL+33578",
+    "sameAs": [
+      "https://www.facebook.com/infinitevisibility7",
+      "https://www.instagram.com/infinitevisibility07",
+      "https://www.pinterest.com/infinitevisibility",
+      "https://www.youtube.com/@infinitevisibility07",
+      "https://x.com/infinitevisi"
+    ]
+  }
+}
+</script>
+{%- endif -%}
+{%- if page.handle contains 'contact' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "@id": "{{ shop_url }}/pages/{{ page.handle }}",
+  "name": "Contact Infinite Visibility | Support & Socials",
+  "url": "{{ shop_url }}/pages/{{ page.handle }}",
+  "description": "Contact Infinite Visibility for customer support, order inquiries, and business collaborations. Based in Riverview, Florida.",
+  "isPartOf": { "@id": "{{ shop_url }}/#website" },
+  "publisher": { "@id": "{{ shop_url }}/#organization" },
+  "mainEntity": {
+    "@type": "LocalBusiness",
+    "name": "Infinite Visibility",
+    "url": "{{ shop_url }}",
+    "email": "infinitevisibility07@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "9930 Jonas Salk Drive",
+      "addressLocality": "Riverview",
+      "addressRegion": "FL",
+      "postalCode": "33578",
+      "addressCountry": "US"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "{{ shop_lat }}",
+      "longitude": "{{ shop_lng }}"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "infinitevisibility07@gmail.com",
+      "contactType": "customer service"
+    },
+    "sameAs": [
+      "https://www.facebook.com/infinitevisibility7",
+      "https://www.instagram.com/infinitevisibility07",
+      "https://www.pinterest.com/infinitevisibility",
+      "https://www.youtube.com/@infinitevisibility07",
+      "https://x.com/infinitevisi"
+    ]
+  }
+}
+</script>
+{%- endif -%}
+{%- if page.handle contains 'wishlist' or page.handle contains 'downloads' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "{{ shop_url }}/pages/{{ page.handle }}",
+  "name": "Anime Wishlist & Downloads | Infinite Visibility",
+  "url": "{{ shop_url }}/pages/{{ page.handle }}",
+  "description": "Save your favorite anime gear and access exclusive printable anime coloring books as instant downloads.",
+  "isPartOf": { "@id": "{{ shop_url }}/#website" },
+  "publisher": { "@id": "{{ shop_url }}/#organization" },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "{{ shop_url }}" },
+      { "@type": "ListItem", "position": 2, "name": "Anime Wishlist & Downloads", "item": "{{ shop_url }}/pages/{{ page.handle }}" }
+    ]
+  }
+}
+</script>
+{%- endif -%}
+{%- if page.handle contains 'coloring' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "{{ shop_url }}/pages/{{ page.handle }}",
+  "name": "Anime Coloring Books | Printable Downloads — Infinite Visibility",
+  "url": "{{ shop_url }}/pages/{{ page.handle }}",
+  "description": "Premium printable anime coloring books featuring Naruto, One Piece, Demon Slayer, and Jujutsu Kaisen. Instant download PDF art pages for kids and adults.",
+  "isPartOf": { "@id": "{{ shop_url }}/#website" },
+  "publisher": { "@id": "{{ shop_url }}/#organization" },
+  "mainEntity": {
+    "@type": "ItemList",
+    "name": "Anime Coloring Books — Printable Digital Downloads",
+    "description": "High-resolution instant-download coloring pages for Goku, Luffy, Tanjiro, Anya Forger, and more.",
+    "url": "{{ shop_url }}/pages/{{ page.handle }}"
+  }
+}
+</script>
+{%- endif -%}
+{%- if page.handle contains 'sale' or page.handle contains 'clearance' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "{{ shop_url }}/pages/{{ page.handle }}",
+  "name": "Big Anime Sale | Up to 50% Off + Free Worldwide Shipping — Infinite Visibility",
+  "url": "{{ shop_url }}/pages/{{ page.handle }}",
+  "description": "Shop the Big Anime Sale at Infinite Visibility. Massive discounts on hoodies, figures, and phone cases. Free worldwide shipping on all orders — no minimum required.",
+  "isPartOf": { "@id": "{{ shop_url }}/#website" },
+  "publisher": { "@id": "{{ shop_url }}/#organization" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SaleEvent",
+  "name": "Big Anime Sale — Free Worldwide Shipping — Infinite Visibility",
+  "url": "{{ shop_url }}/pages/{{ page.handle }}",
+  "description": "Limited-time sale with major markdowns on premium anime streetwear, collectible figures, shockproof phone cases, and home decor. Free worldwide shipping on every order — US, Canada, and international.",
+  "startDate": "2026-05-04",
+  "endDate": "{{ price_valid_until }}",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OnlineEventAttendanceMode",
+  "location": {
+    "@type": "VirtualLocation",
+    "url": "{{ shop_url }}"
+  },
+  "organizer": {
+    "@id": "{{ shop_url }}/#organization"
+  }
+}
+</script>
+{%- endif -%}
+{%- if page.handle == 'llms' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "{{ shop_url }}/pages/llms",
+  "name": "llms.txt — Machine-Readable Store Summary | Infinite Visibility",
+  "url": "{{ shop_url }}/pages/llms",
+  "description": "Machine-readable summary of Infinite Visibility store catalog, shipping policy, and content permissions for AI web agents and large language models.",
+  "isPartOf": { "@id": "{{ shop_url }}/#website" },
+  "publisher": { "@id": "{{ shop_url }}/#organization" }
+}
+</script>
+{%- endif -%}
+{%- endif -%}
+{%- comment %} ── 7. HOMEPAGE SCHEMA ── {% endcomment -%}
+{%- if template == 'index' -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": "{{ shop_url }}",
+  "name": "Premium Anime Merchandise | Free Worldwide Shipping | Infinite Visibility",
+  "url": "{{ shop_url }}",
+  "description": "The ultimate Online Anime Shop for premium streetwear, museum-grade figures, shockproof phone cases, and home decor. Free worldwide shipping on all orders — no minimum. Featuring Naruto, One Piece, Demon Slayer, Solo Leveling, and Jujutsu Kaisen.",
+  "isPartOf": { "@id": "{{ shop_url }}/#website" },
+  "publisher": { "@id": "{{ shop_url }}/#organization" },
+  "about": { "@id": "{{ shop_url }}/#organization" },
+  "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": ["h1", ".hero__heading", ".section-header__title"]
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Store",
+  "@id": "{{ shop_url }}/#store",
+  "name": "Infinite Visibility",
+  "url": "{{ shop_url }}",
+  "image": "https:{{ logo_url }}",
+  "foundingDate": "2022",
+  "description": "Premium anime merchandise and streetwear. Vintage-washed 100% cotton tees, heavyweight hoodies with Y2K Harajuku aesthetics, museum-grade collectible figures, and shockproof tech accessories. Free worldwide shipping on all orders — no minimum required. Proudly US-based in Riverview, FL.",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "9930 Jonas Salk Drive",
+    "addressLocality": "Riverview",
+    "addressRegion": "FL",
+    "postalCode": "33578",
+    "addressCountry": "US"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "{{ shop_lat }}",
+    "longitude": "{{ shop_lng }}"
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+    "opens": "00:00",
+    "closes": "23:59"
+  },
+  "hasMap": "https://maps.google.com/?q=9930+Jonas+Salk+Drive+Riverview+FL+33578",
+  "email": "infinitevisibility07@gmail.com",
+  "sameAs": [
+    "https://www.facebook.com/infinitevisibility7",
+    "https://www.instagram.com/infinitevisibility07",
+    "https://www.pinterest.com/infinitevisibility",
+    "https://www.youtube.com/@infinitevisibility07",
+    "https://x.com/infinitevisi"
+  ]
+}
+</script>
+{%- comment %} ── FREE SHIPPING ANNOUNCEMENT (homepage only) ── {% endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SpecialAnnouncement",
+  "name": "Free Worldwide Shipping — No Minimum Order",
+  "text": "Infinite Visibility now offers free worldwide shipping on all orders with no minimum order required. US, Canada, and international customers all qualify. Shop premium anime merchandise and streetwear from One Piece, Naruto, Demon Slayer, Solo Leveling, and Jujutsu Kaisen.",
+  "datePosted": "2026-05-04",
+  "url": "{{ shop_url }}",
+  "announcementLocation": {
+    "@type": "Store",
+    "name": "Infinite Visibility",
+    "url": "{{ shop_url }}"
+  }
+}
+</script>
+{%- endif -%}
+{%- comment %} ── 8. BLOG ARTICLE SCHEMA ── {% endcomment -%}
+{%- if template contains 'article' and article -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": "{{ shop_url }}/blogs/{{ blog.handle }}/{{ article.handle }}",
+  "headline": "{{ article.title | escape }}",
+  "url": "{{ shop_url }}/blogs/{{ blog.handle }}/{{ article.handle }}",
+  "datePublished": "{{ article.published_at | date: '%Y-%m-%dT%H:%M:%SZ' }}",
+  "dateModified": "{{ article.updated_at | date: '%Y-%m-%dT%H:%M:%SZ' }}",
+  "description": "{{ article.excerpt_or_content | strip_html | truncatewords: 60 | escape }}",
+  {%- if article.image -%}
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:{{ article.image | image_url: width: 1200 }}",
+    "width": 1200
+  },
+  {%- elsif default_img != blank -%}
+  "image": {
+    "@type": "ImageObject",
+    "url": "https:{{ default_img }}",
+    "width": 1200
+  },
+  {%- endif -%}
+  "author": {
+    "@type": "Person",
+    "name": "{{ article.author | escape }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ shop_name }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https:{{ logo_url }}"
+    }
+  },
+  "isPartOf": { "@id": "{{ shop_url }}/#website" }
+}
+</script>
+{%- endif -%}

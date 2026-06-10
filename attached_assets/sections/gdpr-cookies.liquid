@@ -1,0 +1,129 @@
+{% if section.settings.show_gdpr %}
+<script src="{{ 'gdpr-cookies.js' | asset_url }}" defer></script>
+<div class="cookie-disclaimer {{ section.settings.style }}" id="cookies-banner">
+  <p>{{ section.settings.text }}</p>
+  <div class="dt-sc-btn-group dt-sc-list-inline">
+    <button type="button" class="accept-cookie">{{ section.settings.accept }}</button>
+    <button type="button" class="decline-cookie">{{ section.settings.decline }}</button> </div>
+</div>
+{%- style -%}
+  .cookie-disclaimer { position: fixed;max-width: 500px;bottom: 15px;padding: 15px;z-index:15;display: flex;flex-wrap: wrap;align-items: center;justify-content: center;text-align: center;border-radius:var(--DTRadius);color: {{ section.settings.text_color }};background-color: {{ section.settings.bg_color }};{% if section.settings.enable_box_shadow %}box-shadow: var(--DTboxShadow);{% endif %}}
+  .cookie-disclaimer > * {margin:5px; justify-content: center;}
+  .cookie-disclaimer > p {margin: 0 30px;}
+
+  .cookie-disclaimer.bottom{bottom: 0;left: 0;right: 0;padding:0;max-width: 100%;border-radius:0;z-index: 3;}
+  .cookie-disclaimer.left{left: 15px;margin-right:15px;right: auto;}
+  .cookie-disclaimer.right{left: auto;margin-left:15px;right: 15px;}
+
+  .cookie-disclaimer button{margin:5px;padding:{{ section.settings.button_padding }};color: {{ section.settings.button_text_color }};background-color:{{ section.settings.button_bg_color }};}
+  .cookie-disclaimer button:hover{color: {{ section.settings.button_text_hover_color }};background-color:{{ section.settings.button_bg_hover_color }};}
+{%- endstyle -%}
+
+{% endif %}
+{% schema %}
+{
+"name": "GDPR Cookies",
+"class": "gdpr-section",
+"settings": [
+{
+"type": "checkbox",
+"id": "show_gdpr",
+"label": "Enable GDPR cookies"
+},
+
+{
+"type": "select",
+"id": "style",
+"label":"Choose Style",
+"default": "bottom",
+"options": [
+{
+"value": "bottom",
+"label": "Bottom"
+},
+{
+"value": "left",
+"label": "Left"
+},
+{
+"value": "right",
+"label": "Right"
+}
+]
+},
+{
+"type": "checkbox",
+"id": "enable_box_shadow",
+"label": "Enable Box Shadow",
+"default": false
+},
+
+{
+"type": "textarea",
+"id": "text",
+"label": "Text",
+"default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+},
+{
+"type": "text",
+"id": "accept",
+"label": "Button 1",
+"default": "Accept"
+},
+{
+"type": "text",
+"id": "decline",
+"label": "Button 2",
+"default": "Decline"
+},
+{
+"type": "header",
+"content": "Colors"
+},
+{
+"type": "color",
+"id": "bg_color",
+"label": "Background - Color",
+"default": "#70bdc2"
+},
+{
+"type": "color",
+"id": "text_color",
+"label": "Text - Color",
+"default": "#fff"
+},
+
+{
+"type": "color",
+"id": "button_bg_color",
+"label": "Button BG Color",
+"default": "#206469"
+},
+{
+"type": "color",
+"id": "button_text_color",
+"label": "Button Text Color",
+"default": "#fff"
+},
+{
+"type": "color",
+"id": "button_text_hover_color",
+"label": "Button Hover Text Color",
+"default": "#000"
+},
+{
+"type": "color",
+"id": "button_bg_hover_color",
+"label": "Button Hover BG Color",
+"default": "#d8f3f5"
+},
+{
+"type": "text",
+"id": "button_padding",
+"label": "Button Padding",
+"default": "10px 20px 10px 20px",
+"info": "Format - Top, Right, Bottom, Left"
+}
+]
+}
+{% endschema %}

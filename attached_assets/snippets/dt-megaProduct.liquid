@@ -1,0 +1,23 @@
+{%- liquid
+if product == empty
+assign section_onboarding = true
+endif
+unless section_onboarding
+assign product1 = all_products[block.settings.product1]
+assign product2 = all_products[block.settings.product2]
+assign product3 = all_products[block.settings.product3]
+assign product4 = all_products[block.settings.product4]
+if product1 != blank
+render 'product-grid-item', product: product1
+endif
+if product2 != blank
+render 'product-grid-item', product: product2
+endif
+if product3 != blank
+render 'product-grid-item', product: product3
+endif
+if product4 != blank
+render 'product-grid-item', product: product4
+endif
+endunless
+%}

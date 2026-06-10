@@ -1,0 +1,416 @@
+<div class="text-center sidebar_btn {% if settings.collection_sidebar_mobile %} hidden {% endif %}">
+  <a class="dt-sc-btn toggleIcon iv-filter-toggle" aria-label="Open filters">
+    <span class="iv-filter-toggle-text">Filters</span>
+  </a>
+</div>
+
+<div class="sidebar sidebar-height-{{ section.id }} {{ settings.sidebar_style }}_style sidebar-sticky" sidebar-sticky>
+
+  {%- comment -%} TOP CLOSE BUTTON — visible on mobile only {%- endcomment -%}
+  <div class="iv-sidebar-top-bar">
+    <span class="iv-sidebar-top-title">Filters</span>
+    <a href="#" class="js-close-modal iv-close-top-btn" aria-label="Close filters">&#x2715;</a>
+  </div>
+
+  {%- assign today_day = 'now' | date: '%j' | plus: 0 -%}
+
+  {% for block in section.blocks %}
+  {% case block.type %}
+
+  {% when 'menu' %}
+  {% assign sidebar_menu = block.settings.linklist %}
+  {% if linklists[sidebar_menu].links.size > 0 %}
+  <div class="filter-panel-{{ block.type }} shop-filter-panel">
+    {%- if block.settings.filter_title != '' -%}
+    <h5 class="sidebar_title">{{ block.settings.filter_title }}</h5>
+    {%- endif -%}
+    <div class="filter-panel" id="accordian">
+      <ul>
+        {% for link in linklists[sidebar_menu].links %}
+        {% assign link_handle = link.title | handle %}
+        {% if linklists[link_handle] and linklists[link_handle].links.size > 0 %}
+        <li class="{% if link.active %}active{% endif %}">
+          <a href="{{ link.url }}">{{ link.title }}</a>
+          <ul>
+            {% for child in linklists[link_handle].links %}
+            <li {% if child.active %}class="active"{% endif %}><a href="{{ child.url }}">{{ child.title }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% else %}
+        <li class="{% if link.active %}active{% endif %}"><a href="{{ link.url }}">{{ link.title }}</a></li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  {% endif %}
+
+  {% when 'image' %}
+  {% if block.settings.image != blank %}
+  <div class="widget product-sidebar-type-{{ block.type }}">
+    {% if block.settings.title != blank %}<h5 class="sidebar_title">{{ block.settings.title }}</h5>{% endif %}
+    <a href="{{ block.settings.link }}">
+      <img
+        srcset="{%- if block.settings.image.width >= 375 -%}{{ block.settings.image | image_url: width: 375 }} 375w,{%- endif -%}
+        {%- if block.settings.image.width >= 550 -%}{{ block.settings.image | image_url: width: 550 }} 550w,{%- endif -%}
+        {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image.width >= 1100 -%}{{ block.settings.image | image_url: width: 1100 }} 1100w,{%- endif -%}
+        {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image | image_url }} {{ block.settings.image.width }}w"
+        sizes="(max-width: 767px) 100vw, 300px"
+        src="{{ block.settings.image | image_url: width: 600 }}"
+        loading="lazy"
+        alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+        width="{{ block.settings.image.width }}"
+        height="{{ block.settings.image.width | divided_by: block.settings.image.aspect_ratio | round }}">
+    </a>
+    {% if block.settings.link != blank and block.settings.link_text != blank %}
+    <a href="{{ block.settings.link }}" class="dt-sc-btn">{{ block.settings.link_text }}</a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  {% when 'carousel' %}
+  <div class="dT_VProdWrapper widget product-sidebar-type-{{ block.type }}">
+    {%- assign carousel_collection = collections[block.settings.collection] -%}
+    {%- assign carousel_total = carousel_collection.products.size -%}
+    {%- assign carousel_limit = block.settings.limit -%}
+    {%- if carousel_total > 0 -%}
+      {%- assign carousel_offset = today_day | modulo: carousel_total -%}
+    {%- else -%}
+      {%- assign carousel_offset = 0 -%}
+    {%- endif -%}
+    {% if carousel_total > 0 and block.settings.title != blank %}
+    <h5 class="sidebar_title">{{ block.settings.title }}</h5>
+    {% endif %}
+    <div data-section-id="{{ block.id }}"
+         data-section-type="collection-sidebar-carousel-section"
+         data-item-per-view="1"
+         data-autoplay="3"
+         data-small-screen-items="1"
+         data-item-space="2"
+         data-auto-height="true"
+         class="product-sidebar-deals">
+      <div class="dt-sc-swiper-slider swiper-container navigation-bottom-center outside_element">
+        <div id="swiper-{{ block.id }}-slider" class="dT_VProdWrapperOther">
+          <ul class="swiper-wrapper">
+            {%- assign carousel_count = 0 -%}
+            {%- for product in carousel_collection.products -%}
+              {%- if forloop.index0 >= carousel_offset and carousel_count < carousel_limit -%}
+                {% render 'product-grid-item', product: product, swiperSlideClass: 'swiper-slide', imageSize: 'large' %}
+                {%- assign carousel_count = carousel_count | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if carousel_count < carousel_limit -%}
+              {%- for product in carousel_collection.products -%}
+                {%- if forloop.index0 < carousel_offset and carousel_count < carousel_limit -%}
+                  {% render 'product-grid-item', product: product, swiperSlideClass: 'swiper-slide', imageSize: 'large' %}
+                  {%- assign carousel_count = carousel_count | plus: 1 -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- endif -%}
+            {%- if carousel_count == 0 -%}
+              {% for i in (1..5) %}{% render 'empty-row', product: product, swiperSlideClass: 'swiper-slide' %}{% endfor %}
+            {%- endif -%}
+          </ul>
+          <div class="swiper-{{ block.id }}-arrows swiper-arrows">
+            <div id="swiper-{{ block.id }}-next" class="swiper-button-next dt-sc-btn"></div>
+            <div id="swiper-{{ block.id }}-prev" class="swiper-button-prev dt-sc-btn"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% when 'collection' %}
+  <div class="widget product-sidebar-type-{{ block.type }}">
+    {%- assign list_collection = collections[block.settings.collection] -%}
+    {%- assign list_total = list_collection.products.size -%}
+    {%- assign list_limit = block.settings.limit -%}
+    {%- if list_total > 0 -%}
+      {%- assign list_seed = today_day | plus: 13 -%}
+      {%- assign list_offset = list_seed | modulo: list_total -%}
+    {%- else -%}
+      {%- assign list_offset = 0 -%}
+    {%- endif -%}
+    {% if list_total > 0 and block.settings.title != blank %}
+    <h5 class="sidebar_title">{{ block.settings.title }}</h5>
+    {% endif %}
+    <div class="dT_VProdWrapperOther">
+      <ul class="product-list-style">
+        {%- assign list_count = 0 -%}
+        {%- for product in list_collection.products -%}
+          {%- if forloop.index0 >= list_offset and list_count < list_limit -%}
+            {% render 'product-grid-item', product: product, imageSize: 'compact' %}
+            {%- assign list_count = list_count | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if list_count < list_limit -%}
+          {%- for product in list_collection.products -%}
+            {%- if forloop.index0 < list_offset and list_count < list_limit -%}
+              {% render 'product-grid-item', product: product, imageSize: 'compact' %}
+              {%- assign list_count = list_count | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        {%- if list_count == 0 -%}
+          {% for i in (1..5) %}{% render 'empty-row', product: product %}{% endfor %}
+        {%- endif -%}
+      </ul>
+    </div>
+  </div>
+
+  {% when 'collection_filter' %}
+  {%- comment -%}
+    Render for both vertical and drawer.
+    The duplicate on mobile is prevented by CSS — on screens below 1200px
+    the sidebar toggle button shows/hides the sidebar as a drawer overlay,
+    so the filter is always in one place in the DOM regardless of mode.
+  {%- endcomment -%}
+  {% if section.settings.filter_type == 'vertical' or section.settings.filter_type == 'drawer' %}
+  {% render 'collection-filter' %}
+  {% endif %}
+
+  {% when 'search' %}
+  <div class="widget product-sidebar-type-{{ block.type }}">
+    <form action="/search" method="get" role="search">
+      <input type="hidden" name="type" value="product">
+      <input
+        type="search"
+        id="SearchInput"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'general.search.placeholder' | t }}"
+        aria-label="{{ 'general.search.placeholder' | t }}"
+        class="search-bar__input"
+        autocomplete="off">
+      <button type="submit" class="dt-sc-btn" aria-label="Search">{% render 'icon-search' %}</button>
+    </form>
+  </div>
+
+  {% endcase %}
+  {% endfor %}
+
+  {%- comment -%} Original bottom close — required for theme JS {%- endcomment -%}
+  <a href="#" class="js-close-modal dt-sc-btn close-icon"></a>
+
+</div>
+
+<style>
+  /* ── TOGGLE BUTTON ── */
+  .sidebar_btn {
+    display: flex !important;
+    align-items: center;
+  }
+  .sidebar_btn .iv-filter-toggle {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+    transform: rotate(180deg);
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 10px;
+    border-radius: 0 var(--DTRadius, 4px) var(--DTRadius, 4px) 0;
+    background: var(--DT_Button_BG_Color, #31378F) !important;
+    color: var(--DT_Button_Text_Color, #ffffff) !important;
+    font-size: var(--DTFontSizeBase, 14px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+    line-height: 1;
+  }
+  .sidebar_btn .iv-filter-toggle:hover {
+    background: var(--DT_Button_BG_Hover_Color, #ffc72f) !important;
+    color: var(--DT_Button_Text_Hover_Color, #1a1a1a) !important;
+  }
+  .sidebar_btn .iv-filter-toggle i,
+  .sidebar_btn .iv-filter-toggle .fa {
+    display: none !important;
+  }
+
+  /* ── SIDEBAR TOP BAR ── */
+  .iv-sidebar-top-bar {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    margin: -15px -15px 16px -15px;
+    background: var(--DT_Button_BG_Color, #31378F);
+    color: var(--DT_Button_Text_Color, #ffffff);
+    border-bottom: 2px solid rgba(255,255,255,0.15);
+  }
+  .iv-sidebar-top-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .iv-close-top-btn {
+    font-size: 22px;
+    color: var(--DT_Button_Text_Color, #ffffff) !important;
+    text-decoration: none;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.15s ease;
+  }
+  .iv-close-top-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: #fff !important;
+  }
+
+  /* Show top bar on mobile and when drawer is open */
+  @media (max-width: 1199px) {
+    .iv-sidebar-top-bar { display: flex; }
+  }
+  .drawer-sidebar.open .iv-sidebar-top-bar { display: flex; }
+</style>
+
+<script>
+(function () {
+
+  /* ── CLOSE DRAWER ── */
+  function closeDrawer() {
+    var drawer = document.querySelector('.drawer-sidebar');
+    if (drawer) drawer.classList.remove('open');
+    var overlay = document.querySelector('.canvas-overlay');
+    if (overlay) overlay.style.display = 'none';
+    /* Also trigger original theme close logic */
+    var jsClose = document.querySelector('.sidebar .js-close-modal.close-icon');
+    if (jsClose) jsClose.click();
+  }
+
+  /* ── TOP CLOSE BUTTON ── */
+  function bindTopClose() {
+    var btn = document.querySelector('.iv-close-top-btn');
+    if (btn) {
+      btn.removeEventListener('click', handleTopClose);
+      btn.addEventListener('click', handleTopClose);
+    }
+  }
+  function handleTopClose(e) {
+    e.preventDefault();
+    closeDrawer();
+  }
+
+  /* ── APPLY CLOSES MOBILE SIDEBAR ── */
+  function bindApplyClose() {
+    document.querySelectorAll('.iv-apply-filter-btn').forEach(function (btn) {
+      btn.removeEventListener('click', handleApplyClose);
+      btn.addEventListener('click', handleApplyClose);
+    });
+  }
+  function handleApplyClose() {
+    if (window.innerWidth < 1200) {
+      setTimeout(closeDrawer, 500);
+    }
+  }
+
+  /* ── CHECKBOX CLOSES MOBILE SIDEBAR ── */
+  function bindCheckboxClose() {
+    document.querySelectorAll('#CollectionFiltersForm input[type="checkbox"]').forEach(function (cb) {
+      cb.removeEventListener('change', handleCheckboxClose);
+      cb.addEventListener('change', handleCheckboxClose);
+    });
+  }
+  function handleCheckboxClose() {
+    if (window.innerWidth < 768) {
+      setTimeout(closeDrawer, 700);
+    }
+  }
+
+  /* ── PRICE RANGE ── */
+  function initPriceRange() {
+    var rangeStart = document.querySelector('.price_range_start');
+    var rangeEnd   = document.querySelector('.price_range_end');
+    var inputStart = document.querySelector('.price_input_start');
+    var inputEnd   = document.querySelector('.price_input_end');
+    var minNum     = document.querySelector('.iv-min-num');
+    var maxNum     = document.querySelector('.iv-max-num');
+
+    if (!rangeStart || !rangeEnd) return;
+
+    var rMax = parseFloat(rangeStart.max) || 1000;
+
+    function clamp(val, lo, hi) {
+      return Math.min(Math.max(parseFloat(val) || 0, lo), hi);
+    }
+
+    function updateTrack() {
+      var lo  = parseFloat(rangeStart.value) || 0;
+      var hi  = parseFloat(rangeEnd.value)   || rMax;
+      var pr  = rangeStart.closest('price-range');
+      if (pr) {
+        pr.style.setProperty('--range-start', (lo / rMax * 100) + '%');
+        pr.style.setProperty('--range-end',   (hi / rMax * 100) + '%');
+      }
+      if (minNum) minNum.textContent = Math.round(lo);
+      if (maxNum) maxNum.textContent = Math.round(hi);
+      if (inputStart) inputStart.value = Math.round(lo);
+      if (inputEnd)   inputEnd.value   = Math.round(hi);
+    }
+
+    rangeStart.addEventListener('input', function () {
+      this.value = clamp(this.value, 0, parseFloat(rangeEnd.value) - 1);
+      updateTrack();
+    });
+    rangeEnd.addEventListener('input', function () {
+      this.value = clamp(this.value, parseFloat(rangeStart.value) + 1, rMax);
+      updateTrack();
+    });
+
+    if (inputStart) {
+      inputStart.addEventListener('change', function () {
+        var lo = clamp(this.value, 0, parseFloat(rangeEnd.value) - 1);
+        rangeStart.value = lo;
+        this.value = lo;
+        updateTrack();
+        rangeStart.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    }
+    if (inputEnd) {
+      inputEnd.addEventListener('change', function () {
+        var hi = clamp(this.value, parseFloat(rangeStart.value) + 1, rMax);
+        rangeEnd.value = hi;
+        this.value = hi;
+        updateTrack();
+        rangeEnd.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+    }
+
+    updateTrack();
+  }
+
+  /* ── INIT ── */
+  function init() {
+    bindTopClose();
+    bindApplyClose();
+    bindCheckboxClose();
+    initPriceRange();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  /* ── RE-INIT AFTER FILTER RE-RENDER ── */
+  var filterEl = document.getElementById('dt-collection-filter');
+  if (filterEl && window.MutationObserver) {
+    new MutationObserver(function () {
+      bindApplyClose();
+      bindCheckboxClose();
+      bindTopClose();
+      initPriceRange();
+    }).observe(filterEl, { childList: true, subtree: false });
+  }
+
+})();
+</script>

@@ -1,0 +1,294 @@
+<!-- /snippets/ajax-cart-template.liquid -->
+{% comment %}
+ 
+  This snippet provides the default handlebars.js templates for
+  the ajax cart plugin. Use the raw liquid tags to keep the
+  handlebar.js template tags as available hooks.
+
+{% endcomment %}
+  <script id="CartTemplate" type="text/template">
+  {% raw %}
+    <form action="/cart" method="post" novalidate class="cart ajaxcart">
+      <ul class="ajaxcart__inner">
+        {{#items}}
+        <li class="ajaxcart__product">
+          <div class="ajaxcart row" data-line="{{line}}">
+          <div class="item_img"><a href="{{ url }}" class="ajaxcart__product-image"> <img src="{{img}}" alt=""></a> </a></div>
+          <div  class="details">
+          
+          <h6><a href="{{ url }}" class="ajaxcart__product-name">{{name}}</a></h6>
+              <div class="item-desc">
+                <div class="item_dtl">
+                    {{#if variation}}
+                      <p class="ajaxcart__product-meta">{{variation}}</p>
+                    {{/if}}
+                    
+                    {{#properties}}
+                      {{#each this}}
+                        {{#if this}}
+                          <span class="ajaxcart__product-meta">{{@key}}: {{this}}</span>
+                        {{/if}}
+                      {{/each}}
+                    {{/properties}}
+                    {% endraw %}{% if settings.cart_vendor_enable %}{% raw %}
+                      <span class="ajaxcart__product-meta">{{ vendor }}</span>
+                    {% endraw %}{% endif %}{% raw %}
+                  <div class="pricing">
+                  
+                      {{#if discountsApplied}}
+                        <span class="hidden">{% endraw %}{{ 'products.general.sale_price' | t }}{% raw %}</span>
+                        <span class="ajaxcart__price onsale"><span class="money">{{{formatPrice discountedPrice}}}</span></span>
+                        <span class="hidden">{% endraw %}{{ 'products.general.regular_price' | t }}{% raw %}</span>
+                        <del class="ajaxcart__price"><span class="money">{{{formatPrice price}}}</span></del>
+                      {{else}}
+                        <span class="ajaxcart__price"><span class="money">{{{formatPrice price}}}</span></span>
+                      {{/if}}
+
+                    {{#if discountsApplied}}
+                      {{#each discounts}}
+                        <p class="onsale"><i class="la la-tag"></i> {{ this.discount_application.title }} (-<span class="money">{{{formatPrice this.formattedAmount }}}</span>)</p>
+                      {{/each}}
+                    {{/if}}
+                  </div>
+                </div>
+                <div class="ajaxcart__qty product-item-caption-qty">
+                  <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--minus quantity-increment" data-id="{{id}}" data-qty="{{itemMinus}}" data-line="{{line}}">
+                   
+                  </button>
+                  <input type="text" name="updates[]" class="ajaxcart__qty-num input-number" value="{{itemQty}}" min="0" data-id="{{id}}" data-line="{{line}}" aria-label="quantity" pattern="[0-9]*">
+                  <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--plus quantity-increment" data-id="{{id}}" data-line="{{line}}" data-qty="{{itemAdd}}">
+                    
+                  </button>                                  
+                </div>
+                <a href="#" id="changeQty" class="ajaxcart__qty-remove remove-btn close-icon" data-id="{{key}}" data-line="{{line}}" data-qty="{{itemAdd}}">
+               {% endraw %}  {% render 'icon-dustbin' %}  {% raw %}
+    </a>
+              </div>		
+          </div>
+        </div>
+        
+        </div>
+        
+        {{/items}}
+        </li>
+     <li>
+            {% endraw %}{%- if settings.cart_pop_notes -%}{% raw %}
+           <div class="drawer-model-block-1">    
+            <a class="modal-note-trigger1"> 
+            {% endraw %}{{ 'cart.general.note' | t }}{% raw %}  
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 50 50" style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <path id="Auto-Pen_1_" d="M46.1,12.1l1.7-2.9c0.4-0.7,0.6-1.4,0.6-2.2l0-0.9c0-1.3-0.6-2.4-1.6-3.2l-0.4-0.2c-1.2-0.7-2.7-0.7-3.9,0
+            l-0.8,0.5c-0.7,0.4-1.2,0.9-1.6,1.6L21.2,38c-0.3,0.6-0.5,1.2-0.6,1.8L19.9,48l1.2,0.7l6.6-4.9c0.5-0.4,0.9-0.8,1.2-1.3l16.6-29.1
+            l1.9,1.1l-8.8,15.4c-0.2,0.3-0.1,0.8,0.3,1c0.1,0.1,0.2,0.1,0.4,0.1c0.3,0,0.5-0.1,0.6-0.4l9.5-16.6L46.1,12.1z M41.5,5.5
+            c0.3-0.4,0.6-0.8,1.1-1.1l0.8-0.5c0.4-0.2,0.8-0.3,1.2-0.3c0.3,0,0.6,0.1,0.8,0.2L45.7,4c0.7,0.4,1.2,1.2,1.2,2.1l0,0.9
+            c0,0.5-0.1,1-0.4,1.5l-1.7,2.9L40,8.5C39.9,8.4,41.5,5.5,41.5,5.5z M27.5,41.7c-0.2,0.4-0.5,0.7-0.8,0.9l-5.3,3.9l0.6-6.6
+            c0-0.4,0.2-0.8,0.4-1.2L39.1,9.6c0,0,5,3,5,3L27.5,41.7z"/>
+            <rect x="0.4" y="48.4" width="18.5" height="1.1"/>
+            </svg>
+            </a>
+            <div class="modal-note modal-note1">          
+            <div id="cart-notes" class="item">             
+              <label class="accordion-label" for="item-one"><span class="item-heading">{% endraw %}{{ 'cart.general.note' | t }}{% raw %}</span></label>
+              <div class="item-content">
+                <textarea name="note" id="note" rows="5" cols="60">{{note}}</textarea>
+              </div>
+            </div>  
+          </div>
+          
+          </div>
+               
+    {% endraw %}{%- endif -%}{% raw %}                         
+      </li>
+      </ul>
+  
+      <div class="ajaxcart__footer row">
+        <div class="subtotal">
+          <p class="title">{% endraw %}{{ 'cart.label.total' | t }}{% raw %}</p>
+          <p class="subtotal-price"><span class="cart-original-total money">{{{formatPrice subTotalPrice}}}</span></p>
+        </div>
+        {% endraw %}{%- if settings.show_tax_note -%}{% raw %}
+          <div class="tax">
+            <p class="title">{% endraw %}{{ 'cart.general.tax' | t }}{% raw %}</p>
+            <p class="value">{% endraw %}{{ 'cart.general.at_checkout' | t }}{% raw %}</p>
+          </div>
+        {% endraw %}{%- endif -%}{% raw %}
+        {% endraw %}{%- if settings.show_shipping_note -%}{% raw %}
+          <div class="shipping">
+            <p class="title">{% endraw %}{{ 'cart.general.shipping' | t }}{% raw %}</p>
+            <p class="value">{% endraw %}{{ 'cart.general.at_checkout' | t }}{% raw %}</p>
+          </div>
+        {% endraw %}{%- endif -%}{% raw %}
+        <div class="discounts">
+          {{#if cartDiscountsApplied}}
+            <p>{% endraw %}{{ 'cart.general.discounts' | t }}{% raw %}</p>
+            <ul>
+             {{#each cartDiscounts}}
+                <li><i class="la la-tag"></i> (-<span class="money">{{{formatPrice this.formattedAmount }}}</span>)</li>
+             {{/each}}
+            </ul>
+           {{/if}}
+           {{#if cartTotalSavings}}
+             <div class="cart_savings onsale">
+               <p><em>{% endraw %}{{ 'cart.general.savings_html' | t }}{% raw %}</em></p>
+               <p class="cart-savings-amount"><em><span class="money">{{formatPrice cartTotalDiscounts}}</span></em></p>
+             </div>
+           {{/if}}
+        </div>
+        <div class="total">
+          <p>{% endraw %}{{ 'cart.general.shipping_at_checkout' | t }}{% raw %}</p>
+        </div>
+		
+        <div class="multiple_buttons">
+        <button type="submit" class="cart__checkout dt-sc-btn" name="checkout">
+          {% endraw %}{{ 'cart.general.checkout' | t }}{% raw %} 
+    </button>
+        {% endraw %}{% if additional_checkout_buttons %}
+          <div class="additional_checkout_buttons">{{ content_for_additional_checkout_buttons }}</div>
+        {% endif %}{% raw %}
+        <a class="dt-sc-btn" href="/cart">{% endraw %}{{ 'cart.general.view_cart' | t }} {% raw %}</a>
+    </div>
+        
+      </div>
+    </form>
+  {% endraw %}
+  </script>
+  <script id="AjaxQty" type="text/template">
+  {% raw %}
+    <div class="ajaxcart__qty">
+      <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--minus icon-fallback-text" data-id="{{id}}" data-qty="{{itemMinus}}">
+        <span class="icon icon-minus" aria-hidden="true"></span>
+        <span class="fallback-text">-</span>
+      </button>
+      <input type="text" class="ajaxcart__qty-num" value="{{itemQty}}" min="0" data-id="{{id}}" aria-label="quantity" pattern="[0-9]*">
+      <button type="button" class="ajaxcart__qty-adjust ajaxcart__qty--plus icon-fallback-text" data-id="{{id}}" data-qty="{{itemAdd}}">
+        <span class="icon icon-plus" aria-hidden="true"></span>
+        <span class="fallback-text">+</span>
+      </button>
+    </div>
+     <a href="#" id="changeQty" class="ajaxcart__qty-adjust remove-btn" data-id="{{key}}" data-line="{{line}}" data-qty="{{itemAdd}}">
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve">
+<style type="text/css">
+	.delete-icon{stroke:currentcolor;stroke-width:0.25;stroke-miterlimit:10;}
+</style>
+<g transform="translate(128 128) scale(0.72 0.72)">
+	<g transform="translate(-175.05 -175.05000000000004) scale(3.89 3.89)">
+		<path class="delete-icon" d="M15.9,19.8H7c-0.5,0-0.9-0.4-0.9-0.9V7.6c0-0.1,0-0.1,0.1-0.2l0.9-0.7c0,0,0.1,0,0.1,0h9.4
+			c0.1,0,0.2,0.1,0.2,0.2v11.9C16.8,19.4,16.4,19.8,15.9,19.8z M6.5,7.8v11.2c0,0.3,0.2,0.5,0.5,0.5h8.9c0.3,0,0.5-0.2,0.5-0.5V7.2
+			H7.3L6.5,7.8z"/>
+		<path class="delete-icon" d="M4.3,9.5c-0.1,0-0.1,0-0.2-0.1L3.4,8.5c-0.3-0.4-0.2-1,0.2-1.3l8.1-6.3c0.2-0.1,0.4-0.2,0.7-0.2
+			c0.2,0,0.5,0.2,0.6,0.3l0.7,0.9c0,0,0.1,0.1,0,0.2c0,0.1,0,0.1-0.1,0.1L4.4,9.4C4.4,9.4,4.3,9.5,4.3,9.5z M12.2,1.1
+			c-0.1,0-0.2,0-0.3,0.1L3.8,7.5C3.6,7.7,3.6,8,3.8,8.2l0.6,0.7L13.2,2l-0.6-0.7C12.5,1.2,12.4,1.1,12.2,1.1
+			C12.3,1.1,12.2,1.1,12.2,1.1z"/>
+		<path class="delete-icon" d="M5.9,5.9C5.9,5.9,5.8,5.9,5.9,5.9c-0.1,0-0.1,0-0.2-0.1L5.1,5.1c-0.3-0.4-0.2-1,0.2-1.3L8,1.7
+			c0.2-0.1,0.4-0.2,0.7-0.2c0.2,0,0.5,0.2,0.6,0.3l0.6,0.7c0.1,0.1,0.1,0.2,0,0.3L6,5.8C6,5.9,5.9,5.9,5.9,5.9z M8.5,2
+			C8.4,2,8.3,2,8.2,2.1L5.6,4.2C5.5,4.2,5.4,4.3,5.4,4.5c0,0.1,0,0.2,0.1,0.3l0.4,0.5l3.4-2.7L8.9,2.2C8.8,2.1,8.7,2,8.5,2
+			C8.6,2,8.5,2,8.5,2z"/>
+		<path class="delete-icon" d="M11.5,17.6c-0.1,0-0.2-0.1-0.2-0.2V9.2c0-0.1,0.1-0.2,0.2-0.2c0.1,0,0.2,0.1,0.2,0.2v8.2
+			C11.7,17.5,11.6,17.6,11.5,17.6z"/>
+		<path class="delete-icon" d="M14,17.6c-0.1,0-0.2-0.1-0.2-0.2V9.2C13.8,9.1,13.9,9,14,9c0.1,0,0.2,0.1,0.2,0.2v8.2
+			C14.3,17.5,14.2,17.6,14,17.6z"/>
+		<path class="delete-icon" d="M8.9,17.6c-0.1,0-0.2-0.1-0.2-0.2V9.2C8.7,9.1,8.8,9,8.9,9C9,9,9.1,9.1,9.1,9.2v8.2C9.1,17.5,9,17.6,8.9,17.6
+			z"/>
+		<path class="delete-icon" d="M16.5,5.8h-4.2c-0.1,0-0.2-0.1-0.2-0.1c0-0.1,0-0.2,0.1-0.2l2.5-1.9c0.4-0.3,0.9-0.4,1.3-0.1s0.7,0.6,0.7,1.1
+			v1.1C16.7,5.7,16.6,5.8,16.5,5.8z M12.9,5.3h3.3V4.4c0-0.3-0.2-0.6-0.5-0.7c-0.3-0.1-0.6-0.1-0.9,0.1L12.9,5.3z M14.8,3.6
+			L14.8,3.6L14.8,3.6z"/>
+		<path class="delete-icon" d="M15.7,2.3c-0.1,0-0.1,0-0.2,0L15,2c-0.2-0.1-0.4-0.3-0.4-0.6l0-0.5c0-0.2,0.1-0.4,0.3-0.5l0.5-0.2
+			c0.2-0.1,0.4-0.1,0.6,0.1l0.4,0.3c0.2,0.2,0.3,0.5,0.1,0.8L16.2,2C16.1,2.2,15.9,2.3,15.7,2.3z M15.7,0.6
+			C15.7,0.6,15.7,0.6,15.7,0.6L15.7,0.6l-0.6,0.2c0,0-0.1,0.1-0.1,0.1l0,0.5c0,0.1,0,0.1,0.1,0.1l0.6,0.2c0.1,0,0.1,0,0.2-0.1
+			l0.4-0.6c0-0.1,0-0.1,0-0.2L15.7,0.6C15.8,0.6,15.8,0.6,15.7,0.6z M15.6,0.4L15.6,0.4L15.6,0.4z"/>
+	</g>
+</g>
+</a>
+    </span>
+  {% endraw %}
+  </script>
+  <script id="JsQty" type="text/template">
+  {% raw %}
+    <div class="js-qty">
+      <button type="button" class="js-qty__adjust js-qty__adjust--minus quantity-increment hide" data-id="{{id}}" data-qty="{{itemMinus}}">
+        <span>-</span>
+      </button>
+      <input type="number" class="js-qty__num" value="{{itemQty}}" min="1" data-id="{{id}}" aria-label="quantity" pattern="[0-9]*" name="{{inputName}}" id="{{inputId}}" >
+      <button type="button" class="js-qty__adjust js-qty__adjust--plus quantity-increment hide" data-id="{{id}}" data-qty="{{itemAdd}}">
+        <span>+</span>
+      </button>
+    </div>
+     <a href="#" id="changeQty" class="ajaxcart__qty-adjust remove-btn" data-id="{{key}}" data-line="{{line}}" data-qty="{{itemAdd}}">
+    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 60 60" style="enable-background:new 0 0 60 60;" xml:space="preserve">
+<style type="text/css">
+	.delete-icon{stroke:currentcolor;stroke-width:0.25;stroke-miterlimit:10;}
+</style>
+<g transform="translate(128 128) scale(0.72 0.72)">
+	<g transform="translate(-175.05 -175.05000000000004) scale(3.89 3.89)">
+		<path class="delete-icon" d="M15.9,19.8H7c-0.5,0-0.9-0.4-0.9-0.9V7.6c0-0.1,0-0.1,0.1-0.2l0.9-0.7c0,0,0.1,0,0.1,0h9.4
+			c0.1,0,0.2,0.1,0.2,0.2v11.9C16.8,19.4,16.4,19.8,15.9,19.8z M6.5,7.8v11.2c0,0.3,0.2,0.5,0.5,0.5h8.9c0.3,0,0.5-0.2,0.5-0.5V7.2
+			H7.3L6.5,7.8z"/>
+		<path class="delete-icon" d="M4.3,9.5c-0.1,0-0.1,0-0.2-0.1L3.4,8.5c-0.3-0.4-0.2-1,0.2-1.3l8.1-6.3c0.2-0.1,0.4-0.2,0.7-0.2
+			c0.2,0,0.5,0.2,0.6,0.3l0.7,0.9c0,0,0.1,0.1,0,0.2c0,0.1,0,0.1-0.1,0.1L4.4,9.4C4.4,9.4,4.3,9.5,4.3,9.5z M12.2,1.1
+			c-0.1,0-0.2,0-0.3,0.1L3.8,7.5C3.6,7.7,3.6,8,3.8,8.2l0.6,0.7L13.2,2l-0.6-0.7C12.5,1.2,12.4,1.1,12.2,1.1
+			C12.3,1.1,12.2,1.1,12.2,1.1z"/>
+		<path class="delete-icon" d="M5.9,5.9C5.9,5.9,5.8,5.9,5.9,5.9c-0.1,0-0.1,0-0.2-0.1L5.1,5.1c-0.3-0.4-0.2-1,0.2-1.3L8,1.7
+			c0.2-0.1,0.4-0.2,0.7-0.2c0.2,0,0.5,0.2,0.6,0.3l0.6,0.7c0.1,0.1,0.1,0.2,0,0.3L6,5.8C6,5.9,5.9,5.9,5.9,5.9z M8.5,2
+			C8.4,2,8.3,2,8.2,2.1L5.6,4.2C5.5,4.2,5.4,4.3,5.4,4.5c0,0.1,0,0.2,0.1,0.3l0.4,0.5l3.4-2.7L8.9,2.2C8.8,2.1,8.7,2,8.5,2
+			C8.6,2,8.5,2,8.5,2z"/>
+		<path class="delete-icon" d="M11.5,17.6c-0.1,0-0.2-0.1-0.2-0.2V9.2c0-0.1,0.1-0.2,0.2-0.2c0.1,0,0.2,0.1,0.2,0.2v8.2
+			C11.7,17.5,11.6,17.6,11.5,17.6z"/>
+		<path class="delete-icon" d="M14,17.6c-0.1,0-0.2-0.1-0.2-0.2V9.2C13.8,9.1,13.9,9,14,9c0.1,0,0.2,0.1,0.2,0.2v8.2
+			C14.3,17.5,14.2,17.6,14,17.6z"/>
+		<path class="delete-icon" d="M8.9,17.6c-0.1,0-0.2-0.1-0.2-0.2V9.2C8.7,9.1,8.8,9,8.9,9C9,9,9.1,9.1,9.1,9.2v8.2C9.1,17.5,9,17.6,8.9,17.6
+			z"/>
+		<path class="delete-icon" d="M16.5,5.8h-4.2c-0.1,0-0.2-0.1-0.2-0.1c0-0.1,0-0.2,0.1-0.2l2.5-1.9c0.4-0.3,0.9-0.4,1.3-0.1s0.7,0.6,0.7,1.1
+			v1.1C16.7,5.7,16.6,5.8,16.5,5.8z M12.9,5.3h3.3V4.4c0-0.3-0.2-0.6-0.5-0.7c-0.3-0.1-0.6-0.1-0.9,0.1L12.9,5.3z M14.8,3.6
+			L14.8,3.6L14.8,3.6z"/>
+		<path class="delete-icon" d="M15.7,2.3c-0.1,0-0.1,0-0.2,0L15,2c-0.2-0.1-0.4-0.3-0.4-0.6l0-0.5c0-0.2,0.1-0.4,0.3-0.5l0.5-0.2
+			c0.2-0.1,0.4-0.1,0.6,0.1l0.4,0.3c0.2,0.2,0.3,0.5,0.1,0.8L16.2,2C16.1,2.2,15.9,2.3,15.7,2.3z M15.7,0.6
+			C15.7,0.6,15.7,0.6,15.7,0.6L15.7,0.6l-0.6,0.2c0,0-0.1,0.1-0.1,0.1l0,0.5c0,0.1,0,0.1,0.1,0.1l0.6,0.2c0.1,0,0.1,0,0.2-0.1
+			l0.4-0.6c0-0.1,0-0.1,0-0.2L15.7,0.6C15.8,0.6,15.8,0.6,15.7,0.6z M15.6,0.4L15.6,0.4L15.6,0.4z"/>
+	</g>
+</g>
+</svg>
+    </a>
+  {% endraw %}
+  </script>
+
+
+
+{% if settings.ajax_cart_method == 'drawer' %}    
+<script>
+  jQuery(function($) {
+    ajaxCart.init({
+      formSelector: '[data-product-form]',
+      cartContainer: '#CartContainer',
+      addToCartSelector: '.dT_AddToCart',
+      cartCountSelector: '.CartCount',
+      cartCostSelector: '.CartCost',
+      moneyFormat: {{ shop.money_format | json }}
+    });
+    });
+
+    jQuery('body').on('ajaxCart.afterCartLoad', function(evt, cart) {          
+      theme.RightDrawer.open();
+    });
+    
+    jQuery('body').on('ajaxCart.afterCartLoad', function(evt, cart) {          
+    $('.modal-note-trigger1').on('click', function(e) {
+    e.preventDefault();
+    $('.modal-note1').toggleClass('is-visible');
+    $('.modal-note1').slideToggle("slow");
+    });
+    });
+    
+</script>  
+{% endif %}
+
+{% if template contains 'product' %}
+<script type="text/javascript">
+  var recentlyViewed = $('.recently-viewed-products');
+  if ( recentlyViewed.length ) {     
+    Shopify.Products.recordRecentlyViewed();
+  }
+</script>
+{% endif %}

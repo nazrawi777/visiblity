@@ -1,0 +1,188 @@
+<div class="swiper-container main-swiper-container {% if section.settings.gallery_type == 'thumbnails_vertical' %}swiper-gallery-vert-slider{% elsif section.settings.gallery_type == 'thumbnails_horizontal' %}swiper-gallery-inline-slider{% elsif section.settings.gallery_type == 'thumbnails_hide' %}swiper-gallery-inline-slider{% endif %}" id="{% if section.settings.gallery_type == 'thumbnails_vertical' %}swiper-gallery-vert-{{ section.id }}{% elsif section.settings.gallery_type == 'thumbnails_horizontal' %}swiper-gallery-{{ section.id }}{% elsif section.settings.gallery_type == 'thumbnails_hide' %}swiper-gallery-{{ section.id }}{%endif %}">
+  <div class="swiper-wrapper">
+    {% for media in product.media %}
+    {% capture media_id %}FeaturedMedia-{{ section.id }}-{{ media.id }}{% endcapture %}
+    {% capture media_class %}product-featured-media{% endcapture %}
+    {% capture media_wrapper_id %}{{ media_id }}-wrapper{% endcapture %}
+    {%- assign media_alt = media.alt | default: product.title | escape -%}
+    <div class="swiper-slide" id="{{ media.id }}">
+      <div id="{{ media_wrapper_id }}"
+           class="dt-sc-product-single-wrapper {% if media.media_type == "image" %} zoom-img-wrap {% endif %}"
+           {% if media.media_type == 'video' or media.media_type == 'external_video' %} data-product-media-type-video data-enable-video-looping="{{ section.settings.enable_video_looping }}"{% endif %}
+           {% if media.media_type == 'external_video' %} data-video-id="{{ media.external_id }}"{% endif %}
+           data-product-single-media-wrapper
+           data-media-id="{{ section.id }}-{{ media.id }}"
+           tabindex="-1" {% if media.media_type == "image" %}data-media-alt="{{ media_alt }}"{% endif %}>
+        {% case media.media_type %}
+        {% when 'external_video' %}
+        <div class="product-item-img dt-sc-product-single_media" style="padding-top: {{ 1 | divided_by: media.aspect_ratio | times: 100 }}%;">
+          {{ media | external_video_tag }}
+        </div>
+        {% when 'video' %}
+        {% style %}
+        @media screen and (max-width: 320px) {
+          .dt-sc-product-single_media-{{ media.id }} .plyr__poster {
+            background-image: url({{ media.preview_image | image_url: width: 360 }}) !important;
+          }
+        }
+        @media screen and (min-width: 320px) and (max-width: 780px) {
+          .dt-sc-product-single_media-{{ media.id }} .plyr__poster {
+            background-image: url({{ media.preview_image | image_url: width: 900 }}) !important;
+          }
+        }
+        @media screen and (min-width: 780px) and (max-width: 1080px) {
+          .dt-sc-product-single_media-{{ media.id }} .plyr__poster {
+            background-image: url({{ media.preview_image | image_url: width: 1080 }}) !important;
+          }
+        }
+        @media screen and (min-width: 1080px) {
+          .dt-sc-product-single_media-{{ media.id }} .plyr__poster {
+            background-image: url({{ media.preview_image | image_url: width: 2048 }}) !important;
+          }
+        }
+        {% endstyle %}
+        <div class="product-item-img dt-sc-product-single_media dt-sc-product-single_media--video dt-sc-product-single_media--{{ media.id }}" style="padding-top: {{ 1 | divided_by: media.aspect_ratio | times: 100 }}%;">
+          {{ media | video_tag: class: 'media-video', image_size: '700x', autoplay: 'true' }}
+        </div>
+        {% when 'model' %}
+        <div class="product-single__media" data-media-id="{{ media.id }}">
+          {{ media | model_viewer_tag }}
+        </div>
+        {% else %}
+        <img
+          class="product-item-img zoom-img"
+          src="{{ media | image_url: width: 1200 }}"
+          srcset="{{ media | image_url: width: 600 }} 600w, {{ media | image_url: width: 900 }} 900w, {{ media | image_url: width: 1200 }} 1200w, {{ media | image_url: width: 1600 }} 1600w"
+          sizes="(max-width: 767px) 100vw, 50vw"
+          alt="{{ media_alt }}"
+          data-srczoom="{{ media.preview_image.src | image_url: width: 2000 }}"
+          title="{{ product.title | escape }}"
+          width="{{ media.width }}"
+          height="{{ media.height }}"
+          loading="{{ loading | default: 'lazy' }}"
+          fetchpriority="{{ fetchpriority | default: 'auto' }}">
+        {% if section.settings.enable_zoom %}
+        <a tabindex="-1" class="zoom-img-container zoom-img-position" data-image-loading-animation href="javascript:void(0);"></a>
+        {% endif %}
+        {% endcase %}
+      </div>
+    </div>
+    {% else %}
+    {{ "product-5" | placeholder_svg_tag: 'product-item-img thumbnail_slider_svg' }}
+    {% endfor %}
+    <noscript>
+      <div class="dt-sc-no-image" style="background-image: url('{{ img_url }}'); background-position: center;"></div>
+    </noscript>
+  </div>
+  <div class="swiper-pagination-{{ section.id }}"></div>
+</div>
+
+{% if product.media.size > 0 %}
+
+{% if section.settings.gallery_type == 'thumbnails_vertical' %}
+<div class="swiper-vert-thumbnails-main-container swiper-thumbnails-main-container">
+  <div class="swiper-container swiper-thumbnails-vert" id="swiper-gallery-thumbs-vert-{{ section.id }}">
+    <div class="swiper-button-prev swiper-button-prev-{{ section.id }}"></div>
+    <div class="swiper-wrapper">
+      {% for media in product.media %}
+      {%- assign thumb_alt = media.alt | default: product.title | escape -%}
+      <div class="swiper-slide {% if media.media_type == "image" %} grouped-check{% endif %}" {% if media.media_type == "image" %}data-media-alt="{{ thumb_alt }}"{% endif %} tabindex="0">
+        <img
+          class="swiper-thumb-item"
+          src="{{ media | image_url: width: 200 }}"
+          srcset="{{ media | image_url: width: 100 }} 100w, {{ media | image_url: width: 200 }} 200w, {{ media | image_url: width: 300 }} 300w"
+          sizes="100px"
+          alt="{{ thumb_alt }}"
+          title="{{ product.title | escape }}"
+          width="{{ media.width }}"
+          height="{{ media.height }}"
+          loading="lazy">
+        {% if media.media_type == "video" or media.media_type == "external_video" %}
+        <span class="icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+            <g transform="translate(0,-952.36218)">
+              <path class="st0" d="M19.8,968.6c-9,0-16.3,7.3-16.3,16.3v34.9c0,9,7.3,16.3,16.3,16.3h60.4c9,0,16.3-7.3,16.3-16.3v-34.9
+                                   c0-9-7.3-16.3-16.3-16.3H19.8z M40.7,987.2l25.6,15.1l-25.6,15.1V987.2z"/>
+            </g>
+          </svg>
+        </span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-button-next swiper-button-next-{{ section.id }}"></div>
+  </div>
+</div>
+{% endif %}
+
+{% if section.settings.gallery_type == 'thumbnails_horizontal' %}
+<div class="swiper-horiz-thumbnails-main-container swiper-thumbnails-main-container">
+  <div class="swiper-container swiper-thumbnails-inline" id="swiper-gallery-thumbs-{{ section.id }}">
+    <div class="swiper-wrapper">
+      {% for media in product.media %}
+      {%- assign thumb_alt = media.alt | default: product.title | escape -%}
+      <div class="swiper-slide {% if media.media_type == "image" %} grouped-check{% endif %}" {% if media.media_type == "image" %}data-media-alt="{{ thumb_alt }}"{% endif %} tabindex="0">
+        <img
+          loading="lazy"
+          class="swiper-thumb-item"
+          src="{{ media | image_url: width: 200 }}"
+          srcset="{{ media | image_url: width: 100 }} 100w, {{ media | image_url: width: 200 }} 200w, {{ media | image_url: width: 300 }} 300w"
+          sizes="100px"
+          alt="{{ thumb_alt }}"
+          title="{{ product.title | escape }}"
+          width="{{ media.width }}"
+          height="{{ media.height }}">
+        {% if media.media_type == "video" or media.media_type == "external_video" %}
+        <span class="icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+            <g transform="translate(0,-952.36218)">
+              <path class="st0" d="M19.8,968.6c-9,0-16.3,7.3-16.3,16.3v34.9c0,9,7.3,16.3,16.3,16.3h60.4c9,0,16.3-7.3,16.3-16.3v-34.9
+                                   c0-9-7.3-16.3-16.3-16.3H19.8z M40.7,987.2l25.6,15.1l-25.6,15.1V987.2z"/>
+            </g>
+          </svg>
+        </span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="swiper-button-prev swiper-button-prev-{{ section.id }}"></div>
+    <div class="swiper-button-next swiper-button-next-{{ section.id }}"></div>
+  </div>
+</div>
+{% endif %}
+
+{% if section.settings.gallery_type == 'thumbnails_hide' %}
+<div class="swiper-horiz-thumbnails-main-container swiper-thumbnails-main-container hidden">
+  <div class="swiper-container swiper-thumbnails-inline" id="swiper-gallery-thumbs-{{ section.id }}">
+    <div class="swiper-wrapper">
+      {% for media in product.media %}
+      {%- assign thumb_alt = media.alt | default: product.title | escape -%}
+      <div class="swiper-slide {% if media.media_type == "image" %} grouped-check{% endif %}" {% if media.media_type == "image" %}data-media-alt="{{ thumb_alt }}"{% endif %} tabindex="0">
+        <img
+          loading="lazy"
+          class="swiper-thumb-item"
+          src="{{ media | image_url: width: 200 }}"
+          srcset="{{ media | image_url: width: 100 }} 100w, {{ media | image_url: width: 200 }} 200w, {{ media | image_url: width: 300 }} 300w"
+          sizes="100px"
+          alt="{{ thumb_alt }}"
+          title="{{ product.title | escape }}"
+          width="{{ media.width }}"
+          height="{{ media.height }}">
+        {% if media.media_type == "video" or media.media_type == "external_video" %}
+        <span class="icon-wrapper">
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" style="enable-background:new 0 0 100 100;" xml:space="preserve">
+            <g transform="translate(0,-952.36218)">
+              <path class="st0" d="M19.8,968.6c-9,0-16.3,7.3-16.3,16.3v34.9c0,9,7.3,16.3,16.3,16.3h60.4c9,0,16.3-7.3,16.3-16.3v-34.9
+                                   c0-9-7.3-16.3-16.3-16.3H19.8z M40.7,987.2l25.6,15.1l-25.6,15.1V987.2z"/>
+            </g>
+          </svg>
+        </span>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endif %}

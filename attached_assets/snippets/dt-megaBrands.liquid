@@ -1,0 +1,315 @@
+<!-- Image with text -->
+{%- if block.settings.image_1 != blank or block.settings.image_2 != blank  or block.settings.image_3 != blank  or  block.settings.image_4 != blank  or block.settings.image_5 != blank or block.settings.image_6 != blank  or block.settings.image_7 != blank  or  block.settings.image_8 != blank  or block.settings.image_9 != blank  or  block.settings.image_10 != blank %}
+<ul class="sub-menu-lists mega-menu-brands dt-sc-column {{ columnSize }}">
+{%- if block.settings.image_1 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_1 == blank -%}
+    <a href="{{ block.settings.link_1 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_1 == blank -%}
+        <img srcset="{%- if block.settings.image_1.width >= 165 -%}{{ block.settings.image_1 | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.image_1.width >= 360 -%}{{ block.settings.image_1 | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.image_1.width >= 535 -%}{{ block.settings.image_1 | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.image_1.width >= 750 -%}{{ block.settings.image_1 | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image_1.width >= 1070 -%}{{ block.settings.image_1 | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.image_1.width >= 1500 -%}{{ block.settings.image_1 | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image_1 | image_url }} {{ block.settings.image_1.width }}w" src="{{ block.settings.image_1 | image_url: width: 750 }}"
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy"
+        alt="{{ block.settings.image_1.alt }}"
+        loading="lazy"
+        width="{{ block.settings.image_1.width }}"
+        height="{{ block.settings.image_1.height }}">
+        {%- endunless -%}
+      {%- unless block.settings.title_1 == blank -%}
+      <h5>{{ block.settings.title_1 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_1 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+<!-- Image with text -->
+{%- if block.settings.image_2 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_2 == blank -%}
+    <a href="{{ block.settings.link_2 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_2 == blank -%}
+        <img srcset="{%- if block.settings.image_2.width >= 165 -%}{{ block.settings.image_2 | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.image_2.width >= 360 -%}{{ block.settings.image_2 | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.image_2.width >= 535 -%}{{ block.settings.image_2 | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.image_2.width >= 750 -%}{{ block.settings.image_2 | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image_2.width >= 1070 -%}{{ block.settings.image_2 | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.image_2.width >= 1500 -%}{{ block.settings.image_2 | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image_2 | image_url }} {{ block.settings.image_2.width }}w" src="{{ block.settings.image_2 | image_url: width: 750 }}"
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy"
+        alt="{{ block.settings.image_2.alt }}"
+        loading="lazy"
+        width="{{ block.settings.image_2.width }}"
+        height="{{ block.settings.image_2.height }}">
+        {%- endunless -%}
+      {%- unless block.settings.title_2 == blank -%}
+      <h5>{{ block.settings.title_2 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_2 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+<!-- Image with text -->
+{%- if block.settings.image_3 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_3 == blank -%}
+    <a href="{{ block.settings.link_3 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_3 == blank -%}
+      <img srcset="{%- if block.settings.image_3.width >= 165 -%}{{ block.settings.image_3 | image_url: width: 165 }} 165w,{%- endif -%}
+      {%- if block.settings.image_3.width >= 360 -%}{{ block.settings.image_3 | image_url: width: 360 }} 360w,{%- endif -%}
+      {%- if block.settings.image_3.width >= 535 -%}{{ block.settings.image_3 | image_url: width: 535 }} 535w,{%- endif -%}
+      {%- if block.settings.image_3.width >= 750 -%}{{ block.settings.image_3 | image_url: width: 750 }} 750w,{%- endif -%}
+      {%- if block.settings.image_3.width >= 1070 -%}{{ block.settings.image_3 | image_url: width: 1070 }} 1070w,{%- endif -%}
+      {%- if block.settings.image_3.width >= 1500 -%}{{ block.settings.image_3 | image_url: width: 1500 }} 1500w,{%- endif -%}
+      {{ block.settings.image_3 | image_url }} {{ block.settings.image_3.width }}w" src="{{ block.settings.image_3 | image_url: width: 750 }}"
+      sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy"
+      alt="{{ block.settings.image_3.alt }}"
+      loading="lazy"
+      width="{{ block.settings.image_3.width }}"
+      height="{{ block.settings.image_3.height }}">
+      {%- endunless -%}
+      {%- unless block.settings.title_3 == blank -%}
+      <h5>{{ block.settings.title_3 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_3 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+<!-- Image with text -->
+{%- if block.settings.image_4 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_4 == blank -%}
+    <a href="{{ block.settings.link_4 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_4 == blank -%}
+    
+        <img srcset="{%- if block.settings.image_4.width >= 165 -%}{{ block.settings.image_4 | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.image_4.width >= 360 -%}{{ block.settings.image_4 | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.image_4.width >= 535 -%}{{ block.settings.image_4 | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.image_4.width >= 750 -%}{{ block.settings.image_4 | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image_4.width >= 1070 -%}{{ block.settings.image_4 | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.image_4.width >= 1500 -%}{{ block.settings.image_4 | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image_4 | image_url }} {{ block.settings.image_4.width }}w" src="{{ block.settings.image_4 | image_url: width: 750 }}" 
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy" 
+        alt="{{ block.settings.image_4.alt }}"
+        loading="lazy"
+        width="{{ block.settings.image_4.width }}" 
+        height="{{ block.settings.image_4.height }}">
+ 
+      {%- endunless -%}
+      {%- unless block.settings.title_4 == blank -%}
+      <h5>{{ block.settings.title_4 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_4 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+<!-- Image with text -->
+{%- if block.settings.image_5 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_5 == blank -%}
+    <a href="{{ block.settings.link_5 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_5 == blank -%}
+      
+        <img srcset="{%- if block.settings.image_5.width >= 165 -%}{{ block.settings.image_5 | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.image_5.width >= 360 -%}{{ block.settings.image_5 | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.image_5.width >= 535 -%}{{ block.settings.image_5 | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.image_5.width >= 750 -%}{{ block.settings.image_5 | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image_5.width >= 1070 -%}{{ block.settings.image_5 | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.image_5.width >= 1500 -%}{{ block.settings.image_5 | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image_5 | image_url }} {{ block.settings.image_5.width }}w" src="{{ block.settings.image_5 | image_url: width: 750 }}" 
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy" 
+        alt="{{ block.settings.image_5.alt }}"
+        loading="lazy"
+        width="{{ block.settings.image_5.width }}" 
+        height="{{ block.settings.image_5.height }}">
+ 
+      {%- endunless -%}
+      {%- unless block.settings.title_5 == blank -%}
+      <h5>{{ block.settings.title_5 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_5 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+<!-- Image with text -->
+{%- if block.settings.image_6 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_6 == blank -%}
+    <a href="{{ block.settings.link_6 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_6 == blank -%}
+       
+        <img srcset="{%- if block.settings.image_6.width >= 165 -%}{{ block.settings.image_6 | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.image_6.width >= 360 -%}{{ block.settings.image_6 | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.image_6.width >= 535 -%}{{ block.settings.image_6 | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.image_6.width >= 750 -%}{{ block.settings.image_6 | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image_6.width >= 1070 -%}{{ block.settings.image_6 | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.image_6.width >= 1500 -%}{{ block.settings.image_6 | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image_6 | image_url }} {{ block.settings.image_6.width }}w" src="{{ block.settings.image_6 | image_url: width: 750 }}" 
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy" 
+        alt="{{ block.settings.image_6.alt }}"
+        loading="lazy"
+        width="{{ block.settings.image_6.width }}" 
+        height="{{ block.settings.image_6.height }}">
+ 
+      {%- endunless -%}
+  {%- unless block.settings.title_6 == blank -%}
+      <h5>{{ block.settings.title_6 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_6 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+{%- if block.settings.image_7 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_7 == blank -%}
+    <a href="{{ block.settings.link_7 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_7 == blank -%}
+       
+        <img srcset="{%- if block.settings.image_7.width >= 165 -%}{{ block.settings.image_7 | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.image_7.width >= 360 -%}{{ block.settings.image_7 | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.image_7.width >= 535 -%}{{ block.settings.image_7 | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.image_7.width >= 750 -%}{{ block.settings.image_7 | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image_7.width >= 1070 -%}{{ block.settings.image_7 | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.image_7.width >= 1500 -%}{{ block.settings.image_7 | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image_7 | image_url }} {{ block.settings.image_7.width }}w" src="{{ block.settings.image_7 | image_url: width: 750 }}" 
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy" 
+        alt="{{ block.settings.image_7.alt }}"
+        loading="lazy"
+        width="{{ block.settings.image_7.width }}" 
+        height="{{ block.settings.image_7.height }}">
+ 
+      {%- endunless -%}
+  {%- unless block.settings.title_7 == blank -%}
+      <h5>{{ block.settings.title_7 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_7 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+<!-- Image with text -->
+{%- if block.settings.image_8 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_8 == blank -%}
+    <a href="{{ block.settings.link_8 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_8 == blank -%}      
+        <img srcset="{%- if block.settings.image_8.width >= 165 -%}{{ block.settings.image_8 | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.image_8.width >= 360 -%}{{ block.settings.image_8 | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.image_8.width >= 535 -%}{{ block.settings.image_8 | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.image_8.width >= 750 -%}{{ block.settings.image_8 | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image_8.width >= 1070 -%}{{ block.settings.image_8 | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.image_8.width >= 1500 -%}{{ block.settings.image_8 | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image_8 | image_url }} {{ block.settings.image_8.width }}w" src="{{ block.settings.image_8 | image_url: width: 750 }}" 
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy" 
+        alt="{{ block.settings.image_8.alt }}"
+        loading="lazy"
+        width="{{ block.settings.image_8.width }}" 
+        height="{{ block.settings.image_8.height }}"> 
+      {%- endunless -%}
+      {%- unless block.settings.title_8 == blank -%}
+      <h5>{{ block.settings.title_8 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_8 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+<!-- Image with text -->
+{%- if block.settings.image_9 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_9 == blank -%}
+    <a href="{{ block.settings.link_9 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_9 == blank -%}
+       
+        <img srcset="{%- if block.settings.image_9.width >= 165 -%}{{ block.settings.image_9 | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.image_9.width >= 360 -%}{{ block.settings.image_9 | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.image_9.width >= 535 -%}{{ block.settings.image_9 | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.image_9.width >= 750 -%}{{ block.settings.image_9 | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image_9.width >= 1070 -%}{{ block.settings.image_9 | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.image_9.width >= 1500 -%}{{ block.settings.image_9 | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image_9 | image_url }} {{ block.settings.image_9.width }}w" src="{{ block.settings.image_9 | image_url: width: 750 }}" 
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy" 
+        alt="{{ block.settings.image_9.alt }}"
+        loading="lazy"
+        width="{{ block.settings.image_9.width }}" 
+        height="{{ block.settings.image_9.height }}">
+ 
+      {%- endunless -%}
+  {%- unless block.settings.title_9 == blank -%}
+      <h5>{{ block.settings.title_9 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_9 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+<!-- Image with text -->
+{%- if block.settings.image_10 != blank -%}
+<li class="dt-sc-menu-image-with-text top-level-link">
+  <div class="dt-sc-mega_menu text-center">
+    {%- unless block.settings.link_10 == blank -%}
+    <a href="{{ block.settings.link_10 }}"  class="dt-sc-mega_menu-link">
+      {%- endunless -%}
+      {%- unless block.settings.image_10 == blank -%}
+     
+        <img srcset="{%- if block.settings.image_10.width >= 165 -%}{{ block.settings.image_10 | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.image_10.width >= 360 -%}{{ block.settings.image_10 | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.image_10.width >= 535 -%}{{ block.settings.image_10 | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.image_10.width >= 750 -%}{{ block.settings.image_10 | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.image_10.width >= 1070 -%}{{ block.settings.image_10 | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.image_10.width >= 1500 -%}{{ block.settings.image_10 | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.image_10 | image_url }} {{ block.settings.image_10.width }}w" src="{{ block.settings.image_10 | image_url: width: 750 }}" 
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 3 }}px, (min-width: 750px) calc(100vw - 130px), calc(100vw - 55px)" alt="" loading="lazy" 
+        alt="{{ block.settings.image_10.alt }}"
+        loading="lazy"
+        width="{{ block.settings.image_10.width }}" 
+        height="{{ block.settings.image_10.height }}">
+ 
+      {%- endunless -%}
+  {%- unless block.settings.title_10 == blank -%}
+      <h5>{{ block.settings.title_10 }}</h5>
+      {%- endunless -%}
+      {%- unless block.settings.link_10 == blank -%}
+    </a>
+    {%- endunless -%}
+  </div>
+</li>
+{%- endif -%}
+</ul>
+{%- endif -%}

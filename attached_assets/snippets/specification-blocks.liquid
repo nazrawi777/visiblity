@@ -1,0 +1,46 @@
+{% if block.type == 'icon' %}
+<div class="dt-sc-support-block wow {% if  section.settings.animation_effect == true %} {{ block.settings.animation_effect_icon }} {% endif %} {{ section.settings.specification_block_style }} {{ section.settings.text_position }} {% if block.settings.reverse_column %}dt-sc-reverse-columns{% endif %}">
+  {% if block.settings.icon != blank %}
+  <div class="dt-sc-support-icon-image">
+    {%- capture sizes -%}(min-width: 990px) {% if section.blocks.size <= 2 %}710px{% else %}550px{% endif %}, (min-width: 750px) {% if section.blocks.size == 1 %}710px{% else %}550px{% endif %}, calc(100vw - 30px){%- endcapture -%}
+    {{ block.settings.icon | image_url: width: 1420 | image_tag:
+      loading: 'lazy',
+      sizes: sizes,
+      widths: '275, 550, 710, 1420',
+      class: 'block-icon__image'
+    }}
+  </div>
+  {% endif %}
+  <div class="dt-sc-support-content">
+    {% if block.settings.title != blank %}
+    <h5 class="dt-sc-support-heading">{{ block.settings.title }}</h5>
+    {% endif %}
+    {% if block.settings.desc != blank %}
+    <p class="dt-sc-support-description"> {{ block.settings.desc }}</p>
+    {% endif %}
+    {% if block.settings.link and block.settings.link_text != blank %}
+    <a href="{{ block.settings.link }}" class="dt-sc-btn">{{ block.settings.link_text }}</a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% if block.type == 'class' %}
+<div class="dt-sc-support-block wow {% if  section.settings.animation_effect == true %} {{ block.settings.animation_effect_class }} {% endif %} {{ section.settings.specification_block_style }} {{ section.settings.text_position }} {% if block.settings.reverse_column %}dt-sc-reverse-columns{% endif %}">
+  {% if block.settings.class != blank %}
+  <div class="dt-sc-support-icon-image">
+    <i class="{{ block.settings.class }}"></i>
+  </div>
+  {% endif %}
+  <div class="dt-sc-support-content">
+    {% if block.settings.title != blank %}
+    <h5 class="dt-sc-support-heading">{{ block.settings.title }}</h5>
+    {% endif %}
+    {% if block.settings.desc != blank %}
+    <p class="dt-sc-support-description"> {{ block.settings.desc }}</p>
+    {% endif %}
+    {% if block.settings.link != blank and block.settings.link_text != blank %}
+    <a href="{{ block.settings.link }}" class="dt-sc-btn">{{ block.settings.link_text }}</a>
+    {% endif %}
+  </div>
+</div>
+{% endif %}

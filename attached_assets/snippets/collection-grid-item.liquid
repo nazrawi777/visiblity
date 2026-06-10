@@ -1,0 +1,53 @@
+<div class="text-center pickgradient-products {% cycle "odd", "even" %}">
+  {% capture collection_title %}{{ collections[featured].title | escape }}{% endcapture %}
+  <a href="{{ collections[featured].url }}" title="{{ 'collections.general.link_title' | t: title: collection_title }}" class="pickgradient grid-link">
+    {% if collections[featured].image %}
+   <img
+                      srcset="{%- if collections[featured].image.width >= 275 -%}{{ collections[featured].image | image_url: width: 275 }} 275w,{%- endif -%}
+                      {%- if collections[featured].image.width >= 550 -%}{{ collections[featured].image | image_url: width: 550 }} 550w,{%- endif -%}
+                      {%- if collections[featured].image.width >= 710 -%}{{ collections[featured].image | image_url: width: 710 }} 710w,{%- endif -%}
+                      {%- if collections[featured].image.width >= 1420 -%}{{ collections[featured].image | image_url: width: 1420 }} 1420w,{%- endif -%}
+                      {{ collections[featured].image | image_url }} {{ collections[featured].image.width }}w"
+                      src="{{ collections[featured].image | image_url: width: 550 }}"
+                      sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
+                      alt="{{ collections[featured].image.alt }}"
+                      height="{{ collections[featured].image.height }}"
+                      width="{{ collections[featured].image.width }}"
+                      loading="lazy"
+                    >
+    {% else %}
+    <img
+                      srcset="{%- if collections[featured].products.first.featured_image.width >= 275 -%}{{ collections[featured].products.first.featured_image | image_url: width: 275 }} 275w,{%- endif -%}
+                      {%- if collections[featured].products.first.featured_image.width >= 550 -%}{{ collections[featured].products.first.featured_image | image_url: width: 550 }} 550w,{%- endif -%}
+                      {%- if collections[featured].products.first.featured_image.width >= 710 -%}{{ collections[featured].products.first.featured_image | image_url: width: 710 }} 710w,{%- endif -%}
+                      {%- if collections[featured].products.first.featured_image.width >= 1420 -%}{{ collections[featured].products.first.featured_image | image_url: width: 1420 }} 1420w,{%- endif -%}
+                      {{ collections[featured].products.first.featured_image | image_url }} {{ collections[featured].products.first.featured_image.width }}w"
+                      src="{{ collections[featured].products.first.featured_image | image_url: width: 550 }}"
+                      sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
+                      alt="{{ collections[featured].products.first.featured_image.alt }}"
+                      height="{{ collections[featured].products.first.featured_image.height }}"
+                      width="{{ collections[featured].products.first.featured_image.width }}"
+                      loading="lazy"
+                    >
+    {% endif %}
+  </a>
+
+  <div class="collection-detail">
+    <h5>
+      <a href="{{ collections[featured].url }}" title="{{ 'collections.general.link_title' | t: title: collection_title }}" class="grid-link">
+        {{ collections[featured].title }}{% if section.settings.show_item_count and section.settings.show_superscript_style %}<sup>[{{ collections[featured].all_products_count }}]</sup>{% endif %}</a>
+  </h5>
+      {% unless section.settings.show_superscript_style %}
+      {% if section.settings.show_item_count %}
+      <p class="collection-count">{{ collection.all_products_count }} <span>{{ 'cart.general.items' | t }}</span></p>
+      {% endif %}
+      {% endunless %}
+
+   {% if section.settings.show_excerpt %}
+    <p class="collection-description">{{ collection.description | strip_html | truncate: 100 }}</p>
+    {% endif %}
+    {% if section.settings.collection_btn_text != blank %}
+    <a href="{{ collections[featured].url }}" class="dt-sc-btn">{{ section.settings.collection_btn_text }}</a>
+    {% endif %}
+  </div>
+</div>

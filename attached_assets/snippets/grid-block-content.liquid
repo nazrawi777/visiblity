@@ -1,0 +1,122 @@
+<div class="dt-sc-grid-banner wow {% if  section.settings.animation_effect == true %} {{ block.settings.animation_effect_block }} {% endif %} {{ grid_style }} {{ list_style }} {{ overlay_style }} {% if block.settings.reverse_column %}dt-sc-reverse-columns{% endif %} {{ block.type }}-{{ block.id }} {% if block.settings.grid_banner_type == 'video' %}{{ block.settings.video_icon_position }}{% endif %}">
+  {%- if block.settings.enable_image_link %} <a href="{{ block.settings.block_button_link }}" class="dt-sc-grid-banner-image">{% endif %}
+  {% if block.settings.show_image %}
+
+  <div class="dt-sc-grid-banner-image {{ overlay_class }}">
+    {% if block.settings.grid_banner_type == 'video' %}
+    {% if block.settings.block_video != blank %}
+
+    <video width="1920" height="740"  muted loop  {% if block.settings.block_image != blank %}poster="{{ block.settings.block_image | image_url: width: 1920 }}"{% endif %}>
+      <source src="{{ block.settings.block_video }}" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+
+    {% unless block.settings.content_with_icon %}
+    <div class="video_icon">
+      <a class="gridPlay" style="display: flex">
+        {% if block.settings.block_play_video_icon %}
+          <img src="{{ block.settings.block_play_video_icon | image_url: width: 250 }}" loading="lazy" alt="" width="{{ block.settings.block_play_video_icon.width }}"  height="{{ block.settings.block_play_video_icon.height }}">
+        {% else %}
+        {% render 'play-icon' %}
+        {% endif %}
+      </a>
+      <a class="gridPause" style="display: none">
+        {% if block.settings.block_pause_video_icon %}
+          <img src="{{ block.settings.block_pause_video_icon | image_url: width: 250 }}"  loading="lazy" alt="" width="{{ block.settings.block_pause_video_icon.width }}"  height="{{ block.settings.block_pause_video_icon.height }}">
+        {% else %}
+        {% render 'pause-icon' %}
+        {% endif %}
+      </a>
+    </div>
+    {% endunless %}
+
+    {% endif %}
+    {% elsif block.settings.grid_banner_type == 'image' %}
+    {% if block.settings.block_image != blank %}
+    <img
+              srcset="{%- if block.settings.block_image.width >= 375 -%}{{ block.settings.block_image | image_url: width: 375 }} 375w,{%- endif -%}
+              {%- if block.settings.block_image.width >= 550 -%}{{ block.settings.block_image | image_url: width: 550 }} 550w,{%- endif -%}
+              {%- if block.settings.block_image.width >= 750 -%}{{ block.settings.block_image | image_url: width: 750 }} 750w,{%- endif -%}
+              {%- if block.settings.block_image.width >= 1100 -%}{{ block.settings.block_image | image_url: width: 1100 }} 1100w,{%- endif -%}
+              {%- if block.settings.block_image.width >= 1500 -%}{{ block.settings.block_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+              {%- if block.settings.block_image.width >= 1780 -%}{{ block.settings.block_image | image_url: width: 1780 }} 1780w,{%- endif -%}
+              {%- if block.settings.block_image.width >= 2000 -%}{{ block.settings.block_image | image_url: width: 2000 }} 2000w,{%- endif -%}
+              {%- if block.settings.block_image.width >= 3000 -%}{{ block.settings.block_image | image_url: width: 3000 }} 3000w,{%- endif -%}
+              {%- if block.settings.block_image.width >= 3840 -%}{{ block.settings.block_image | image_url: width: 3840 }} 3840w,{%- endif -%}
+              {{ block.settings.block_image | image_url: width: 1500 }} {{ block.settings.block_image.width }}w"
+              sizes="100vw"
+              src="{{ block.settings.block_image | image_url: width: 1500 }}"
+              loading="lazy"              
+              alt="{{ block.settings.block_image.alt | escape }}"
+              width="{{ block.settings.block_image.width }}"
+              height="{{ block.settings.block_image.width | divided_by: block.settings.block_image.aspect_ratio | round }}"
+            >
+    {% else %}
+    {{ 'image' | placeholder_svg_tag: 'placeholder_svg' }}
+    {% endif %}
+    {% endif %}
+  </div>
+
+  {% endif %}
+
+    {%- if block.settings.enable_image_link %} </a>{% endif %}
+
+
+  {% if block.settings.block_video != blank or  block.settings.grid_banner_type == 'video'  or  block.settings.block_title != blank or  block.settings.block_sub_title != blank or  block.settings.block_description != blank or  block.settings.block_button_link != blank %}
+  <div class="dt-sc-grid-banner-content {% unless block.settings.show_content %}hidden {% endunless %}
+              {% unless section.settings.block_banner_style == 'grid' %} {{ block.settings.content_position }}{% endunless %}
+              {% if section.settings.block_banner_style == 'grid' %}{{ block.settings.block_text_align }}{% endif %}">
+
+    {% unless section.settings.block_banner_style == 'grid' %}
+    <div class="dt-sc-grid-banner-inner {{ block.settings.block_text_align }} ">
+      {% endunless %}
+
+      {% if section.settings.block_banner_style == 'overlay' %}
+      {%- capture sizes -%}
+      (min-width: 990px) {% if section.blocks.size <= 2 %}710px{% else %}550px{% endif %}, (min-width: 750px) {% if section.blocks.size == 1 %}710px{% else %}550px{% endif %}, calc(100vw - 30px)
+      {%- endcapture -%}
+      {% if block.settings.content_with_icon %}
+      <div class="video_icon">
+        <a class="gridPlay" style="display: flex">
+          {% if block.settings.block_play_video_icon %}
+            {{ block.settings.block_play_video_icon | image_url: width: 710 | image_tag: loading: 'lazy', sizes: sizes, widths: '275, 550, 710' }}
+          {% else %}
+          {% render 'play-icon' %}
+          {% endif %}
+        </a>
+        <a class="gridPause" style="display: none">
+          {% if block.settings.block_pause_video_icon %}
+            {{ block.settings.block_pause_video_icon | image_url: width: 710 | image_tag: loading: 'lazy', sizes: sizes, widths: '275, 550, 710' }}
+          {% else %}
+          {% render 'pause-icon' %}
+          {% endif %}
+        </a>
+      </div>
+      {% endif %}
+      {% endif %}
+
+      {% if block.settings.block_title != blank %}
+      <h3 class="dt-sc-main-title ">
+      {% if block.settings.enable_title_link %}<a href="{{ block.settings.block_button_link }}">{% endif %}
+      {{ block.settings.block_title }}
+      {% if block.settings.enable_title_link %}</a>{% endif %}
+      </h3>
+      {% endif %}
+      {% if block.settings.block_sub_title != blank %}
+      <h6 class="dt-sc-sub-title">{{ block.settings.block_sub_title }}</h6>
+      {% endif %}
+      {% if block.settings.block_description != blank %}
+      <p class="dt-sc-description">{{ block.settings.block_description }}</p>
+      {% endif %}
+      {% if block.settings.block_button_link != blank %}
+      <a href="{{ block.settings.block_button_link }}" class="dt-sc-btn">{{ block.settings.block_button_text }}</a>
+      {% endif %}
+
+      {% unless section.settings.block_banner_style == 'grid' %}
+    </div>
+
+    {% endunless %}
+
+  </div>
+  {% endif %}
+</div>

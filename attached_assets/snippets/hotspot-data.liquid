@@ -1,0 +1,253 @@
+{% if block.settings.slider_type == 'image' %}
+{% if  block.settings.image != blank %}
+  <img
+    srcset="{%- if block.settings.image.width >= 165 -%}{{ block.settings.image | image_url: width: 165 }} 165w,{%- endif -%}
+    {%- if block.settings.image.width >= 360 -%}{{ block.settings.image | image_url: width: 360 }} 360w,{%- endif -%}
+    {%- if block.settings.image.width >= 535 -%}{{ block.settings.image | image_url: width: 535 }} 535w,{%- endif -%}
+    {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+    {%- if block.settings.image.width >= 1070 -%}{{ block.settings.image | image_url: width: 1070 }} 1070w,{%- endif -%}
+    {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+    {{ block.settings.image | image_url: width: 1920 }} {{ block.settings.image.width }}w"
+    src="{{ block.settings.image | image_url: width: 1500 }}"
+    sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
+    alt="{{ block.settings.image.alt }}"
+    loading="lazy"
+    class="slide-img"
+    width="{{ block.settings.image.width }}"
+    height="{{ block.settings.image.height }}"
+    >
+
+{% else %}
+{{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg slide-img desktop-only' }}
+{% endif %}
+
+
+{% if  block.settings.mobile_image != blank %}
+  <img
+    srcset="{%- if block.settings.mobile_image.width >= 165 -%}{{ block.settings.mobile_image | image_url: width: 165 }} 165w,{%- endif -%}
+    {%- if block.settings.mobile_image.width >= 360 -%}{{ block.settings.mobile_image | image_url: width: 360 }} 360w,{%- endif -%}
+    {%- if block.settings.mobile_image.width >= 535 -%}{{ block.settings.mobile_image | image_url: width: 535 }} 535w,{%- endif -%}
+    {%- if block.settings.mobile_image.width >= 750 -%}{{ block.settings.mobile_image | image_url: width: 750 }} 750w,{%- endif -%}
+    {%- if block.settings.mobile_image.width >= 1070 -%}{{ block.settings.mobile_image | image_url: width: 1070 }} 1070w,{%- endif -%}
+    {%- if block.settings.mobile_image.width >= 1500 -%}{{ block.settings.mobile_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+    {{ block.settings.mobile_image | image_url: width: 1920 }} {{ block.settings.mobile_image.width }}w"
+    src="{{ block.settings.mobile_image | image_url: width: 1500 }}"
+    sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
+    alt="{{ block.settings.mobile_image.alt }}"
+    loading="lazy"
+    class="slide-img mobile-only"
+    width="{{ block.settings.mobile_image.width }}"
+    height="{{ block.settings.mobile_image.height }}"
+    >
+{% else %}
+<img
+  srcset="{%- if block.settings.image.width >= 165 -%}{{ block.settings.image | image_url: width: 165 }} 165w,{%- endif -%}
+  {%- if block.settings.image.width >= 360 -%}{{ block.settings.image | image_url: width: 360 }} 360w,{%- endif -%}
+  {%- if block.settings.image.width >= 535 -%}{{ block.settings.image | image_url: width: 535 }} 535w,{%- endif -%}
+  {%- if block.settings.image.width >= 750 -%}{{ block.settings.image | image_url: width: 750 }} 750w,{%- endif -%}
+  {%- if block.settings.image.width >= 1070 -%}{{ block.settings.image | image_url: width: 1070 }} 1070w,{%- endif -%}
+  {%- if block.settings.image.width >= 1500 -%}{{ block.settings.image | image_url: width: 1500 }} 1500w,{%- endif -%}
+  {{ block.settings.image | image_url: width: 1920 }} {{ block.settings.image.width }}w"
+  src="{{ block.settings.image | image_url: width: 1500 }}"
+  sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
+  alt="{{ block.settings.image.alt }}"
+  loading="lazy"
+  class="slide-img mobile-only"
+  width="{{ block.settings.image.width }}"
+  height="{{ block.settings.image.height }}"
+     >
+{% endif %}
+{% elsif block.settings.slider_type == 'video' %}
+{% if block.settings.video_url != blank %}
+<video poster="{{ block.settings.image | image_url: width: 1920 }}"
+       width="1920" height="740"  muted loop>
+  <source src="{{ block.settings.video_url }}" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+{% else %}
+{{ block.settings.iframe_url }}
+{% endif %}
+{% endif %}
+
+<div class="dt-sc-hotspot-wrapper">
+    <div class="dt-sc-hotspot-item dt-sc-hotspot-item{{ block.id }}_a block-type-{{ block.type }}">
+      <a class="open-popup-link{{ block.id }}_a dt-sc-hotspot-marker dt-sc-hotspot-marker{{ block.id }}_a" href="#dt-sc-hotspot-marker{{ block.id }}_a"><span class="{{ section.settings.icon }}"></span></a>
+      {% if block.settings.spot_1_title != blank or block.settings.spot_1_text != blank or block.settings.spot_1_link_text != blank %}
+      <div id="dt-sc-hotspot-marker{{ block.id }}_a" class="dt-sc-hotspot-popup {{ block.settings.spot_1_text_position }}">
+        <div class="dt-sc-hotspot-content {{ block.settings.spot_1_content_alignment }}">
+          {% if block.settings.spot_1_title != blank %}
+          <h4 class="dt-sc-hotspot-content-title"><a href="{{ block.settings.spot_1_link }}" title="{{ block.settings.spot_1_title }}">{{ block.settings.spot_1_title }}</a></h4>
+          {% endif %}
+          {% if block.settings.spot_1_text != blank %}
+          <p>{{ block.settings.spot_1_text }}</p>
+          {% endif %}
+           {% if block.settings.spot_1_image != blank %}
+          {{ block.settings.spot_1_image | image_url: width: 400 | image_tag: sizes: '(min-width:1600px) 960px, (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)' }}
+          {% endif %}
+          {% if block.settings.spot_1_link_text != blank and block.settings.spot_1_link != blank %}
+          <a class="dt-sc-btn" href="{{ block.settings.spot_1_link }}">{{ block.settings.spot_1_link_text }}</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+<div class="dt-sc-hotspot-item dt-sc-hotspot-item{{ block.id }}_b block-type-{{ block.type }}">
+      <a class="open-popup-link{{ block.id }}_b dt-sc-hotspot-marker dt-sc-hotspot-marker{{ block.id }}_b" href="#dt-sc-hotspot-marker{{ block.id }}_b"><span class="{{ section.settings.icon }}"></span></a>
+      {% if block.settings.spot_2_title != blank or block.settings.spot_2_text != blank or block.settings.spot_2_link_text != blank %}
+      <div id="dt-sc-hotspot-marker{{ block.id }}_b" class="dt-sc-hotspot-popup {{ block.settings.spot_2_text_position }}">
+        <div class="dt-sc-hotspot-content {{ block.settings.spot_2_content_alignment }}">
+          {% if block.settings.spot_2_title != blank %}
+          <h4 class="dt-sc-hotspot-content-title"><a href="{{ block.settings.spot_2_link }}" title="{{ block.settings.spot_2_title }}">{{ block.settings.spot_2_title }}</a></h4>
+          {% endif %}
+          {% if block.settings.spot_2_text != blank %}
+          <p>{{ block.settings.spot_2_text }}</p>
+          {% endif %}
+          {% if block.settings.spot_2_image != blank %}
+          {{ block.settings.spot_2_image | image_url: width: 400 | image_tag: sizes: '(min-width:1600px) 960px, (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)' }}
+          {% endif %}
+          {% if block.settings.spot_2_link_text != blank and block.settings.spot_2_link != blank %}
+          <a class="dt-sc-btn" href="{{ block.settings.spot_2_link }}">{{ block.settings.spot_2_link_text }}</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+
+<div class="dt-sc-hotspot-item dt-sc-hotspot-item{{ block.id }}_c block-type-{{ block.type }}">
+      <a class="open-popup-link{{ block.id }}_c dt-sc-hotspot-marker dt-sc-hotspot-marker{{ block.id }}_c" href="#dt-sc-hotspot-marker{{ block.id }}_c"><span class="{{ section.settings.icon }}"></span></a>
+      {% if block.settings.spot_3_title != blank or block.settings.spot_3_text != blank or block.settings.spot_3_link_text != blank %}
+      <div id="dt-sc-hotspot-marker{{ block.id }}_c" class="dt-sc-hotspot-popup {{ block.settings.spot_3_text_position }}">
+        <div class="dt-sc-hotspot-content {{ block.settings.spot_3_content_alignment }}">
+          {% if block.settings.spot_3_title != blank %}
+          <h4 class="dt-sc-hotspot-content-title"><a href="{{ block.settings.spot_3_link }}" title="{{ block.settings.spot_3_title }}">{{ block.settings.spot_3_title }}</a></h4>
+          {% endif %}
+          {% if block.settings.spot_3_text != blank %}
+          <p>{{ block.settings.spot_3_text }}</p>
+          {% endif %}
+          {% if block.settings.spot_3_image != blank %}
+          {{ block.settings.spot_3_image | image_url: width: 400 | image_tag: sizes: '(min-width:1600px) 960px, (min-width: 750px) calc((100vw - 11.5rem) / 2), calc(100vw - 4rem)' }}
+          {% endif %}
+          {% if block.settings.spot_3_link_text != blank and block.settings.spot_3_link != blank %}
+          <a class="dt-sc-btn" href="{{ block.settings.spot_3_link }}">{{ block.settings.spot_3_link_text }}</a>
+          {% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+</div>
+
+{% if block.settings.show_content %}
+<div class="slider-content slider-content-bg {{ block.settings.text_alignment }}  {{ block.settings.content_position }}">
+  <div class="slide_{{ block.id }}">
+
+    {% if block.settings.show_image %}
+    {% if block.settings.block_image != blank %}
+      <img
+        srcset="{%- if block.settings.block_image.width >= 165 -%}{{ block.settings.block_image | image_url: width: 165 }} 165w,{%- endif -%}
+        {%- if block.settings.block_image.width >= 360 -%}{{ block.settings.block_image | image_url: width: 360 }} 360w,{%- endif -%}
+        {%- if block.settings.block_image.width >= 535 -%}{{ block.settings.block_image | image_url: width: 535 }} 535w,{%- endif -%}
+        {%- if block.settings.block_image.width >= 750 -%}{{ block.settings.block_image | image_url: width: 750 }} 750w,{%- endif -%}
+        {%- if block.settings.block_image.width >= 1070 -%}{{ block.settings.block_image | image_url: width: 1070 }} 1070w,{%- endif -%}
+        {%- if block.settings.block_image.width >= 1500 -%}{{ block.settings.block_image | image_url: width: 1500 }} 1500w,{%- endif -%}
+        {{ block.settings.block_image | image_url: width: 1920 }} {{ block.settings.block_image.width }}w"
+        src="{{ block.settings.block_image | image_url: width: 1500 }}"
+        sizes="(min-width: {{ settings.container_width }}px) {{ settings.container_width | minus: 100 | divided_by: 2 }}px, (min-width: 750px) calc(50vw - 130px), calc(50vw - 55px)"
+        alt="{{ block.settings.block_image.alt }}"
+        loading="lazy"
+        class="slide-img mobile-only"
+        width="{{ block.settings.block_image.width }}"
+        height="{{ block.settings.block_image.height }}"
+        >
+    {% else %}
+    {{ 'image' | placeholder_svg_tag: 'placeholder_svg' }}
+    {% endif %}
+    {% endif %}
+
+
+
+    {% if block.settings.title_2 != blank %}
+    <p class="slide-sub-heading-2"
+       style="color: {{ settings.body_text_color }}; {% if block.settings.subheading_color != blank %}
+              color:{{ block.settings.subheading_color }};
+              {% endif %}">
+      {{ block.settings.title_2 }}
+    </p>
+    {% endif %}
+
+    {% if block.settings.title != blank %}
+    <h2 class="slide-heading"
+        style="color: {{ settings.body_text_color }}; {% if block.settings.heading_color != blank %}
+               color:{{ block.settings.heading_color }};
+               {% endif %}">
+      {{ block.settings.title }}
+    </h2>
+    {% endif %}
+
+    {% if block.settings.desc != blank %}
+    <div class="slide-text"
+         style="color: {{ settings.body_text_color }}; {% if block.settings.desc_color != blank %}
+                color:{{ block.settings.desc_color }};
+                {% endif %}">
+      {{ block.settings.desc }}
+    </div>
+    {% endif %}
+
+    <div class="multiple-buttons">
+      {% if block.settings.button != blank %}
+      <a href="{{ block.settings.link }}" class="slide-button dt-sc-btn">{{ block.settings.button }}</a>
+      {% endif %}
+      {% if block.settings.button_2 != blank %}
+      <a href="{{ block.settings.link_2 }}" class="slide-button dt-sc-btn secondary">{{ block.settings.button_2 }}</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% if block.settings.slider_type == 'video' and block.settings.video_url != blank %}
+<div class="play-btn">
+  <a  class="slide-button dt-sc-btn btn play">
+
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+<path d="M177.8-633.7c122.9,2.7,219.7,101.8,217.4,222.8c-2.3,122.1-102.1,219.1-223.4,217.1C50.2-195.8-46.6-297.2-43.9-420
+	C-41.4-538.7,59.8-636.2,177.8-633.7z M176.9-608.3C71.9-609.8-16.9-523.4-18.6-418c-1.7,107.6,84.4,197.5,190.4,198.7
+	c107.7,1.3,195.8-84,197.9-191.3C371.8-518.1,285.4-606.7,176.9-608.3z"/>
+<path d="M506,256.8c-0.4,139.4-112.9,250-253.8,249.3C116.6,505.4,6.2,392.2,6.3,254.2C6.5,116.1,118.6,4.5,256.5,5.2
+	C396.1,5.9,506.4,117.1,506,256.8z M35.2,254.9C35.1,377.2,133.7,477.2,254.2,477c123.7-0.2,222.9-98.2,222.9-220.1
+	c-0.1-125.2-98-222.8-223.5-222.9C133.9,34,35.4,133.7,35.2,254.9z"/>
+<path d="M-606-414.2c0.1-122.7,98.2-219.7,222-219.5c118.9,0.2,217.4,100.1,216.9,220.1c-0.4,119.8-98.4,219.4-216,219.7
+	C-507.7-193.6-606.1-290.9-606-414.2z M-580.5-414.9c-0.1,109.4,86.4,195.5,196.4,195.6c104.3,0.1,191.2-88,191.6-194.3
+	c0.4-105.9-86.4-194.4-191-194.7C-493-608.6-580.5-522.7-580.5-414.9z"/>
+<path d="M265.3-413.4c0,23.9-0.2,47.8,0.1,71.7c0.1,12.4-5.2,18-17.8,17.9c-48.3-0.3-96.7-0.3-145-0.1c-12,0-17-5.6-16.9-17.1
+	c0.1-48.8,0.1-97.7,0.1-146.5c0-10.8,5.1-16.2,16.2-16.2c48.8,0,97.7-0.1,146.5-0.2c11.6,0,17,5.6,16.9,17.3
+	C265.2-462.3,265.3-437.9,265.3-413.4z"/>
+<path d="M181.3,361.5c0-72.5,0-139.3,0-212c61.9,35.7,120,69.3,183.3,105.9C301.5,291.9,243.7,325.4,181.3,361.5z"/>
+<path d="M-365.3-413.2c0-25.4,0.6-50.8-0.2-76.2c-0.4-13.7,6.7-15.1,17.4-14.8c9.9,0.3,18.3-0.5,18.2,14
+	c-0.6,50.8-0.6,101.6,0,152.4c0.2,14.4-8.2,13.9-18.1,14.1c-10.6,0.2-18-1-17.5-14.8C-364.7-363.4-365.3-388.3-365.3-413.2z"/>
+<path d="M-407.7-414c0,24.9-0.7,49.8,0.3,74.7c0.6,14.7-7.1,15.5-18.3,15.6c-11.8,0.1-18.1-2-17.9-16.1c0.8-49.8,0.8-99.6,0-149.4
+	c-0.2-15.7,8.9-14.2,19.1-14.7c11.2-0.5,17.5,2,17.1,15.2C-408.3-463.8-407.7-438.9-407.7-414z"/>
+</svg>
+
+  </a>
+
+  <a  class="slide-button dt-sc-btn btn pause" style="display:none">
+
+ <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+<path d="M6,255.7C6,115.9,117.9,5.4,258.8,5.6c135.5,0.2,247.6,114,247.1,250.8c-0.5,136.5-112.1,250-246.1,250.3
+	C118,507,5.9,396.2,6,255.7z M34.9,254.9c-0.1,124.6,98.4,222.7,223.7,222.8c118.8,0.1,217.8-100.3,218.2-221.3
+	c0.4-120.6-98.5-221.4-217.6-221.8C134.7,34.2,35,132.1,34.9,254.9z"/>
+<path d="M281.2,257.7c0-28.5,0.6-56.9-0.3-85.4c-0.5-15.3,7.5-16.9,19.5-16.6c11.1,0.3,20.5-0.6,20.4,15.6
+	c-0.6,56.9-0.6,113.8,0,170.7c0.2,16.1-9.1,15.6-20.3,15.8c-11.8,0.2-20.1-1.1-19.6-16.6C281.9,313.5,281.2,285.6,281.2,257.7z"/>
+<path d="M231.8,255.8c0,28.4-0.8,56.7,0.3,85.1c0.7,16.8-8.1,17.6-20.9,17.7c-13.4,0.1-20.6-2.3-20.4-18.4
+	c0.9-56.7,0.9-113.4,0-170.1c-0.3-17.9,10.2-16.2,21.7-16.7c12.7-0.6,19.9,2.3,19.4,17.3C231.2,199.1,231.8,227.5,231.8,255.8z"/>
+</svg>
+
+  </a>
+</div>
+{% endif %}

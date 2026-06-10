@@ -1,0 +1,62 @@
+{%- liquid
+layout none 
+unless current_collection == blank
+assign current_collection = collection
+endunless
+assign on_sale = false
+if product.compare_at_price > product.price
+assign on_sale = true
+endif
+assign sold_out = true
+if product.available
+assign sold_out = false
+endif
+%}
+
+
+
+
+<li class="{% if sold_out %} sold-out{% endif %}{% if on_sale %} on-sale{% endif %}"
+    id="product-{{ product.id }}" {% if section.settings.collection_infinite_scrolling %}
+    {% if forloop.index > section.settings.total_products_load %}
+    style="display:none"
+    data-wow-duration="1{{ forloop.index }}" {% endif %}{% endif %}
+    id="product-{{ product.id }}">
+
+  <div class="products">
+    <div class="product-container">
+      <a href="{{ product.url | within: collection }}" class="grid-link">
+        <div class="ImageOverlayCa"></div>
+        <img loading="lazy" src="{{ product.featured_image.src | image_url: width: 960 }}" class="featured-image" alt="{{ product.featured_image.alt | escape }}" width="{{ product.featured_image.width }}" height="{{ product.featured_image.height }}">
+      </a>
+      <div class="ImageWrapper">
+        <div class="product-button">
+          {% if settings.enable_add_cart %}
+          {% if product.available %}
+          {% assign productVariantSize = product.variants | size %}
+          {% if productVariantSize > 1 %}
+          <a  title="{{ 'products.product.product_link' | t }}" href="{{ product.url }}">
+            {% render 'icon-link' %}
+          </a>
+          {% else %}
+          <form  action="/cart/add" method="post" class="variants clearfix" id="cart-form-{{ product.id }}">
+            <input type="hidden" name="id" value="{{ product.variants[0].id }}" />
+            <a class="add-cart-btn" title="{{ 'products.product.add_to_cart' | t }}">
+              {% render 'icon-cart' %}
+            </a>
+          </form>
+          {% endif %}
+          {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="product-detail">
+      <a href="{{ product.url | within: collection }}" class="grid-link__title">{{ product.title }}</a>
+      <div class="grid-link__meta">
+        {% render 'product-price', variant: product %}
+      </div>
+    </div>
+  </div>
+</li>
