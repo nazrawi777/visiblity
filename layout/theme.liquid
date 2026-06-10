@@ -34,6 +34,8 @@
   <link rel="dns-prefetch" href="https://judge.me">
   <link rel="dns-prefetch" href="https://apis.google.com">
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
   {%- if template contains 'collection' and collection.image -%}
     <link rel="preload" as="image"
       href="{{ collection.image | image_url: width: 1200 }}"
@@ -219,6 +221,8 @@
     template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}
     {% unless template contains 'index' %}others{% endunless %}
   ">
+  <div id="cursor-orb" aria-hidden="true"></div>
+  <div id="cursor-trail" aria-hidden="true"></div>
   <a class="skip-to-content-link visually-hidden" href="#MainContent">
     {{ "accessibility.skip_to_text" | t }}
   </a>
@@ -311,6 +315,8 @@
     onload="initMerchantWidget()"
     async>
   </script>
+
+  {{ 'custom-cursor.js' | asset_url | script_tag }}
   <ul hidden>
     <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
     <li id="a11y-new-window-message">{{ 'general.accessibility.link_messages.new_window' | t }}</li>

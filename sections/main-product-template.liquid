@@ -401,6 +401,40 @@ assign current_variant = product.selected_or_first_available_variant
 {% render 'sticky_cart' %}
 {% endif %}
 {% endunless %}
+
+<div class="iv-sticky-atc" data-sticky-atc aria-hidden="true">
+  <div class="iv-sticky-atc__inner">
+    <p class="iv-sticky-atc__title">{{ product.title | escape }}</p>
+    <div class="iv-sticky-atc__price"><span class="money">{{ current_variant.price | money }}</span></div>
+    <button type="button" class="iv-sticky-atc__button dt-sc-btn" data-sticky-atc-button>{{ 'products.product.add_to_cart' | t }}</button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var stickyBar = document.querySelector('[data-sticky-atc]');
+    var stickyButton = document.querySelector('[data-sticky-atc-button]');
+    var mainButton = document.getElementById('dT_AddToCart-{{ section.id }}');
+    if (!stickyBar || !mainButton) return;
+
+    function syncStickyAtc() {
+      var buttonBottom = mainButton.getBoundingClientRect().bottom + window.pageYOffset;
+      var shouldShow = window.pageYOffset > buttonBottom;
+      stickyBar.classList.toggle('is-visible', shouldShow);
+      stickyBar.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
+    }
+
+    window.addEventListener('scroll', syncStickyAtc, { passive: true });
+    window.addEventListener('resize', syncStickyAtc);
+    syncStickyAtc();
+
+    if (stickyButton) {
+      stickyButton.addEventListener('click', function() {
+        mainButton.click();
+      });
+    }
+  });
+</script>
 {%- style -%}
   /* ── BREADCRUMB ── */
   .product-breadcrumb ol { display: flex; flex-wrap: wrap; list-style: none; padding: 0; margin: 0 0 15px 0; font-size: 13px; gap: 5px; }

@@ -129,80 +129,73 @@
     {% endif %}
 
     {%- liquid
-      if section.settings.enable_items_per_page
-        if cart.attributes.pagination != blank and cart.attributes.pagination
-          assign product_per_page = cart.attributes.pagination
-        else
-          assign product_per_page = 36
-        endif
-      else
-        assign product_per_page = 36
-      endif
+      assign product_per_page = 36
     -%}
 
     {% paginate collection.products by product_per_page %}
 
-    {% if section.settings.filter_type == "drawer" %}
-    <div class="drawer-sidebar">
-      <div class="text-center sidebar_btn {% if settings.collection_sidebar_mobile %} hidden {% endif %}">
-        <a class="dt-sc-btn toggleIcon"> <i class="fa fa-caret-right" aria-hidden="true"></i> </a>
+    <div class="iv-filter-drawer" id="CollectionFilterDrawer" aria-hidden="true">
+      <div class="iv-filter-drawer__panel" role="dialog" aria-modal="true" aria-label="Collection filters">
+        <div class="iv-filter-drawer__header">
+          <span>FILTERS</span>
+          <button type="button" class="iv-filter-drawer__close" data-iv-filter-close aria-label="Close filters">&times;</button>
+        </div>
+        <div class="iv-filter-drawer__body">
+          {% render 'collection-sidebar' %}
+        </div>
       </div>
-      <div class="sidebar sidebar-height-{{ section.id }} {{ settings.sidebar_style }}_style sidebar-sticky" sidebar-sticky>
-        <a href="#" class="js-close-modal dt-sc-btn close-icon"></a>
-        <a href="#" class="clear-all dT_ClearAll" style="text-align: right;margin-bottom: 15px;">Clear All</a>
-        {% render 'collection-sidebar' %}
-      </div>
-      <div class="canvas-overlay"></div>
+      <button type="button" class="iv-filter-drawer__overlay" data-iv-filter-close aria-label="Close filters"></button>
     </div>
-    {% endif %}
 
-    {% if section.settings.filter_type == 'horizontal' %}
-    <div class="horizontal-filter-sidebar">
-      <p class="filter-heading">{% render 'icon-filter' %}</p>
-      {% render 'collection-filter' %}
-    </div>
-    {% endif %}
 
-    <div id="collection-template-query" class="{% if settings.collection_sidebar_use == 'full-width' or section.settings.filter_type == 'drawer' %}no-sidebar{% else %}has-sidebar {{ settings.collection_sidebar_use}}{% endif %}">
+
+    <div id="collection-template-query" class="no-sidebar iv-collection-full-width">
       <div class="collection-grid product-grid-height-{{ section.id }}">
         {% if section.settings.show_collection_image and collection.image and section.settings.banner_position == 'with-in-container' %}
         {{ collection_meta }}
         {% endif %}
 
-        {% if section.settings.collections_view_enable or section.settings.collections_sort_enable %}
-        <div class="collection-header">
-          {% if section.settings.filter_type == 'drawer' %}<a class="drawer_filter_action dt-sc-btn">{% render 'icon-filter' %} Filter</a>{% endif %}
-          {% if section.settings.collections_view_enable %}{% render 'collection-mode', grid_item_width: grid_item_width %}{% endif %}
-          {% if section.settings.collections_custom_cols %}
-          <ul class="custom-product-grid">
-            <li data-cols="one-column" class="{% if section.settings.grid == '1' %}active{% endif %}"></li>
-            <li data-cols="two-column" class="{% if section.settings.grid == '2' %}active{% endif %}"></li>
-            <li data-cols="three-column" class="{% if section.settings.grid == '3' %}active{% endif %}"></li>
-            <li data-cols="four-column" class="{% if section.settings.grid == '4' %}active{% endif %}"></li>
-            <li data-cols="five-column" class="{% if section.settings.grid == '5' %}active{% endif %}"></li>
-            <li data-cols="six-column" class="{% if section.settings.grid == '6' %}active{% endif %}"></li>
-          </ul>
-          {% endif %}
-          {% if section.settings.enable_items_per_page %}
-          <div class="items_per_page">
-            <label>{{ 'products.product.items_per_view' | t }}</label>
-            <select name="paginateBy" id="paginateBy" class="collection-sort__input">
-              <option value="6" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '6' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '6' %}selected="selected"{% endif %}{% endif %}>6</option>
-              <option value="12" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '12' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '12' %}selected="selected"{% endif %}{% endif %}>12</option>
-              <option value="18" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '18' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '18' %}selected="selected"{% endif %}{% endif %}>18</option>
-              <option value="24" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '24' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '24' %}selected="selected"{% endif %}{% endif %}>24</option>
-              <option value="36" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '36' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '36' %}selected="selected"{% endif %}{% endif %}>36</option>
-              <option value="48" {% if cart.attributes.pagination != blank and cart.attributes.pagination %}{% if cart.attributes.pagination == '48' %}selected="selected"{% endif %}{% else %}{% if product_per_page == '48' %}selected="selected"{% endif %}{% endif %}>48</option>
-            </select>
+        <div class="collection-header iv-collection-toolbar">
+          <p class="iv-collection-count">Showing {{ collection.products_count }} products</p>
+          <div class="iv-collection-toolbar__actions">
+            <button type="button" class="iv-filter-toggle dt-sc-btn" data-iv-filter-open>{% render 'icon-filter' %} Filters</button>
+            {% if section.settings.collections_sort_enable %}{% render 'collection-sorting' %}{% endif %}
           </div>
-          {% endif %}
-          {% if section.settings.collections_sort_enable %}{% render 'collection-sorting' %}{% endif %}
         </div>
-        {% endif %}
 
-        <div class="dT_VProdWrapper" id="dT_collectionGrid">
-          <ul class="grid product-collection dt-sc-column {{ grid_item_width }} dt-even-columns product-grid-style"
-            {% unless section.settings.pagination == 'numbers' %} id="AjaxinateContainer" {% endunless %}>
+
+        {%- assign has_active_filters = false -%}
+        {%- for filter in collection.filters -%}
+          {%- if filter.active_values.size > 0 -%}{%- assign has_active_filters = true -%}{%- endif -%}
+          {%- if filter.type == 'price_range' -%}{%- if filter.min_value.value != nil or filter.max_value.value != nil -%}{%- assign has_active_filters = true -%}{%- endif -%}{%- endif -%}
+        {%- endfor -%}
+        {%- if has_active_filters -%}
+        <div class="iv-active-filter-tags" aria-label="Active filters">
+          {%- for filter in collection.filters -%}
+            {%- for value in filter.active_values -%}
+              <a class="iv-active-filter-tag js-facet-remove" href="{{ value.url_to_remove }}">
+                <span>{{ value.label | escape }}</span>
+                {% render 'icon-close-small' %}
+              </a>
+            {%- endfor -%}
+            {%- if filter.type == 'price_range' -%}
+              {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                <a class="iv-active-filter-tag js-facet-remove" href="{{ filter.url_to_remove }}">
+                  <span>
+                    {%- if filter.min_value.value -%}{{ filter.min_value.value | money }}{%- else -%}{{ 0 | money }}{%- endif -%}
+                    &ndash;
+                    {%- if filter.max_value.value -%}{{ filter.max_value.value | money }}{%- else -%}{{ filter.range_max | money }}{%- endif -%}
+                  </span>
+                  {% render 'icon-close-small' %}
+                </a>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          <a class="iv-active-filter-clear js-facet-remove" href="{{ collection.url }}?sort_by={{ collection.sort_by | default: collection.default_sort_by }}">Clear all</a>
+        </div>
+        {%- endif -%}
+        <div class="dT_VProdWrapper" id="dT_collectionGrid" data-infinite-scroll-wrapper data-next-page="{% if paginate.next %}{{ paginate.next.url }}{% endif %}">
+          <ul class="grid product-collection dt-sc-column four-column dt-even-columns product-grid-style iv-collection-product-grid" data-infinite-scroll-grid id="AjaxinateContainer">
             {% if collection.products.size > 0 %}
               {% for product in collection.products %}
                 {% render 'product-grid-item', product: product, imageSize: imageSize %}
@@ -213,37 +206,9 @@
               </li>
             {% endif %}
           </ul>
-
-          {% if section.settings.pagination == 'numbers' %}
-            {% if paginate.pages > 1 %}
-            <div class="text-center pagination">
-              {% render 'pagination', paginate: paginate %}
-            </div>
-            {% endif %}
-          {% endif %}
-
-          {% unless section.settings.pagination == 'numbers' %}
-          <div id="AjaxinatePagination" class="pagination-method-{{- section.settings.pagination -}}">
-            <div class="custom-page-progress-bar" data-page-items-count='{{ collection.products_count }}'>
-              {%- assign productSize = collection.products.size | plus: paginate.current_offset -%}
-              <p>{{ 'collections.general.count_text' | t: current_count: productSize, total_count: collection.products_count }}</p>
-              <div class="progress-bar">
-                <div class="active-bar" style="width: {{ productSize | times: 100.0 | divided_by: collection.products_count }}%"></div>
-              </div>
-            </div>
-            {% if paginate.next %}
-            <div class="load_more_btn"><a class="dt-sc-btn text-center" href="{{ paginate.next.url }}">{{ 'collections.general.load_more' | t }}</a></div>
-            {% endif %}
-          </div>
-          {% endunless %}
+          <div class="iv-infinite-scroll-loader" data-infinite-scroll-loader aria-hidden="true"><span></span><span></span><span></span></div>
         </div>
       </div>
-
-      {% unless settings.collection_sidebar_use == 'full-width' %}
-        {% unless section.settings.filter_type == 'drawer' %}
-          {% render 'collection-sidebar' %}
-        {% endunless %}
-      {% endunless %}
     </div>
 
     {% endpaginate %}
@@ -329,6 +294,8 @@
     to   { opacity: 1; transform: translateX(-50%) translateY(0); }
   }
 </style>
+
+{{ 'infinite-scroll.js' | asset_url | script_tag }}
 
 {%- style -%}
   /* ── BREADCRUMB ── */
@@ -490,15 +457,44 @@
       ]
     });
   }
+  document.addEventListener('DOMContentLoaded', function() {
+    var drawer = document.getElementById('CollectionFilterDrawer');
+    if (!drawer) return;
+    document.querySelectorAll('[data-iv-filter-open]').forEach(function(button) {
+      button.addEventListener('click', function() {
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('iv-filter-drawer-open');
+      });
+    });
+    var closeDrawer = function() {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('iv-filter-drawer-open');
+    };
+    drawer.querySelectorAll('[data-iv-filter-close]').forEach(function(button) {
+      button.addEventListener('click', closeDrawer);
+    });
 
-  $('#paginateBy').on('change', function(){
-    var val = $(this).val();
-    $.ajax({
-      type: "POST",
-      url: '/cart.js',
-      data: { "attributes[pagination]": val },
-      success: function(d){ window.location.reload(); },
-      dataType: 'json'
+    drawer.querySelectorAll('.js-filter').forEach(function(filterPanel, index) {
+      var summary = filterPanel.querySelector('.mobile-facets__summary');
+      var body = filterPanel.querySelector('.filter-body');
+      if (!summary || !body) return;
+      summary.setAttribute('role', 'button');
+      summary.setAttribute('tabindex', '0');
+      summary.setAttribute('aria-expanded', index === 0 ? 'true' : 'false');
+      filterPanel.classList.toggle('is-open', index === 0);
+      var togglePanel = function() {
+        var isOpen = filterPanel.classList.toggle('is-open');
+        summary.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      };
+      summary.addEventListener('click', togglePanel);
+      summary.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          togglePanel();
+        }
+      });
     });
   });
 </script>

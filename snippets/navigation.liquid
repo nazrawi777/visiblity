@@ -115,10 +115,32 @@ endfor
 
         {% unless blockType == "tab" %}
         {%- if link.links != blank -%}
-        {%- for child_link in link.links  limit: 6 -%}
+        {%- for child_link in link.links limit: 6 -%}
+        {%- unless link.handle == 'shop-now' and child_link.handle == 'all-products' -%}
         <li class="{% if child_link.active %}active{% endif %}">
-           <a class="heading" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}>
-            {{ child_link.title }}
+           <a class="heading{% if link.handle == 'shop-now' %} shop-now-dropdown-link{% endif %}" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}>
+            <span>{{ child_link.title }}</span>
+            {%- if link.handle == 'shop-now' -%}
+              {%- assign nav_collection_handle = '' -%}
+              {%- assign child_title_downcase = child_link.title | downcase -%}
+              {%- if child_title_downcase contains 'all products' -%}
+                {%- assign nav_collection_handle = 'premium-anime-merchandise-clothing-collectibles-shop-all' -%}
+              {%- elsif child_title_downcase contains 'big sale' or child_title_downcase contains 'sale' -%}
+                {%- assign nav_collection_handle = 'big-anime-sale-clearance-discounts-merch-collectibles' -%}
+              {%- elsif child_title_downcase contains 'women' -%}
+                {%- assign nav_collection_handle = 'womens-anime-merch-cute-trendy-gear-kawaii' -%}
+              {%- elsif child_title_downcase contains 'kid' -%}
+                {%- assign nav_collection_handle = 'kids-anime-merch-cool-clothes-toys-gifts' -%}
+              {%- elsif child_title_downcase contains 'accessories' -%}
+                {%- assign nav_collection_handle = 'anime-accessories-figures-phone-cases-wall-art-decor' -%}
+              {%- elsif child_title_downcase contains 'man' -%}
+                {%- assign nav_collection_handle = 'mans-anime-merch-streetwear-gear-collectibles' -%}
+              {%- endif -%}
+              {%- assign nav_collection_image = collections[nav_collection_handle].image | default: collections[nav_collection_handle].products.first.featured_image -%}
+              {%- if nav_collection_image != blank -%}
+                <img class="shop-now-dropdown-thumb" src="{{ nav_collection_image | image_url: width: 96, height: 96, crop: 'center' }}" alt="{{ collections[nav_collection_handle].title | default: child_link.title | escape }}" loading="lazy" width="48" height="48">
+              {%- endif -%}
+            {%- endif -%}
             </a>
           {%- if child_link.links != blank -%}
           <ul>
@@ -128,18 +150,9 @@ endfor
                 <span>
                  {% assign mapTag = grandchild_link.handle %}
                  {{ grandchild_link.title }}
-                  {% if sale_tag contains mapTag %}
-                  <em class="tag sale">{{ sale_label }}</em>
-                  {% endif %}
-
-                  {% if new_tag contains mapTag %}
-                  <em class="tag new">{{ new_label }}</em>
-                  {% endif %}
-
-                  {% if hot_tag contains mapTag %}
-                  <em class="tag hot">{{ hot_label }}</em>
-
-                  {% endif %}
+                  {% if sale_tag contains mapTag %}<em class="tag sale">{{ sale_label }}</em>{% endif %}
+                  {% if new_tag contains mapTag %}<em class="tag new">{{ new_label }}</em>{% endif %}
+                  {% if hot_tag contains mapTag %}<em class="tag hot">{{ hot_label }}</em>{% endif %}
                 </span>
               </a>
             </li>
@@ -147,7 +160,18 @@ endfor
           </ul>
           {%- endif -%}
         </li>
+        {%- endunless -%}
         {%- endfor -%}
+        {%- if link.handle == 'shop-now' -%}
+          {%- for child_link in link.links -%}
+            {%- assign child_title_downcase = child_link.title | downcase -%}
+            {%- if child_link.handle == 'all-products' or child_title_downcase contains 'all products' -%}
+            {%- assign nav_collection_handle = 'premium-anime-merchandise-clothing-collectibles-shop-all' -%}
+            {%- assign nav_collection_image = collections[nav_collection_handle].image | default: collections[nav_collection_handle].products.first.featured_image -%}
+            <li class="{% if child_link.active %}active{% endif %}"><a class="heading shop-now-dropdown-link" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}><span>{{ child_link.title }}</span>{%- if nav_collection_image != blank -%}<img class="shop-now-dropdown-thumb" src="{{ nav_collection_image | image_url: width: 96, height: 96, crop: 'center' }}" alt="{{ collections[nav_collection_handle].title | default: child_link.title | escape }}" loading="lazy" width="48" height="48">{%- endif -%}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
         {% endif %}
         {% endunless %}
 
@@ -191,9 +215,31 @@ endfor
       <ul class="sub-menu-lists">
 
         {%- for child_link in link.links -%}
+        {%- unless link.handle == 'shop-now' and child_link.handle == 'all-products' -%}
         <li class="{% if primary or secondary %}  {%- if child_link.links != blank -%}menu-item-has-children{% endif %}{% endif %}{% if child_link.active %} active{% endif %}">
-          <a href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}>
-            {{ child_link.title }}
+          <a class="{% if link.handle == 'shop-now' %}shop-now-dropdown-link{% endif %}" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}>
+            <span>{{ child_link.title }}</span>
+            {%- if link.handle == 'shop-now' -%}
+              {%- assign nav_collection_handle = '' -%}
+              {%- assign child_title_downcase = child_link.title | downcase -%}
+              {%- if child_title_downcase contains 'all products' -%}
+                {%- assign nav_collection_handle = 'premium-anime-merchandise-clothing-collectibles-shop-all' -%}
+              {%- elsif child_title_downcase contains 'big sale' or child_title_downcase contains 'sale' -%}
+                {%- assign nav_collection_handle = 'big-anime-sale-clearance-discounts-merch-collectibles' -%}
+              {%- elsif child_title_downcase contains 'women' -%}
+                {%- assign nav_collection_handle = 'womens-anime-merch-cute-trendy-gear-kawaii' -%}
+              {%- elsif child_title_downcase contains 'kid' -%}
+                {%- assign nav_collection_handle = 'kids-anime-merch-cool-clothes-toys-gifts' -%}
+              {%- elsif child_title_downcase contains 'accessories' -%}
+                {%- assign nav_collection_handle = 'anime-accessories-figures-phone-cases-wall-art-decor' -%}
+              {%- elsif child_title_downcase contains 'man' -%}
+                {%- assign nav_collection_handle = 'mans-anime-merch-streetwear-gear-collectibles' -%}
+              {%- endif -%}
+              {%- assign nav_collection_image = collections[nav_collection_handle].image | default: collections[nav_collection_handle].products.first.featured_image -%}
+              {%- if nav_collection_image != blank -%}
+                <img class="shop-now-dropdown-thumb" src="{{ nav_collection_image | image_url: width: 96, height: 96, crop: 'center' }}" alt="{{ collections[nav_collection_handle].title | default: child_link.title | escape }}" loading="lazy" width="48" height="48">
+              {%- endif -%}
+            {%- endif -%}
           </a>
 
           {%- if child_link.links != blank -%}
@@ -218,7 +264,18 @@ endfor
           </div>
           {%- endif -%}
         </li>
+        {%- endunless -%}
         {%- endfor -%}
+        {%- if link.handle == 'shop-now' -%}
+          {%- for child_link in link.links -%}
+            {%- assign child_title_downcase = child_link.title | downcase -%}
+            {%- if child_link.handle == 'all-products' or child_title_downcase contains 'all products' -%}
+            {%- assign nav_collection_handle = 'premium-anime-merchandise-clothing-collectibles-shop-all' -%}
+            {%- assign nav_collection_image = collections[nav_collection_handle].image | default: collections[nav_collection_handle].products.first.featured_image -%}
+            <li class="{% if child_link.active %} active{% endif %}"><a class="shop-now-dropdown-link" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}><span>{{ child_link.title }}</span>{%- if nav_collection_image != blank -%}<img class="shop-now-dropdown-thumb" src="{{ nav_collection_image | image_url: width: 96, height: 96, crop: 'center' }}" alt="{{ collections[nav_collection_handle].title | default: child_link.title | escape }}" loading="lazy" width="48" height="48">{%- endif -%}</a></li>
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
       </ul>
     </div>
   </div>
