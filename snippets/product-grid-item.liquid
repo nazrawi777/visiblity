@@ -181,6 +181,30 @@
       </div>
     </div>
     <div class="product-detail {{ settings.item_aignment }}">
+      <div class="iv-card-swatches" aria-label="Available colors">
+        {%- assign color_option_index = -1 -%}
+        {%- for option in product.options_with_values -%}
+          {%- assign option_name_downcase = option.name | downcase -%}
+          {%- if option_name_downcase contains 'color' or option_name_downcase contains 'colour' -%}
+            {%- assign color_option_index = forloop.index0 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if color_option_index != -1 -%}
+          {%- assign shown_colors = '' -%}
+          {%- assign shown_color_count = 0 -%}
+          {%- for variant in product.variants -%}
+            {%- assign color_value = variant.options[color_option_index] -%}
+            {%- unless shown_colors contains color_value -%}
+              {%- if shown_color_count < 5 -%}
+                <span class="iv-card-swatch" title="{{ color_value | escape }}" style="{% if variant.image %}background-image:url({{ variant.image | image_url: width: 40, height: 40, crop: 'center' }});{% else %}background-color: {{ color_value | handle | replace: '-', '' }};{% endif %}"></span>
+              {%- endif -%}
+              {%- assign shown_colors = shown_colors | append: color_value | append: '|' -%}
+              {%- assign shown_color_count = shown_color_count | plus: 1 -%}
+            {%- endunless -%}
+          {%- endfor -%}
+          {%- if shown_color_count > 5 -%}<span class="iv-card-more">+{{ shown_color_count | minus: 5 }} more</span>{%- endif -%}
+        {%- endif -%}
+      </div>
       {% render 'new-label', product: product %}
       {% if settings.display_vendor %}<p class="product-vendor"><span>{{ product.vendor }}</span></p>{% endif %}
       <h5 class="grid-link__title" itemprop="name">
@@ -202,6 +226,27 @@
             {% endif %}
           {% endif %}
         </div>
+      </div>
+      <div class="iv-card-sizes" aria-label="Available sizes">
+        {%- assign size_option_index = -1 -%}
+        {%- for option in product.options_with_values -%}
+          {%- assign option_name_downcase = option.name | downcase -%}
+          {%- if option_name_downcase contains 'size' -%}
+            {%- assign size_option_index = forloop.index0 -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if size_option_index != -1 -%}
+          {%- assign shown_sizes = '' -%}
+          {%- assign shown_size_count = 0 -%}
+          {%- for variant in product.variants -%}
+            {%- assign size_value = variant.options[size_option_index] -%}
+            {%- unless shown_sizes contains size_value -%}
+              {%- if shown_size_count < 4 -%}<span class="iv-card-size">{{ size_value }}</span>{%- endif -%}
+              {%- assign shown_sizes = shown_sizes | append: size_value | append: '|' -%}
+              {%- assign shown_size_count = shown_size_count | plus: 1 -%}
+            {%- endunless -%}
+          {%- endfor -%}
+        {%- endif -%}
       </div>
       {% if settings.product_button_style == 'icon' %}
         {% render 'variant-tag-color', product: product %}

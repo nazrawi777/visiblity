@@ -34,6 +34,8 @@
   <link rel="dns-prefetch" href="https://judge.me">
   <link rel="dns-prefetch" href="https://apis.google.com">
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
   {%- if template contains 'collection' and collection.image -%}
     <link rel="preload" as="image"
       href="{{ collection.image | image_url: width: 1200 }}"
@@ -219,6 +221,8 @@
     template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}
     {% unless template contains 'index' %}others{% endunless %}
   ">
+  <div id="cursor-orb" aria-hidden="true"></div>
+  <div id="cursor-trail" aria-hidden="true"></div>
   <a class="skip-to-content-link visually-hidden" href="#MainContent">
     {{ "accessibility.skip_to_text" | t }}
   </a>
@@ -310,6 +314,36 @@
     src="https://www.gstatic.com/shopping/merchant/merchantwidget.js"
     onload="initMerchantWidget()"
     async>
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var orb = document.getElementById('cursor-orb');
+      var trail = document.getElementById('cursor-trail');
+      if (!orb || !trail || window.matchMedia('(max-width: 768px)').matches) return;
+      var trailX = window.innerWidth / 2;
+      var trailY = window.innerHeight / 2;
+      document.addEventListener('mousemove', function(event) {
+        orb.style.left = event.clientX + 'px';
+        orb.style.top = event.clientY + 'px';
+        trailX += (event.clientX - trailX) * 0.35;
+        trailY += (event.clientY - trailY) * 0.35;
+        trail.style.left = trailX + 'px';
+        trail.style.top = trailY + 'px';
+      });
+      document.addEventListener('mouseover', function(event) {
+        if (event.target.closest('a, button, [role="button"]')) {
+          orb.classList.add('cursor-orb--hover');
+          trail.classList.add('cursor-trail--hover');
+        }
+      });
+      document.addEventListener('mouseout', function(event) {
+        if (event.target.closest('a, button, [role="button"]')) {
+          orb.classList.remove('cursor-orb--hover');
+          trail.classList.remove('cursor-trail--hover');
+        }
+      });
+    });
   </script>
   <ul hidden>
     <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
