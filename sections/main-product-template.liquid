@@ -403,11 +403,15 @@ assign current_variant = product.selected_or_first_available_variant
 {% endunless %}
 
 <div class="iv-sticky-atc" data-sticky-atc aria-hidden="true">
-  <div class="iv-sticky-atc__inner">
+  <div class="iv-sticky-atc__info">
+    {%- if product.featured_image != blank -%}
+    <img class="iv-sticky-atc__image" src="{{ product.featured_image | image_url: width: 88, height: 88, crop: 'center' }}" alt="{{ product.featured_image.alt | default: product.title | escape }}" loading="lazy" width="44" height="44">
+    {%- endif -%}
     <p class="iv-sticky-atc__title">{{ product.title | escape }}</p>
     <div class="iv-sticky-atc__price"><span class="money">{{ current_variant.price | money }}</span></div>
-    <button type="button" class="iv-sticky-atc__button dt-sc-btn" data-sticky-atc-button>{{ 'products.product.add_to_cart' | t }}</button>
   </div>
+  <div class="iv-sticky-atc__divider" aria-hidden="true"></div>
+  <button type="button" class="iv-sticky-atc__button dt-sc-btn" data-sticky-atc-button>Add to Cart</button>
 </div>
 
 <script>
@@ -418,8 +422,7 @@ assign current_variant = product.selected_or_first_available_variant
     if (!stickyBar || !mainButton) return;
 
     function syncStickyAtc() {
-      var buttonBottom = mainButton.getBoundingClientRect().bottom + window.pageYOffset;
-      var shouldShow = window.pageYOffset > buttonBottom;
+      var shouldShow = window.pageYOffset > 100;
       stickyBar.classList.toggle('is-visible', shouldShow);
       stickyBar.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
     }
