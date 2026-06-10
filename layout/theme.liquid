@@ -316,35 +316,7 @@
     async>
   </script>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      var orb = document.getElementById('cursor-orb');
-      var trail = document.getElementById('cursor-trail');
-      if (!orb || !trail || window.matchMedia('(max-width: 768px)').matches) return;
-      var trailX = window.innerWidth / 2;
-      var trailY = window.innerHeight / 2;
-      document.addEventListener('mousemove', function(event) {
-        orb.style.left = event.clientX + 'px';
-        orb.style.top = event.clientY + 'px';
-        trailX += (event.clientX - trailX) * 0.35;
-        trailY += (event.clientY - trailY) * 0.35;
-        trail.style.left = trailX + 'px';
-        trail.style.top = trailY + 'px';
-      });
-      document.addEventListener('mouseover', function(event) {
-        if (event.target.closest('a, button, [role="button"]')) {
-          orb.classList.add('cursor-orb--hover');
-          trail.classList.add('cursor-trail--hover');
-        }
-      });
-      document.addEventListener('mouseout', function(event) {
-        if (event.target.closest('a, button, [role="button"]')) {
-          orb.classList.remove('cursor-orb--hover');
-          trail.classList.remove('cursor-trail--hover');
-        }
-      });
-    });
-  </script>
+  {{ 'custom-cursor.js' | asset_url | script_tag }}
   <ul hidden>
     <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
     <li id="a11y-new-window-message">{{ 'general.accessibility.link_messages.new_window' | t }}</li>
