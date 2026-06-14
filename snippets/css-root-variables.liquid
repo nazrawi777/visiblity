@@ -33,6 +33,22 @@ assign dt_sc_base_font_bold_italic = dt_sc_base_font_bold | font_modify: 'style'
 {{ dt_sc_base_font_bold_italic | font_face: font_display: 'swap' }}
 
 :root {
+  /* Brand colors */
+  --color-primary: #31378F;       /* header bg, primary navy */
+  --color-primary-dark: #1a1d4d;  /* depth, gradients, scrolled-header state */
+  --color-accent: #ffc72f;        /* CTAs, hover glow, highlights */
+  --color-white: #ffffff;
+  --color-sale-red: #DC2626;      /* sale badges only */
+
+  /* Motion tokens */
+  --duration-ui: 200ms;
+  --duration-section: 500ms;
+  --stagger-card: 0.07s;
+  --ease-enter: cubic-bezier(0, 0, 0.2, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+
+  /* Signature Typography */
+  --font-display: 'Russo One', sans-serif;
 
   /* Heading font*/
   {%- if settings.custom_font_family_1 != blank -%}
@@ -172,6 +188,47 @@ assign dt_sc_base_font_bold_italic = dt_sc_base_font_bold | font_modify: 'style'
   --DT_Gradient_Hover: {{ settings.gradient_hover }};
 
   --sidebar_width:{{ settings.sidebar_width }}px;
+
+  /* Global Accessibility & UI */
+  --focus-ring: 2px solid var(--color-accent);
+  }
+
+  /* Global Accessibility & Interaction */
+  :focus-visible {
+    outline: none;
+    ring: 2px solid var(--color-accent); /* Standard utility name, but let's use actual CSS */
+    outline: var(--focus-ring);
+    outline-offset: 2px;
+  }
+
+  .site-header__links a,
+  .dt-sc-btn,
+  .product-card,
+  .grid-link,
+  button,
+  [role="button"],
+  a {
+    cursor: pointer !important;
+  }
+
+  /* Reduced Motion Fallback */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-delay: -1ms !important;
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      background-attachment: initial !important;
+      scroll-behavior: auto !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }
+    html {
+      scroll-behavior: auto !important;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
 

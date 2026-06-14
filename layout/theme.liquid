@@ -212,6 +212,18 @@
   </script>
   {% render 'header-js' %}
   {{ content_for_header }}
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap">
+  <link rel="stylesheet" href="{{ 'glassmorphism.css' | asset_url }}">
+  <link rel="stylesheet" href="{{ 'loading-screen.css' | asset_url }}">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js" defer></script>
+
+  <script src="{{ 'smooth-scroll.js' | asset_url }}" defer></script>
+  <script src="{{ 'loading-screen.js' | asset_url }}" defer></script>
+  <script src="{{ 'animations.js' | asset_url }}" defer></script>
 </head>
 <body
   id="{{ page_title | handle }}"
@@ -223,6 +235,15 @@
   ">
   <div id="cursor-orb" aria-hidden="true"></div>
   <div id="cursor-trail" aria-hidden="true"></div>
+
+  <div class="loading-screen">
+    <div class="echo-container">
+      <span class="echo echo-2">INFINITE VISIBILITY</span>
+      <span class="echo echo-1">INFINITE VISIBILITY</span>
+      <h1 class="brand-text">INFINITE VISIBILITY</h1>
+    </div>
+  </div>
+
   <a class="skip-to-content-link visually-hidden" href="#MainContent">
     {{ "accessibility.skip_to_text" | t }}
   </a>

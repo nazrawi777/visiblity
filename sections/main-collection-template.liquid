@@ -135,7 +135,7 @@
     {% paginate collection.products by product_per_page %}
 
     <div class="iv-filter-drawer" id="CollectionFilterDrawer" aria-hidden="true">
-      <div class="iv-filter-drawer__panel" role="dialog" aria-modal="true" aria-label="Collection filters">
+      <div class="iv-filter-drawer__panel glass-panel" role="dialog" aria-modal="true" aria-label="Collection filters">
         <div class="iv-filter-drawer__header">
           <span>FILTERS</span>
           <button type="button" class="iv-filter-drawer__close" data-iv-filter-close aria-label="Close filters">‹</button>
@@ -375,6 +375,15 @@
   /* ── MISC ── */
   .list-collection-products { grid-gap: var(--DTGutter_Width); }
   .increasedzindexclass { z-index: 2; }
+
+  .iv-collection-hero-parallax {
+    overflow: hidden;
+  }
+  @media (min-width: 768px) {
+    .iv-collection-hero-parallax img {
+        will-change: transform;
+    }
+  }
 
   /* ── DRAWER SIDEBAR ── */
   {% if section.settings.filter_type == 'drawer' %}
