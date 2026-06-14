@@ -55,3 +55,11 @@
 .template-collection.big-sale .iv-product-card {
     transition-duration: 250ms;
 }
+
+/* Display Typography for animated elements */
+.brand-text,
+.echo,
+.home-slideshow-section .slide-heading,
+.dt-sc-heading .dt-sc-main-heading {
+    font-family: var(--font-display) !important;
+}

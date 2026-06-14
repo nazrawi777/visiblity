@@ -47,6 +47,9 @@ assign dt_sc_base_font_bold_italic = dt_sc_base_font_bold | font_modify: 'style'
   --ease-enter: cubic-bezier(0, 0, 0.2, 1);
   --ease-exit: cubic-bezier(0.4, 0, 1, 1);
 
+  /* Signature Typography */
+  --font-display: 'Russo One', sans-serif;
+
   /* Heading font*/
   {%- if settings.custom_font_family_1 != blank -%}
   --DTFontTypo_Heading: {{- settings.custom_font_family_1 -}};
