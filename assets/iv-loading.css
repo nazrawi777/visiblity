@@ -1,0 +1,102 @@
+#iv-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: var(--iv-navy-deep, #1a1d4d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+#iv-loader.iv-loader--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.iv-loader__inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.iv-loader__logo {
+  font-size: 72px;
+  color: var(--iv-yellow, #ffc72f);
+  font-weight: 700;
+  animation: iv-pulse 1.2s ease-in-out infinite;
+  line-height: 1;
+}
+
+@keyframes iv-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.95); }
+}
+
+.iv-loader__text {
+  position: relative;
+  height: 28px;
+  overflow: hidden;
+}
+
+/* CRAV-style echo/ghost text */
+.iv-loader__line {
+  display: block;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+  line-height: 28px;
+}
+
+.iv-loader__line:last-child {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  color: var(--iv-yellow, #ffc72f);
+  filter: blur(4px);
+  opacity: 0.4;
+  transform: translateY(3px);
+  clip-path: inset(0 60% 0 0);
+  animation: iv-echo-scan 1.8s linear infinite;
+}
+
+@keyframes iv-echo-scan {
+  0% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0% 0 0); }
+}
+
+.iv-loader__bar {
+  width: 200px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.iv-loader__bar-fill {
+  height: 100%;
+  background: var(--iv-yellow, #ffc72f);
+  border-radius: 2px;
+  width: 0%;
+  animation: iv-bar-fill 1.4s ease-out forwards;
+}
+
+@keyframes iv-bar-fill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #iv-loader { transition: none; }
+  .iv-loader__logo { animation: none; }
+  .iv-loader__line:last-child { animation: none; }
+  .iv-loader__bar-fill { animation: none; width: 100%; }
+}

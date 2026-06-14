@@ -42,13 +42,16 @@
   %}
 
     {%- if section.settings.pick_menu != blank -%}
-      <ul class="dt-sc-list-inline  dt-desktop-menu dt-nav" data-menu="dt-main-menu">
+      <ul class="dt-sc-list-inline  dt-desktop-menu dt-nav iv-header__nav" data-menu="dt-main-menu">
         <li class="close-nav"></li>
         {% comment %}theme-check-disable{% endcomment %}
         {%- liquid
+          assign skip_nav = 'policy,about-us,blogs,about_us'
           for link in linklists[main_menu_linklist].links
-          assign Fetchlevel = true
-          render 'navigation', link: link, section: section, menuclass: 'primaryMenu', id: 'default', pack: 'dt-sc-menu', loop: forloop.index, Fetchlevel: Fetchlevel
+            unless skip_nav contains link.handle
+              assign Fetchlevel = true
+              render 'navigation', link: link, section: section, menuclass: 'primaryMenu', id: 'default', pack: 'dt-sc-menu', loop: forloop.index, Fetchlevel: Fetchlevel
+            endunless
           endfor
       %}
       {% comment %}theme-check-enable{% endcomment %}
@@ -84,7 +87,7 @@
 
   {% capture header_icons %}
   {% if section.settings.show_account or section.settings.show_header_cart or section.settings.show_header_wishlist or section.settings.show_header_compare or section.settings.show_header_currency or section.settings.search_type == 'search-icon' %}
-  <div class="site-header__links dt-sc-flex">
+  <div class="site-header__links dt-sc-flex iv-header__icons">
     {%- unless section.settings.show_secondary_menu or  section.settings.menu_align == 'menu_bottom' -%}
     <div  class="mobile-nav-container mobile-nav-offcanvas-right dt-header-menu" data-menu="dt-main-menu"><div class="menu-trigger" data-menu="dt-main-menu">  <i class="menu-trigger-icon"></i></div> </div>
     {% endunless %}
@@ -190,7 +193,7 @@
   {% endcapture %}
 
   {% capture logo %}
-  <div  class="logo{% unless section.settings.menu_align == 'logo_left' %} text-center{% endunless %}">
+  <div  class="logo{% unless section.settings.menu_align == 'logo_left' %} text-center{% endunless %} iv-header__logo">
     <a href="{{ routes.root_url }}" title="{{ shop.name }}" >
     {%- if section.settings.logo != blank -%}
         {%- assign logo_alt = section.settings.logo.alt | default: shop.name | escape -%}
@@ -210,7 +213,31 @@
   {% endcapture %}
 
   <div data-section-id="{{ section.id }}" data-section-type="header-section" data-header-section>
-    <header id="header">
+    <div class="iv-drawer-overlay"></div>
+    <div class="iv-mobile-drawer">
+      <button class="iv-drawer-close" aria-label="Close menu">✕</button>
+      <div class="iv-mobile-nav">
+        {%- for link in linklists[main_menu_linklist].links -%}
+          {%- assign skip_nav = 'policy,about-us,blogs,about_us' -%}
+          {%- unless skip_nav contains link.handle -%}
+            <div class="iv-mobile-nav-item">
+              <a href="{{ link.url }}" class="iv-mobile-nav-link" {% if link.links != blank %}data-has-sub{% endif %}>
+                {{ link.title }}
+                {% if link.links != blank %}<span class="iv-nav-chevron">▼</span>{% endif %}
+              </a>
+              {% if link.links != blank %}
+                <div class="iv-mobile-sub">
+                  {% for child_link in link.links %}
+                    <a href="{{ child_link.url }}">{{ child_link.title }}</a>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {%- endunless -%}
+        {%- endfor -%}
+      </div>
+    </div>
+    <header id="header" class="iv-header">
       {%- if section.settings.show_announcement -%}
       {% render 'announcement' %}
       {% endif %}
@@ -269,7 +296,12 @@
             endunless
           %}
             <div class="logo-alignment {% if section.settings.show_secondary_menu %} secondary-menu-enabled{% endif %} {% unless section.settings.show_secondary_menu %} dt-sc-{{ section.settings.menu_align }} {% endunless %}">
-              <nav id="AccessibleNav" role="navigation" class="dt-sc-flex-space-between {{ section.settings.dropdown_style }}" data-menu="dt-main-menu">
+              <nav id="AccessibleNav" role="navigation" class="dt-sc-flex-space-between {{ section.settings.dropdown_style }} iv-header__inner" data-menu="dt-main-menu">
+                <button class="iv-hamburger" aria-label="Open menu">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                </button>
                 {%- liquid
                 if  section.settings.menu_align == 'logo_left' or section.settings.menu_align == 'menu_bottom'
                 unless  section.settings.show_secondary_menu
