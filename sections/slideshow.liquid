@@ -4,7 +4,7 @@
   assign bottom = margin[1]
 -%}
 
-<div class="{% render 'container-settings' %}"
+<div class="{% render 'container-settings' %} iv-hero-section" data-iv-hero
   data-section-id="{{ section.id }}"
   data-section-type="slideshow-section"
   data-autoPlay="{{ section.settings.autoplay }}"
@@ -25,7 +25,7 @@
               assign style = '3'
             endif
           -%}
-          <div class="slider_style_{{ style }} slider-{{ block.id }}-list swiper-slide {% if block.settings.slider_type == 'video' %}video-cover{% endif %}">
+          <div class="slider_style_{{ style }} slider-{{ block.id }}-list swiper-slide {% if block.settings.slider_type == 'video' %}video-cover{% endif %}" data-iv-slide-content>
             {% render 'slider-data', block: block, is_first: forloop.first %}
 
             {%- comment -%}

@@ -42,6 +42,8 @@
   %}
 
     {%- if section.settings.pick_menu != blank -%}
+      {% comment %} IV: Original Shopify nav preserved below, replaced by custom iv-nav {% endcomment %}
+      <div style="display:none;">
       <ul class="dt-sc-list-inline  dt-desktop-menu dt-nav" data-menu="dt-main-menu">
         <li class="close-nav"></li>
         {% comment %}theme-check-disable{% endcomment %}
@@ -53,6 +55,7 @@
       %}
       {% comment %}theme-check-enable{% endcomment %}
       </ul>
+      </div>
     {%- endif -%}
   {% endcapture %}
 
@@ -210,7 +213,7 @@
   {% endcapture %}
 
   <div data-section-id="{{ section.id }}" data-section-type="header-section" data-header-section>
-    <header id="header">
+    <header id="header" class="iv-header">
       {%- if section.settings.show_announcement -%}
       {% render 'announcement' %}
       {% endif %}
@@ -289,6 +292,52 @@
                 echo header_icons
                 endunless
               %}
+
+              <nav class="iv-nav" id="iv-nav" role="navigation" aria-label="Main navigation">
+                <ul class="iv-nav__list">
+                  <li class="iv-nav__item"><a href="/" class="iv-nav__link">HOME</a></li>
+                  <li class="iv-nav__item iv-nav__item--has-dropdown">
+                    <a href="/collections/shop-now-unleash-your-style-and-personalize-everything-at-infinite-visibility" class="iv-nav__link">SHOP NOW <span class="iv-nav__arrow" aria-hidden="true">↓</span></a>
+                    <div class="iv-dropdown" role="menu"><div class="iv-dropdown__grid">
+                      <a href="/collections/mans-anime-merch-streetwear-gear-collectibles" class="iv-dropdown__item" role="menuitem">MAN</a>
+                      <a href="/collections/womens-anime-merch-cute-trendy-gear-kawaii" class="iv-dropdown__item" role="menuitem">WOMEN</a>
+                      <a href="/collections/kids-anime-merch-cool-clothes-toys-gifts" class="iv-dropdown__item" role="menuitem">KID'S</a>
+                      <a href="/collections/anime-accessories-figures-phone-cases-wall-art-decor" class="iv-dropdown__item" role="menuitem">ACCESSORIES</a>
+                      <a href="/collections/big-anime-sale-clearance-discounts-merch-collectibles" class="iv-dropdown__item iv-dropdown__item--sale" role="menuitem">🔥 BIG SALE</a>
+                      <a href="/collections/all-products" class="iv-dropdown__item iv-dropdown__item--view-all" role="menuitem">ALL PRODUCTS →</a>
+                    </div></div>
+                  </li>
+                  <li class="iv-nav__item iv-nav__item--has-dropdown">
+                    <a href="/collections/coloring-books-for-all-ages-infinite-visibility" class="iv-nav__link">COLORING BOOKS <span class="iv-nav__arrow" aria-hidden="true">↓</span></a>
+                    <div class="iv-dropdown" role="menu"><div class="iv-dropdown__list">
+                      <a href="/collections/explore-a-world-of-coloring-anime-manga-and-beyond/Downloadable-coloring-pages" class="iv-dropdown__item" role="menuitem">Coloring Pages</a>
+                      <a href="/collections/anime-and-manga-characters-coloring-book" class="iv-dropdown__item" role="menuitem">Anime & Manga Characters</a>
+                      <a href="/collections/enchanted-anime-waifu-girls-coloring-book-downloads" class="iv-dropdown__item" role="menuitem">Anime & Manga Girls</a>
+                      <a href="/collections/kids-coloring-books-amazing-printable-adventures" class="iv-dropdown__item" role="menuitem">Kids Coloring Books</a>
+                      <a href="/collections/horror-coloring-books-for-adults" class="iv-dropdown__item" role="menuitem">Horror Coloring Book</a>
+                      <a href="/collections/coloring-books-for-all-ages-infinite-visibility" class="iv-dropdown__item iv-dropdown__item--view-all" role="menuitem">View All →</a>
+                    </div></div>
+                  </li>
+                  <li class="iv-nav__item iv-nav__item--has-dropdown">
+                    <a href="/collections/anime-and-manga-characters-best-downloads" class="iv-nav__link">DIGITAL ARTS <span class="iv-nav__arrow" aria-hidden="true">↓</span></a>
+                    <div class="iv-dropdown" role="menu"><div class="iv-dropdown__list">
+                      <a href="/collections/unique-digital-art-downloads-infinite-visibility-gallery" class="iv-dropdown__item" role="menuitem">Digital Artwork</a>
+                      <a href="/collections/anime-and-manga-characters-best-downloads" class="iv-dropdown__item" role="menuitem">Anime Characters</a>
+                      <a href="/collections/enchanted-anime-girls-infinite-visibility-digital-delights" class="iv-dropdown__item" role="menuitem">Anime Girl's</a>
+                      <a href="/collections/enchanted-demons-anime-waifu-demon-girls-digital-downloads" class="iv-dropdown__item" role="menuitem">Demon Girls</a>
+                      <a href="/collections/anime-bunny-girls-anime-waifu-girls" class="iv-dropdown__item" role="menuitem">Bunny Girls</a>
+                    </div></div>
+                  </li>
+                  <li class="iv-nav__item iv-nav__item--has-dropdown">
+                    <a href="/collections/freebies" class="iv-nav__link">FREEBIES <span class="iv-nav__arrow" aria-hidden="true">↓</span></a>
+                    <div class="iv-dropdown" role="menu"><div class="iv-dropdown__list">
+                      <a href="/collections/free-coloring-pages-for-all-ages" class="iv-dropdown__item" role="menuitem">Free Coloring Pages</a>
+                      <a href="/collections/free-digital-art-downloads-ignite-creativity" class="iv-dropdown__item" role="menuitem">Free Digital Downloads</a>
+                    </div></div>
+                  </li>
+                </ul>
+              </nav>
+              <button class="iv-hamburger" id="iv-hamburger" aria-label="Toggle navigation" aria-expanded="false"><span></span><span></span><span></span></button>
               {% if section.settings.enable_togle_menu %}
                 <div class="button_container" id="toggle"><span class="hamburger_icon"></span></div>
               <div class="full-menu-overlay" id="overlay">

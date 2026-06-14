@@ -1,0 +1,12 @@
+/* ===================================================
+   IV LOADING SCREEN
+=================================================== */
+.iv-loader { position: fixed; inset: 0; z-index: 99999; background: #1a1d4d; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.iv-loader.iv-loader--hidden { display: none !important; pointer-events: none; }
+.iv-loader__inner { text-align: center; position: relative; padding: 2rem; }
+.iv-loader__brand { display: block; font-size: clamp(0.75rem, 2vw, 1.1rem); font-weight: 700; letter-spacing: 0.5em; color: #ffc72f; margin-bottom: 2.5rem; text-transform: uppercase; opacity: 0.9; }
+.iv-loader__text-wrap { position: relative; display: inline-block; margin-bottom: 3rem; line-height: 1; }
+.iv-loader__text { display: block; font-size: clamp(1.4rem, 5vw, 3.5rem); font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; color: #ffffff; position: relative; z-index: 2; }
+.iv-loader__text--echo { position: absolute; top: 8px; left: 8px; z-index: 1; color: rgba(255, 199, 47, 0.2); pointer-events: none; user-select: none; }
+.iv-loader__bar { width: 280px; max-width: 75vw; height: 2px; background: rgba(255, 255, 255, 0.1); margin: 0 auto; overflow: hidden; border-radius: 2px; }
+.iv-loader__bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #ffc72f 0%, #ffffff 100%); border-radius: 2px; transition: none; }

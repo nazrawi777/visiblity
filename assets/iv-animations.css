@@ -1,0 +1,21 @@
+/* ===================================================
+   IV ANIMATIONS
+=================================================== */
+.iv-char { display: inline-block; will-change: transform, opacity; }
+.iv-section-header, .iv-collection-header { overflow: hidden; }
+.iv-collection-banner { will-change: transform, opacity; }
+.iv-filter-sidebar { opacity: 0; transform: translateX(-18px); will-change: transform, opacity; }
+.iv-product-card { opacity: 0; transform: translateY(28px); will-change: transform, opacity; }
+.iv-product-card:hover { transform: translateY(-6px) !important; box-shadow: 0 16px 50px rgba(255, 199, 47, 0.18), 0 0 0 1px rgba(255, 199, 47, 0.12) !important; z-index: 2; position: relative; }
+.iv-sale-badge { animation: iv-sale-pulse 1.6s ease-in-out infinite; }
+[data-collection-handle*="sale"] .iv-sale-badge, [data-collection-handle*="big"] .iv-sale-badge { animation: iv-sale-pulse-aggressive 0.9s ease-in-out infinite; }
+.iv-marquee-glow { animation: iv-marquee-glow 3s ease-in-out infinite; }
+.iv-deal-timer { animation: iv-timer-pulse 2s ease-in-out infinite; }
+.iv-category-scroll { display: flex; gap: 1.25rem; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 0.75rem; }
+.iv-category-scroll::-webkit-scrollbar { display: none; }
+.iv-category-scroll__item { flex: 0 0 auto; scroll-snap-align: start; }
+@keyframes iv-sale-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.45); } 50% { box-shadow: 0 0 0 7px rgba(229, 62, 62, 0); } }
+@keyframes iv-sale-pulse-aggressive { 0%, 100% { box-shadow: 0 0 0 0 rgba(229, 62, 62, 0.65); transform: scale(1); } 50% { box-shadow: 0 0 0 10px rgba(229, 62, 62, 0); transform: scale(1.06); } }
+@keyframes iv-marquee-glow { 0%, 100% { filter: brightness(1) drop-shadow(0 0 0px rgba(255, 199, 47, 0)); } 50% { filter: brightness(1.25) drop-shadow(0 0 10px rgba(255, 199, 47, 0.45)); } }
+@keyframes iv-timer-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.015); } }
+@media (prefers-reduced-motion: reduce) { .iv-product-card, .iv-collection-banner, .iv-filter-sidebar, .iv-collection-header, .iv-sale-badge, .iv-dropdown, .iv-dropdown__item { animation: none !important; transition: none !important; opacity: 1 !important; transform: none !important; } }

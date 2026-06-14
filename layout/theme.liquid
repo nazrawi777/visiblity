@@ -212,6 +212,9 @@
   </script>
   {% render 'header-js' %}
   {{ content_for_header }}
+  {{ 'iv-loading.css' | asset_url | stylesheet_tag }}
+  {{ 'iv-header.css' | asset_url | stylesheet_tag }}
+  {{ 'iv-animations.css' | asset_url | stylesheet_tag }}
 </head>
 <body
   id="{{ page_title | handle }}"
@@ -221,6 +224,18 @@
     template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}
     {% unless template contains 'index' %}others{% endunless %}
   ">
+  <div class="iv-loader" id="iv-loader" aria-hidden="true">
+    <div class="iv-loader__inner">
+      <div class="iv-loader__brand">INFINITE VISIBILITY</div>
+      <div class="iv-loader__text-wrap">
+        <span class="iv-loader__text">ENTERING THE UNIVERSE</span>
+        <span class="iv-loader__text iv-loader__text--echo" aria-hidden="true">ENTERING THE UNIVERSE</span>
+      </div>
+      <div class="iv-loader__bar">
+        <div class="iv-loader__bar-fill" id="iv-loader-bar"></div>
+      </div>
+    </div>
+  </div>
   <div id="cursor-orb" aria-hidden="true"></div>
   <div id="cursor-trail" aria-hidden="true"></div>
   <a class="skip-to-content-link visually-hidden" href="#MainContent">
@@ -321,5 +336,9 @@
     <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
     <li id="a11y-new-window-message">{{ 'general.accessibility.link_messages.new_window' | t }}</li>
   </ul>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js" defer></script>
+  {{ 'iv-main.js' | asset_url | script_tag }}
 </body>
 </html>
