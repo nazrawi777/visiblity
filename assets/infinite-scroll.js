@@ -47,11 +47,30 @@
             return;
           }
 
+          var newItems = [];
           Array.prototype.forEach.call(incomingGrid.children, function(item) {
-            grid.appendChild(document.importNode(item, true));
+            var importedItem = document.importNode(item, true);
+            grid.appendChild(importedItem);
+            newItems.push(importedItem);
           });
 
           updateNextUrl(doc);
+
+          // Trigger GSAP entrance for new products
+          if (typeof ScrollTrigger !== 'undefined' && ScrollTrigger.batch) {
+              ScrollTrigger.batch(newItems, {
+                  onEnter: batch => {
+                      gsap.from(batch, {
+                          y: 30,
+                          opacity: 0,
+                          stagger: 0.07,
+                          duration: 0.5,
+                          ease: 'cubic-bezier(0, 0, 0.2, 1)',
+                          overwrite: true
+                      });
+                  }
+              });
+          }
           if (window.Shopify && window.Shopify.PaymentButton) {
             window.Shopify.PaymentButton.init();
           }

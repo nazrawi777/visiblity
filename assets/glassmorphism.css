@@ -1,0 +1,57 @@
+/* Glassmorphism Variants */
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 16px;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 16px;
+}
+
+.glass-chip {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+/* Mobile rule: reduce blur to 8px on screens < 768px */
+@media (max-width: 767px) {
+  .glass-nav,
+  .glass-panel {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .glass-chip {
+    backdrop-filter: blur(6px); /* proportionally reduced */
+    -webkit-backdrop-filter: blur(6px);
+  }
+}
+
+/* Product Card Enhancements */
+.iv-product-card {
+  transition: transform var(--duration-ui) var(--ease-enter),
+              box-shadow var(--duration-ui) var(--ease-enter);
+}
+
+.iv-product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 24px rgba(255, 199, 47, 0.35);
+}
+
+.badge--sale {
+    transition: transform 0.3s ease;
+}
+
+.template-collection.big-sale .iv-product-card {
+    transition-duration: 250ms;
+}

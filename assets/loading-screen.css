@@ -1,0 +1,48 @@
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  overflow: hidden;
+}
+
+.echo-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-text {
+  font-family: var(--font-display, 'Russo One', sans-serif);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-white);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  z-index: 2;
+  position: relative;
+}
+
+.echo {
+  position: absolute;
+  font-family: var(--font-display, 'Russo One', sans-serif);
+  font-size: 4rem;
+  font-weight: 700;
+  color: var(--color-white);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.5;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+@media (max-width: 767px) {
+    .brand-text, .echo {
+        font-size: 2.5rem;
+    }
+}
