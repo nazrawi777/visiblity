@@ -71,7 +71,7 @@
 </nav>
 
 {% capture collection_meta %}
-<div class="collection-hero {{ section.settings.banner_position }}">
+<div class="collection-hero {{ section.settings.banner_position }} iv-collection-banner">
   <div class="collection-hero__image">
     <img
       srcset="{%- if collection.image.width >= 165 -%}{{ collection.image | image_url: width: 165 }} 165w,{%- endif -%}
@@ -91,7 +91,7 @@
     >
   </div>
   <div class="hero-header">
-    <h1 itemprop="name">{{ collection.title }}</h1>
+    <h1 class="iv-collection-header" itemprop="name">{{ collection.title }}</h1>
     {%- if collection_welcome != '' -%}
     <div class="collection-welcome-message">
       <p>{{ collection_welcome }}</p>
@@ -106,7 +106,7 @@
 </div>
 {% endcapture %}
 
-<div class="{% render 'container-settings' %}" data-section-id="{{ section.id }}" data-section-type="collection-template" itemscope itemtype="https://schema.org/CollectionPage">
+<div class="{% render 'container-settings' %}" data-collection-handle="{{ collection.handle }}" data-section-id="{{ section.id }}" data-section-type="collection-template" itemscope itemtype="https://schema.org/CollectionPage">
   <meta itemprop="name" content="{{ collection.title | escape }}">
   <meta itemprop="description" content="{{ collection_meta_desc | escape }}">
   <meta itemprop="url" content="{{ shop.url }}/collections/{{ collection.handle }}">
@@ -134,7 +134,7 @@
 
     {% paginate collection.products by product_per_page %}
 
-    <div class="iv-filter-drawer" id="CollectionFilterDrawer" aria-hidden="true">
+    <div class="iv-filter-drawer iv-filter-sidebar" id="CollectionFilterDrawer" aria-hidden="true">
       <div class="iv-filter-drawer__panel" role="dialog" aria-modal="true" aria-label="Collection filters">
         <div class="iv-filter-drawer__header">
           <span>FILTERS</span>
@@ -195,7 +195,7 @@
         </div>
         {%- endif -%}
         <div class="dT_VProdWrapper" id="dT_collectionGrid" data-infinite-scroll-wrapper data-next-page="{% if paginate.next %}{{ paginate.next.url }}{% endif %}">
-          <ul class="grid product-collection dt-sc-column four-column dt-even-columns product-grid-style iv-collection-product-grid" data-infinite-scroll-grid id="AjaxinateContainer">
+          <ul class="grid product-collection dt-sc-column four-column dt-even-columns product-grid-style iv-collection-product-grid iv-product-grid" data-infinite-scroll-grid id="AjaxinateContainer">
             {% if collection.products.size > 0 %}
               {% for product in collection.products %}
                 {% render 'product-grid-item', product: product, imageSize: imageSize %}
