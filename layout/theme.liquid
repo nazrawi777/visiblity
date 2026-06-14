@@ -35,7 +35,28 @@
   <link rel="dns-prefetch" href="https://apis.google.com">
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- IV: GSAP + Lenis CDN (non-blocking) -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js"></script>
+
+  <!-- IV: Preload style assets -->
+  <link rel="preload" as="style" href="{{ 'iv-loading.css' | asset_url }}">
+  <link rel="preload" as="style" href="{{ 'iv-header.css' | asset_url }}">
+  <link rel="preload" as="style" href="{{ 'iv-animations.css' | asset_url }}">
+
+  <!-- IV: Stylesheets (non-blocking) -->
+  <link rel="stylesheet" href="{{ 'iv-loading.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'iv-header.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'iv-animations.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'iv-pages.css' | asset_url }}" media="print" onload="this.media='all'">
+
+  <!-- IV: Main JS (deferred) -->
+  <script defer src="{{ 'iv-main.js' | asset_url }}"></script>
+
   {%- if template contains 'collection' and collection.image -%}
     <link rel="preload" as="image"
       href="{{ collection.image | image_url: width: 1200 }}"
@@ -212,6 +233,14 @@
   </script>
   {% render 'header-js' %}
   {{ content_for_header }}
+
+  <!-- Preload critical hero image (replace with actual first slide image URL) -->
+  {%- assign hero_img = settings.hero_image | default: '' -%}
+  {%- if hero_img != blank -%}
+  <link rel="preload" as="image" fetchpriority="high"
+    href="{{ hero_img | image_url: width: 1920 }}"
+    imagesrcset="{{ hero_img | image_url: width: 800 }} 800w, {{ hero_img | image_url: width: 1200 }} 1200w, {{ hero_img | image_url: width: 1920 }} 1920w">
+  {%- endif -%}
 </head>
 <body
   id="{{ page_title | handle }}"
@@ -221,6 +250,18 @@
     template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}
     {% unless template contains 'index' %}others{% endunless %}
   ">
+  <div id="iv-loader" aria-hidden="true">
+    <div class="iv-loader__inner">
+      <div class="iv-loader__logo">∞</div>
+      <div class="iv-loader__text">
+        <span class="iv-loader__line" data-text="LOADING ANIME UNIVERSE">LOADING ANIME UNIVERSE</span>
+        <span class="iv-loader__line" data-text="LOADING ANIME UNIVERSE" aria-hidden="true">LOADING ANIME UNIVERSE</span>
+      </div>
+      <div class="iv-loader__bar">
+        <div class="iv-loader__bar-fill"></div>
+      </div>
+    </div>
+  </div>
   <div id="cursor-orb" aria-hidden="true"></div>
   <div id="cursor-trail" aria-hidden="true"></div>
   <a class="skip-to-content-link visually-hidden" href="#MainContent">

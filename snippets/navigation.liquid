@@ -86,6 +86,9 @@ endfor
   <a href="{{ link.url }}" class=" {% if dt_mega %}mega-menu{% endif %} dt-sc-nav-link dropdown">
     <span>
       {{ link.title | escape }}
+      {%- if primary or secondary or dt_mega -%}
+        <svg class="iv-nav-chevron" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      {%- endif -%}
       {% assign mainTag = link.handle %}
       {% if sale_tag contains mainTag %}
       <em class="sale tag">{{ sale_label }}</em>
@@ -101,14 +104,25 @@ endfor
     {% endif %}
   </a>
   {% if  dt_mega %}
-  <div class="sub-menu-block block-{{ blockID }}-type is-hidden ">
+  <div class="sub-menu-block block-{{ blockID }}-type is-hidden iv-dropdown">
     <div class="submenu_inner">
     <div class="go-back">
       <a href="javascript:void(0);"></a>
     </div>
     <div class="see-all"></div>
     <div class="dt-sc-dropdown-menu{% if dt_mega %} dt-sc--main-menu--mega{% endif %} {% if primary or secondary %} dt-sc_main-menu--has-links{% endif %}">
-      <ul class="sub-menu-lists {% if dt_mega %} {% unless blockType == "tab" %} dt-sc-column  {{ columnSize }} {% else %} {{ tabStyle -}}{% endunless %} {% if reverse %}row-reverse{% endif %} {% endif %} ">
+      {%- assign grid_class = '' -%}
+      {%- if link.handle == 'shop-now' -%}
+        {%- assign grid_class = 'iv-dropdown__grid iv-dropdown__grid--shopnow' -%}
+      {%- elsif columnSize contains 'two-column' or columnSize contains 'three-column' or columnSize contains 'four-column' -%}
+        {%- assign col_num = columnSize | split: '-' | first -%}
+        {%- case col_num -%}
+          {%- when 'two' -%}{%- assign grid_class = 'iv-dropdown__grid iv-dropdown__grid--2col' -%}
+          {%- when 'three' -%}{%- assign grid_class = 'iv-dropdown__grid iv-dropdown__grid--3col' -%}
+          {%- when 'four' -%}{%- assign grid_class = 'iv-dropdown__grid iv-dropdown__grid--4col' -%}
+        {%- endcase -%}
+      {%- endif -%}
+      <ul class="sub-menu-lists {{ grid_class }} {% if dt_mega %} {% unless blockType == "tab" %} dt-sc-column  {{ columnSize }} {% else %} {{ tabStyle -}}{% endunless %} {% if reverse %}row-reverse{% endif %} {% endif %} ">
         {% if blockType == "promo_banner" %}
         {{ megaBanner1 }}
         {% endif %}
@@ -117,8 +131,8 @@ endfor
         {%- if link.links != blank -%}
         {%- for child_link in link.links limit: 6 -%}
         {%- unless link.handle == 'shop-now' and child_link.handle == 'all-products' -%}
-        <li class="{% if child_link.active %}active{% endif %}">
-           <a class="heading{% if link.handle == 'shop-now' %} shop-now-dropdown-link{% endif %}" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}>
+        <li class="{% if child_link.active %}active{% endif %} {% if link.handle == 'shop-now' %}iv-dropdown__item{% endif %}">
+           <a class="heading{% if link.handle == 'shop-now' %} shop-now-dropdown-link iv-dropdown__item-name{% endif %}" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}>
             <span>{{ child_link.title }}</span>
             {%- if link.handle == 'shop-now' -%}
               {%- assign nav_collection_handle = '' -%}
@@ -206,19 +220,21 @@ endfor
   {% else %}
 
   {%- if link.links != blank -%}
-  <div class="sub-menu-block is-hidden">
+  <div class="sub-menu-block is-hidden iv-dropdown">
     <div class="submenu_inner">
     <div class="go-back">
       <a href="javascript:void(0);"></a>
     </div>
     <div class="see-all"></div>
     <div class="dt-sc-dropdown-menu{% if primary or secondary %} dt-sc_main-menu--has-links{% endif %}">
-      <ul class="sub-menu-lists">
+      {%- assign grid_class = '' -%}
+      {%- if link.handle == 'shop-now' -%}{%- assign grid_class = 'iv-dropdown__grid iv-dropdown__grid--shopnow' -%}{%- endif -%}
+      <ul class="sub-menu-lists {{ grid_class }}">
 
         {%- for child_link in link.links -%}
         {%- unless link.handle == 'shop-now' and child_link.handle == 'all-products' -%}
-        <li class="{% if primary or secondary %}  {%- if child_link.links != blank -%}menu-item-has-children{% endif %}{% endif %}{% if child_link.active %} active{% endif %}">
-          <a class="{% if link.handle == 'shop-now' %}shop-now-dropdown-link{% endif %}" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}>
+        <li class="{% if primary or secondary %}  {%- if child_link.links != blank -%}menu-item-has-children{% endif %}{% endif %}{% if child_link.active %} active{% endif %} {% if link.handle == 'shop-now' %}iv-dropdown__item{% endif %}">
+          <a class="{% if link.handle == 'shop-now' %}shop-now-dropdown-link iv-dropdown__item-name{% endif %}" href="{{ child_link.url }}" {% if child_link.active %}aria-current="page"{% endif %}>
             <span>{{ child_link.title }}</span>
             {%- if link.handle == 'shop-now' -%}
               {%- assign nav_collection_handle = '' -%}

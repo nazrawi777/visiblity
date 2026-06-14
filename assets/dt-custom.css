@@ -762,6 +762,31 @@
     border-color: #b22222;
 }
 
+/* Replace ALL GIF spinner references with this */
+.dt-loading,
+.loading-overlay,
+[class*="loading"] .spinner,
+.ajax-loader {
+  background-image: none !important;
+}
+
+.dt-loading::after,
+.loading-overlay::after,
+[class*="loading"] .spinner::after {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 24px;
+  border: 2px solid rgba(49,55,143,0.2);
+  border-top-color: var(--iv-yellow, #ffc72f);
+  border-radius: 50%;
+  animation: iv-spin 0.7s linear infinite;
+}
+
+@keyframes iv-spin {
+  to { transform: rotate(360deg); }
+}
+
 /**************/
 
 .item-swiper-init .products {

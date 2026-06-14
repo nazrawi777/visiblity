@@ -5,7 +5,7 @@
   {% endif %}
 {% endif %}
 {% comment %}theme-check-disable ParserBlockingJavaScript{% endcomment %}
-<script src="{{ 'dt-theme.js' | asset_url }}"></script>
+<script src="{{ 'dt-theme.js' | asset_url }}" defer></script>
 {% comment %}theme-check-enable ParserBlockingJavaScript{% endcomment %}
 <script src="{{ 'dT_main.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'dT_main_app.js' | asset_url }}" defer="defer"></script>

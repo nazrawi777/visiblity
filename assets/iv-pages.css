@@ -1,0 +1,208 @@
+/* ═══════════════════════════════════════════
+   COLLECTION PAGE — Global
+═══════════════════════════════════════════ */
+
+/* Hero banner */
+.collection-hero {
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border-radius: 0 0 24px 24px;
+  margin-bottom: 40px;
+}
+
+.collection-hero__image {
+  position: absolute;
+  inset: 0;
+}
+
+.collection-hero__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.collection-hero__image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,12,40,0.92) 0%, rgba(10,12,40,0.3) 60%, transparent 100%);
+}
+
+.hero-header {
+  position: relative;
+  z-index: 2;
+  padding: 32px 40px 36px;
+  max-width: 800px;
+}
+
+.hero-header h1 {
+  font-size: clamp(28px, 4vw, 56px);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.collection-welcome-message {
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 16px;
+  max-width: 600px;
+}
+
+.collection-welcome-message p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ═══════════════════════════════════════════
+   FILTER SIDEBAR — Glassmorphism
+═══════════════════════════════════════════ */
+.facets__form,
+.filter-group,
+[class*="facets"],
+.collection-filter {
+  background: rgba(49, 55, 143, 0.15) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 16px !important;
+  padding: 20px 16px !important;
+  position: sticky;
+  top: 88px;
+}
+
+/* ═══════════════════════════════════════════
+   PER-COLLECTION HERO ACCENTS
+═══════════════════════════════════════════ */
+
+/* MEN'S — Dark blue/teal energy */
+body[data-collection="mans-anime-merch-streetwear-gear-collectibles"] .collection-hero::before {
+  content: 'GEAR UP';
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 120px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.03);
+  z-index: 1;
+  pointer-events: none;
+  font-family: 'Rajdhani', sans-serif;
+  line-height: 1;
+}
+
+/* WOMEN'S — Purple/pink energy */
+body[data-collection="womens-anime-merch-cute-trendy-gear-kawaii"] .collection-hero::before {
+  content: 'SLAY QUEEN';
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 80px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.03);
+  z-index: 1;
+  pointer-events: none;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+/* KIDS — Bright energy */
+body[data-collection="kids-anime-merch-cool-clothes-toys-gifts"] .collection-hero::before {
+  content: 'POWER UP';
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 100px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: rgba(255,255,255,0.03);
+  z-index: 1;
+  pointer-events: none;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+/* BIG SALE — Red urgency */
+body[data-collection*="sale"] .collection-hero::before {
+  content: 'RAID NOW';
+  position: absolute;
+  top: 20px;
+  right: 40px;
+  font-size: 110px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: rgba(255,80,80,0.06);
+  z-index: 1;
+  pointer-events: none;
+  font-family: 'Rajdhani', sans-serif;
+}
+
+body[data-collection*="sale"] .hero-header h1 {
+  color: #ff6b6b;
+}
+
+/* ═══════════════════════════════════════════
+   PRODUCT GRID — Staggered reveal
+═══════════════════════════════════════════ */
+.list-view-item,
+.product-item,
+.grid__item,
+.four-column > li,
+.three-column > li,
+.two-column > li {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.list-view-item.iv-revealed,
+.product-item.iv-revealed,
+.grid__item.iv-revealed,
+.four-column > li.iv-revealed,
+.three-column > li.iv-revealed,
+.two-column > li.iv-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════
+   BREADCRUMB
+═══════════════════════════════════════════ */
+.collection-breadcrumb,
+.product-breadcrumb {
+  padding: 16px 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+}
+
+.collection-breadcrumb a,
+.product-breadcrumb a {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.collection-breadcrumb a:hover,
+.product-breadcrumb a:hover {
+  color: var(--iv-yellow, #ffc72f);
+}
+
+.collection-breadcrumb li::after {
+  content: ' ›';
+  color: rgba(255,255,255,0.2);
+  margin: 0 6px;
+}
+
+.collection-breadcrumb li:last-child::after { display: none; }
